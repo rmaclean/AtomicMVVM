@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>AtomicMVVM</id>
+    <version>1.0.1</version>
+    <authors>Robert MacLean</authors>
+    <owners>Robert MacLean</owners>
+    <licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
+    <projectUrl>http://www.sadev.co.za</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A supremely lightweight MVVM framework.</description>
+    <releaseNotes>First release.</releaseNotes>
+    <copyright>Copyright Robert MacLean 2012</copyright>
+    <tags>MVVM WPF</tags>
+  </metadata>
+</package>

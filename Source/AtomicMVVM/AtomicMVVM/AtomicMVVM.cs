@@ -30,7 +30,8 @@ namespace AtomicMVVM
             where TNewContent : CoreData
         {
             viewModel = typeof(TNewContent).GetConstructor(Type.EmptyTypes).Invoke(null) as CoreData;
-            var viewName = typeof(TNewContent).FullName.Replace(".ViewModels.", ".Views.");
+            var viewName = typeof(TNewContent).AssemblyQualifiedName.Replace(".ViewModels.", ".Views.");
+                        
             view = Type.GetType(viewName, true, true).GetConstructor(Type.EmptyTypes).Invoke(null) as UserControl;
 
             var validMethods = (from m in viewModel.GetType().GetMethods()
