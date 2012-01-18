@@ -25,13 +25,26 @@ namespace AtomicMVVM
             this.ChangeView<TContent>();
 
             (shell as Window).Show();
-        }        
+        }
+
+
+        public void ChangeView<TNewContent, TData>(TData data)
+            where TNewContent : CoreData
+        {
+            viewModel = typeof(TNewContent).GetConstructor(new[] { typeof(TData) }).Invoke(new object[] { data }) as CoreData;
+            ChangeView();
+        }
 
         public void ChangeView<TNewContent>()
             where TNewContent : CoreData
         {
             viewModel = typeof(TNewContent).GetConstructor(Type.EmptyTypes).Invoke(null) as CoreData;
-            var viewName = typeof(TNewContent).AssemblyQualifiedName.Replace(".ViewModels.", ".Views.");
+            ChangeView();
+        }
+
+        private void ChangeView()
+        {
+            var viewName = viewModel.GetType().AssemblyQualifiedName.Replace(".ViewModels.", ".Views.");
 
             view = Type.GetType(viewName, true, true).GetConstructor(Type.EmptyTypes).Invoke(null) as UserControl;
 
@@ -72,12 +85,12 @@ namespace AtomicMVVM
                                 foreach (var attribute in canExecuteMethod.GetCustomAttributes<ReevaluatePropertyAttribute>(false))
                                 {
                                     viewModel.PropertyChanged += (s, e) =>
+                                    {
+                                        if (e.PropertyName == attribute.PropertyName)
                                         {
-                                            if (e.PropertyName == attribute.PropertyName)
-                                            {
-                                                command.RaiseCanExecuteChanged();
-                                            }
-                                        };
+                                            command.RaiseCanExecuteChanged();
+                                        }
+                                    };
                                 }
                             }
 
@@ -95,7 +108,7 @@ namespace AtomicMVVM
 
         private void AddTrigger(string propertyName, string methodName)
         {
-            this.viewModel.PropertyChanged += (s,e) =>
+            this.viewModel.PropertyChanged += (s, e) =>
                 {
                     if (e.PropertyName == propertyName)
                     {

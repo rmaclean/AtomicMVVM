@@ -6,9 +6,9 @@ namespace GeneralDemo.ViewModels
 {
     using MakeData = HeaderedArray<HeaderedArray<string>>;
     using ModelData = HeaderedArray<string>;
-using System.Collections.Generic;
+    using System.Collections.Generic;
 
-    class HeaderedArray<T>
+    public class HeaderedArray<T>
     {
         public string Name { get; private set; }
         public T[] Data { get; private set; }
@@ -112,7 +112,7 @@ using System.Collections.Generic;
 
         [TriggerProperty("SelectedMake")]
         public void SetModels()
-        {            
+        {
             if (string.IsNullOrWhiteSpace(this.SelectedMake))
             {
                 this.Models.Clear();
@@ -141,7 +141,7 @@ using System.Collections.Generic;
         [TriggerProperty("SelectedModel")]
         [TriggerProperty("SelectedMake")]
         public void SetColours()
-        {            
+        {
             if (string.IsNullOrWhiteSpace(this.SelectedMake) || string.IsNullOrWhiteSpace(this.SelectedModel))
             {
                 this.Colours.Clear();

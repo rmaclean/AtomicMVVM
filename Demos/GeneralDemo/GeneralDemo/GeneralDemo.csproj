@@ -34,10 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AtomicMVVM, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ef44276a5eebd19b, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AtomicMVVM.1.0.3\lib\net40\AtomicMVVM.dll</HintPath>
-    </Reference>
     <Reference Include="MahApps.Metro">
       <HintPath>..\packages\MahApps.Metro.0.5.0.0\lib\net40\MahApps.Metro.dll</HintPath>
     </Reference>
@@ -62,14 +58,23 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Compile Include="Models\CustomerData.cs" />
     <Compile Include="ViewModels\Cars.cs" />
+    <Compile Include="ViewModels\Customers.cs" />
     <Compile Include="ViewModels\Menu.cs" />
+    <Compile Include="ViewModels\Orders.cs" />
     <Compile Include="ViewModels\Popup.cs" />
     <Compile Include="Views\Cars.xaml.cs">
       <DependentUpon>Cars.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Customers.xaml.cs">
+      <DependentUpon>Customers.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Orders.xaml.cs">
+      <DependentUpon>Orders.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
@@ -89,7 +94,13 @@
     <Page Include="Views\Cars.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Customers.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Menu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Orders.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Popup.xaml">
@@ -123,6 +134,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Source\AtomicMVVM\AtomicMVVM\AtomicMVVM.csproj">
+      <Project>{27b5d238-468e-4bb4-92f3-da281c75e882}</Project>
+      <Name>AtomicMVVM</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

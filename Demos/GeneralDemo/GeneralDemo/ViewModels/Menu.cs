@@ -18,5 +18,10 @@ namespace GeneralDemo.ViewModels
         {
             App.Bootstrapper.ChangeView<Cars>();
         }
+
+        public void ShowCustomers()
+        {
+            App.Bootstrapper.ChangeView<Customers>();
+        }
     }
 }

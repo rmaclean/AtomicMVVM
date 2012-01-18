@@ -12,12 +12,12 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-      <Grid.RowDefinitions>
+        <Grid.RowDefinitions>
             <RowDefinition Height="32"/>
             <RowDefinition Height="32"/>
             <RowDefinition Height="4"/>
             <RowDefinition Height="32"/>
-        </Grid.RowDefinitions>      
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -28,7 +28,7 @@
         <TextBlock Grid.Row="0" Grid.Column="2" Text="Colour"/>
         <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Makes}" SelectedItem="{Binding SelectedMake}"/>
         <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Models}"  SelectedItem="{Binding SelectedModel}"/>
-        <ComboBox Grid.Row="1" Grid.Column="2"  ItemsSource="{Binding Colours}"/>
+        <ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Colours}"/>
         <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Content="Go to menu" x:Name="GoToMenu"/>
     </Grid>
 </UserControl>
