@@ -39,6 +39,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\Nuget\AtomicMVVM.dll.nuspec">
+      <Link>AtomicMVVM.dll.nuspec</Link>
+    </None>
     <None Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
