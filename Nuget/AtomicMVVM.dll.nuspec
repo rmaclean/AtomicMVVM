@@ -2,17 +2,17 @@
 <package >
   <metadata>
     <id>AtomicMVVM</id>
-    <version>1.0.2beta</version>
+    <version>1.0.3</version>
     <authors>Robert MacLean</authors>
     <owners>Robert MacLean</owners>
     <licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
     <projectUrl>https://bitbucket.org/rmaclean/atomicmvvm/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A supremely lightweight MVVM framework for WPF projects.</description>
-    <releaseNotes>
-		1.0.2beta - Updated version to be proper semver. Updated project to be the bitbucket site. Helps if I make classes public (doh). Added trigger property logic.
-		1.0.1beta - Fixed bug in the type location.
-		1.0.0beta - First release.</releaseNotes>
+    <releaseNotes>1.0.3 - Doesn't help if I don't include the updated assembly. So this is 1.0.2 proper.
+1.0.2 - Updated project to be the bitbucket site. Helps if I make classes public (doh). Added trigger property logic.
+1.0.1 - Fixed bug in the type location.
+1.0.0 - First release.</releaseNotes>
     <copyright>Copyright Robert MacLean 2012</copyright>
     <tags>MVVM WPF</tags>
   </metadata>
