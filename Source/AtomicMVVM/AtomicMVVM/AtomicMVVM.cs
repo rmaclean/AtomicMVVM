@@ -9,7 +9,6 @@ namespace AtomicMVVM
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
-    using System.Windows.Media;
 
     public class Bootstrapper<TShell, TContent>
         where TShell : IShell
