@@ -8,9 +8,16 @@
     <Grid>
        <Grid.RowDefinitions>
             <RowDefinition Height="32"/>
+            <RowDefinition Height="4"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="4"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="4"/>
             <RowDefinition Height="32"/>
         </Grid.RowDefinitions>
         <TextBox Grid.Row="0" Text="{Binding FullName, Mode=TwoWay}" />
-        <Button Grid.Row="1" Content="Click" x:Name="ShowName"/>
+        <Button Grid.Row="2" Content="Click to say hi" x:Name="ShowName"/>
+        <Button Grid.Row="4" Content="Click to say goodbye" x:Name="SayGoodbye"/>
+        <Button Grid.Row="6" Content="Back" x:Name="GoToMenu"/>
     </Grid>
 </UserControl>

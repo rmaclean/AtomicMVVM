@@ -10,7 +10,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A supremely lightweight MVVM framework.</description>
     <releaseNotes>
-		1.0.2beta - Updated version to be proper semver. Updated project to be the bitbucket site.
+		1.0.2beta - Updated version to be proper semver. Updated project to be the bitbucket site. Helps if I make classes public (doh).
 		1.0.1beta - Fixed bug in the type location.
 		1.0.0beta - First release.</releaseNotes>
     <copyright>Copyright Robert MacLean 2012</copyright>

@@ -13,5 +13,10 @@ namespace GeneralDemo.ViewModels
         {
             App.Bootstrapper.ChangeView<Popup>();
         }
+
+        public void ShowCars()
+        {
+            App.Bootstrapper.ChangeView<Cars>();
+        }
     }
 }

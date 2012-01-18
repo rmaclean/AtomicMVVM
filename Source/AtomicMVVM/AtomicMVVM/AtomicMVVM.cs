@@ -2,6 +2,7 @@
 namespace AtomicMVVM
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
@@ -24,14 +25,14 @@ namespace AtomicMVVM
             this.ChangeView<TContent>();
 
             (shell as Window).Show();
-        }
+        }        
 
         public void ChangeView<TNewContent>()
             where TNewContent : CoreData
         {
             viewModel = typeof(TNewContent).GetConstructor(Type.EmptyTypes).Invoke(null) as CoreData;
             var viewName = typeof(TNewContent).AssemblyQualifiedName.Replace(".ViewModels.", ".Views.");
-                        
+
             view = Type.GetType(viewName, true, true).GetConstructor(Type.EmptyTypes).Invoke(null) as UserControl;
 
             var validMethods = (from m in viewModel.GetType().GetMethods()
@@ -43,6 +44,11 @@ namespace AtomicMVVM
 
             foreach (var method in validMethods)
             {
+                foreach (var attribute in method.GetCustomAttributes<TriggerPropertyAttribute>(false))
+                {
+                    AddTrigger(attribute.PropertyName, method.Name);
+                }
+
                 var control = view.FindName(method.Name);
                 if (control != null && control is ICommandSource)
                 {
@@ -63,7 +69,7 @@ namespace AtomicMVVM
 
                             if (canExecuteMethod != null)
                             {
-                                foreach (var attribute in canExecuteMethod.GetCustomAttributes<RelatedPropertyAttribute>())
+                                foreach (var attribute in canExecuteMethod.GetCustomAttributes<ReevaluatePropertyAttribute>(false))
                                 {
                                     viewModel.PropertyChanged += (s, e) =>
                                         {
@@ -85,6 +91,17 @@ namespace AtomicMVVM
             view.DataContext = viewModel;
 
             shell.ChangeContent(view);
+        }
+
+        private void AddTrigger(string propertyName, string methodName)
+        {
+            this.viewModel.PropertyChanged += (s,e) =>
+                {
+                    if (e.PropertyName == propertyName)
+                    {
+                        viewModel.GetType().GetMethod(methodName).Invoke(viewModel, null);
+                    }
+                };
         }
     }
 
@@ -155,9 +172,20 @@ namespace AtomicMVVM
     }
 
     [System.AttributeUsage(System.AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
-    sealed class RelatedPropertyAttribute : System.Attribute
+    public sealed class ReevaluatePropertyAttribute : System.Attribute
     {
-        public RelatedPropertyAttribute(string propertyName)
+        public ReevaluatePropertyAttribute(string propertyName)
+        {
+            this.PropertyName = propertyName;
+        }
+
+        public string PropertyName { get; private set; }
+    }
+
+    [System.AttributeUsage(System.AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
+    public sealed class TriggerPropertyAttribute : System.Attribute
+    {
+        public TriggerPropertyAttribute(string propertyName)
         {
             this.PropertyName = propertyName;
         }
