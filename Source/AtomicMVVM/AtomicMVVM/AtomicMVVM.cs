@@ -9,6 +9,7 @@ namespace AtomicMVVM
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
+    using System.Windows.Media;
 
     public class Bootstrapper<TShell, TContent>
         where TShell : IShell
@@ -17,16 +18,18 @@ namespace AtomicMVVM
         private IShell shell;
         private CoreData viewModel;
         private UserControl view;
+        public List<Tuple<string, Action>> GlobalCommands { get; private set; }
+
 
         public Bootstrapper()
         {
+            this.GlobalCommands = new List<Tuple<string,Action>>();
             shell = (IShell)typeof(TShell).GetConstructor(Type.EmptyTypes).Invoke(null);
 
             this.ChangeView<TContent>();
 
             (shell as Window).Show();
         }
-
 
         public void ChangeView<TNewContent, TData>(TData data)
             where TNewContent : CoreData
@@ -101,6 +104,26 @@ namespace AtomicMVVM
                 }
             }
 
+            foreach (var method in GlobalCommands)
+            {
+                var control = view.FindName(method.Item1);
+                if (control != null && control is ICommandSource)
+                {
+                    var commandProperty = control.GetType().GetProperty("Command");
+                    if (commandProperty.GetValue(control) == null)
+                    {
+                        var commandParameterProperty = control.GetType().GetProperty("CommandParameter");
+                        if (commandProperty.CanWrite && commandParameterProperty.CanWrite)
+                        {
+                            var command = new GlobalCommand(method.Item2);
+
+                            commandProperty.SetValue(control, command);
+                            commandParameterProperty.SetValue(control, viewModel);
+                        }
+                    }
+                }
+            }
+
             view.DataContext = viewModel;
 
             shell.ChangeContent(view);
@@ -117,6 +140,28 @@ namespace AtomicMVVM
                 };
         }
     }
+
+    public class GlobalCommand : ICommand
+    {
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public event EventHandler CanExecuteChanged;
+        private Action action;
+
+        public GlobalCommand(Action action)
+        {
+            this.action = action;
+        }
+
+        public void Execute(object parameter)
+        {
+            action();
+        }
+    }
+
 
     public class AttachedCommand : ICommand
     {

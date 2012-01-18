@@ -105,11 +105,6 @@ namespace GeneralDemo.ViewModels
             _makes = data.Select(_ => _.Name).ToArray();
         }
 
-        public void GoToMenu()
-        {
-            App.Bootstrapper.ChangeView<Menu>();
-        }
-
         [TriggerProperty("SelectedMake")]
         public void SetModels()
         {

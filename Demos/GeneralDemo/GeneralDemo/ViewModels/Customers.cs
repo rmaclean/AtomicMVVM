@@ -23,11 +23,6 @@ namespace GeneralDemo.ViewModels
             }
         }
 
-        public void GoToMenu()
-        {
-            App.Bootstrapper.ChangeView<Menu>();
-        }
-
         public void ViewOrders()
         {
             App.Bootstrapper.ChangeView<Orders,string>(SelectedCustomer);

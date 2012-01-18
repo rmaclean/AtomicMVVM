@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 
 namespace AtomicMVVM
 {
@@ -26,5 +28,6 @@ namespace AtomicMVVM
         {
             return property.GetValue(obj, null);
         }
-    }    
+    }  
+
 }

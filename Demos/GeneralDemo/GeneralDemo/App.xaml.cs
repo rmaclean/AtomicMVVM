@@ -22,6 +22,7 @@ namespace GeneralDemo
         public App()
         {
             Bootstrapper = new Bootstrapper<MainWindow, Menu>();
+            Bootstrapper.GlobalCommands.Add(new Tuple<string,Action>("GoToMenu", () => App.Bootstrapper.ChangeView<Menu>()));
         }
     }
 }

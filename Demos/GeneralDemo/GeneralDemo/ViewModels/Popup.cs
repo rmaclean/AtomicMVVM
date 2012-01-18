@@ -38,11 +38,5 @@ namespace GeneralDemo.ViewModels
         {
             return CanShowName();
         }
-
-        public void GoToMenu()
-        {
-            App.Bootstrapper.ChangeView<Menu>();
-        }
-
     }
 }
