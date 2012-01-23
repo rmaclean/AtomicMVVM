@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AtomicMVVM, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ef44276a5eebd19b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AtomicMVVM.1.0.5\lib\net40\AtomicMVVM.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro">
       <HintPath>..\packages\MahApps.Metro.0.5.0.0\lib\net40\MahApps.Metro.dll</HintPath>
     </Reference>
@@ -134,12 +138,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Source\AtomicMVVM\AtomicMVVM\AtomicMVVM.csproj">
-      <Project>{27b5d238-468e-4bb4-92f3-da281c75e882}</Project>
-      <Name>AtomicMVVM</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

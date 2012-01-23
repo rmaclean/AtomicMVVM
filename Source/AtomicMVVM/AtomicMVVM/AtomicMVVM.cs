@@ -6,14 +6,27 @@ namespace AtomicMVVM
     using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
+#if WINRT
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Input;
+    using Windows.UI.Xaml.Controls.Primitives;
+#else
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
+using System.Windows.Controls.Primitives;
+#endif
 
     public class Bootstrapper<TShell, TContent>
         where TShell : IShell
         where TContent : CoreData
     {
+#if (WINRT)
+        private readonly Type[] EmptyTypes = new Type[] { };
+#else
+         private readonly Type[] EmptyTypes = Type.EmptyTypes;
+#endif
         private IShell shell;
         private CoreData viewModel;
         private UserControl view;
@@ -22,12 +35,18 @@ namespace AtomicMVVM
 
         public Bootstrapper()
         {
-            this.GlobalCommands = new List<Tuple<string,Action>>();
-            shell = (IShell)typeof(TShell).GetConstructor(Type.EmptyTypes).Invoke(null);
+
+            this.GlobalCommands = new List<Tuple<string, Action>>();
+
+            shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
 
             this.ChangeView<TContent>();
 
+#if (SILVERLIGHT || WINRT)
+            (shell as object as Window).Activate();
+#else
             (shell as Window).Show();
+#endif
         }
 
         public void ChangeView<TNewContent, TData>(TData data)
@@ -40,7 +59,7 @@ namespace AtomicMVVM
         public void ChangeView<TNewContent>()
             where TNewContent : CoreData
         {
-            viewModel = typeof(TNewContent).GetConstructor(Type.EmptyTypes).Invoke(null) as CoreData;
+            viewModel = typeof(TNewContent).GetConstructor(EmptyTypes).Invoke(null) as CoreData;
             ChangeView();
         }
 
@@ -48,12 +67,20 @@ namespace AtomicMVVM
         {
             var viewName = viewModel.GetType().AssemblyQualifiedName.Replace(".ViewModels.", ".Views.");
 
-            view = Type.GetType(viewName, true, true).GetConstructor(Type.EmptyTypes).Invoke(null) as UserControl;
+#if WINRT
+            var viewType = Type.GetType(viewName);
+#else
+            var viewType = Type.GetType(viewName, true, true);
+#endif
+
+            view = viewType.GetConstructor(EmptyTypes).Invoke(null) as UserControl;
 
             var validMethods = (from m in viewModel.GetType().GetMethods()
                                 where m.IsPublic &&
                                      !m.IsSpecialName &&
+#if !WINRT
                                      !m.Attributes.HasFlag(MethodAttributes.VtableLayoutMask) &&
+#endif
                                      m.ReturnType == typeof(void)
                                 select m).ToList();
 
@@ -65,7 +92,15 @@ namespace AtomicMVVM
                 }
 
                 var control = view.FindName(method.Name);
-                if (control != null && control is ICommandSource)
+#if WINRT
+                if (control != null && typeof(ButtonBase).GetTypeInfo().IsAssignableFrom(control.GetType().GetTypeInfo()))
+#else
+#if SILVERLIGHT
+                if (control != null && typeof(ButtonBase).IsAssignableFrom(control.GetType()))
+#else
+                          if (control != null && control is ICommandSource)
+#endif
+#endif
                 {
                     var commandProperty = control.GetType().GetProperty("Command");
                     if (commandProperty.GetValue(control) == null)
@@ -74,7 +109,7 @@ namespace AtomicMVVM
                         if (commandProperty.CanWrite && commandParameterProperty.CanWrite)
                         {
                             var canExecuteExists = false;
-                            var canExecuteMethod = viewModel.GetType().GetMethod("Can" + method.Name, Type.EmptyTypes);
+                            var canExecuteMethod = viewModel.GetType().GetMethod("Can" + method.Name, EmptyTypes);
                             if (canExecuteMethod != null)
                             {
                                 canExecuteExists = canExecuteMethod.ReturnType == typeof(bool);
@@ -106,7 +141,15 @@ namespace AtomicMVVM
             foreach (var method in GlobalCommands)
             {
                 var control = view.FindName(method.Item1);
-                if (control != null && control is ICommandSource)
+#if WINRT
+                if (control != null && typeof(ButtonBase).GetTypeInfo().IsAssignableFrom(control.GetType().GetTypeInfo()))
+#else
+#if SILVERLIGHT
+                if (control != null && typeof(ButtonBase).IsAssignableFrom(control.GetType()))
+#else
+                          if (control != null && control is ICommandSource)
+#endif
+#endif
                 {
                     var commandProperty = control.GetType().GetProperty("Command");
                     if (commandProperty.GetValue(control) == null)
@@ -147,7 +190,11 @@ namespace AtomicMVVM
             return true;
         }
 
+#if (WINRT)
+        public event Windows.UI.Xaml.EventHandler CanExecuteChanged;
+#else
         public event EventHandler CanExecuteChanged;
+#endif
         private Action action;
 
         public GlobalCommand(Action action)
@@ -164,6 +211,11 @@ namespace AtomicMVVM
 
     public class AttachedCommand : ICommand
     {
+#if (WINRT)
+        private readonly Type[] EmptyTypes = new Type[] { };
+#else
+        private readonly Type[] EmptyTypes = Type.EmptyTypes;
+#endif
         public bool CanExecute(object parameter)
         {
             if (!canExecuteExists)
@@ -178,7 +230,7 @@ namespace AtomicMVVM
 
             if (canExecuteMethod == null)
             {
-                canExecuteMethod = parameter.GetType().GetMethod("Can" + this.methodName, Type.EmptyTypes);
+                canExecuteMethod = parameter.GetType().GetMethod("Can" + this.methodName, EmptyTypes);
             }
 
             return (bool)canExecuteMethod.Invoke(parameter, null);
@@ -192,7 +244,11 @@ namespace AtomicMVVM
             }
         }
 
+#if (WINRT)
+        public event Windows.UI.Xaml.EventHandler CanExecuteChanged;
+#else
         public event EventHandler CanExecuteChanged;
+#endif
         private string methodName;
         private MethodInfo executeMethod;
         private MethodInfo canExecuteMethod;

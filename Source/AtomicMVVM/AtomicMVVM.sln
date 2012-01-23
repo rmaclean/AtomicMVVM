@@ -3,6 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 11
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtomicMVVM", "AtomicMVVM\AtomicMVVM.csproj", "{27B5D238-468E-4BB4-92F3-DA281C75E882}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtomicMVVM (4.5)", "AtomicMVVM (4.5)\AtomicMVVM (4.5).csproj", "{9FB37F00-3B38-441C-8800-2E380FC2FD91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtomicMVVM (Silverlight 5)", "AtomicMVVM (Silverlight 5)\AtomicMVVM (Silverlight 5).csproj", "{ABA3D029-B043-4717-AA07-A82D5063F787}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtomicMVVM (WinRT)", "AtomicMVVM (WinRT)\AtomicMVVM (WinRT).csproj", "{E8827DA6-BE83-4729-951B-B0C1086ED9DC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{6BBDE25C-9140-48A2-BE24-1ECC131A1AE8}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\Nuget\AtomicMVVM.dll.nuspec = ..\..\Nuget\AtomicMVVM.dll.nuspec
+		..\..\Nuget\update-nuget.bat = ..\..\Nuget\update-nuget.bat
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +25,18 @@ Global
 		{27B5D238-468E-4BB4-92F3-DA281C75E882}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27B5D238-468E-4BB4-92F3-DA281C75E882}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27B5D238-468E-4BB4-92F3-DA281C75E882}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FB37F00-3B38-441C-8800-2E380FC2FD91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FB37F00-3B38-441C-8800-2E380FC2FD91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FB37F00-3B38-441C-8800-2E380FC2FD91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FB37F00-3B38-441C-8800-2E380FC2FD91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABA3D029-B043-4717-AA07-A82D5063F787}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABA3D029-B043-4717-AA07-A82D5063F787}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABA3D029-B043-4717-AA07-A82D5063F787}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABA3D029-B043-4717-AA07-A82D5063F787}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8827DA6-BE83-4729-951B-B0C1086ED9DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8827DA6-BE83-4729-951B-B0C1086ED9DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8827DA6-BE83-4729-951B-B0C1086ED9DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8827DA6-BE83-4729-951B-B0C1086ED9DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

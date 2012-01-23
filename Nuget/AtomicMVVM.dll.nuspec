@@ -1,21 +1,25 @@
 <?xml version="1.0"?>
 <package >
-  <metadata>
-    <id>AtomicMVVM</id>
-    <version>1.0.5</version>
-    <authors>Robert MacLean</authors>
-    <owners>Robert MacLean</owners>
-    <licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
-    <projectUrl>https://bitbucket.org/rmaclean/atomicmvvm/</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>A supremely lightweight MVVM framework for WPF projects.</description>
-    <releaseNotes>1.0.5 - Added support for non-default view constructors which allows for data passing. Added support for global app commands.
-1.0.4 - Building for .NET 4 client profile now (rather than 4.5 as was doing).
-1.0.3 - Doesn't help if I don't include the updated assembly. So this is 1.0.2 proper.
-1.0.2 - Updated project to be the bitbucket site. Helps if I make classes public (doh). Added trigger property logic.
-1.0.1 - Fixed bug in the type location.
-1.0.0 - First release.</releaseNotes>
-    <copyright>Copyright Robert MacLean 2012</copyright>
-    <tags>MVVM WPF</tags>
-  </metadata>
+	<metadata>
+		<id>AtomicMVVM</id>
+		<version>1.0.6</version>
+		<authors>Robert MacLean</authors>
+		<owners>Robert MacLean</owners>
+		<licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
+		<projectUrl>https://bitbucket.org/rmaclean/atomicmvvm/</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<summary>A supremely lightweight MVVM framework for WPF, Silverlight &amp; Metro projects.</summary>
+		<releaseNotes>
+			1.0.6 - Added support for .NET 4.5, Silverlight 5 &amp; Metro in NuGet package
+			1.0.5 - Added support for non-default view constructors which allows for data passing. Added support for global app commands.
+			1.0.4 - Building for .NET 4 client profile now (rather than 4.5 as was doing).
+			1.0.3 - Doesn't help if I don't include the updated assembly. So this is 1.0.2 proper.
+			1.0.2 - Updated project to be the bitbucket site. Helps if I make classes public (doh). Added trigger property logic.
+			1.0.1 - Fixed bug in the type location.
+			1.0.0 - First release.
+		</releaseNotes>
+		<copyright>Copyright Robert MacLean 2012</copyright>
+		<tags>MVVM WPF SILVERLIGHT METRO</tags>
+		<description>The goal of AtomicMVVM is to allow developers to work with MVVM in their XAML based solutions (XPF, Silverlight, Windows Phone, WinRT) with minimal effort while not getting in the way of the code. It requires .NET 4 or higher. The design goals of AtomicMVVM are (in order): simple over feature rich, unobtrusive over less code and convention over configuration.</description>
+	</metadata>
 </package>
