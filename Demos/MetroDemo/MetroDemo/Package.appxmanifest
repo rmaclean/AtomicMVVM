@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
+  
+  <Identity Name="ee245149-af73-465f-84af-949f5fd95e16"
+            Publisher="CN=robert"
+            Version="1.0.0.0" />
+  
+  <Properties>
+    <DisplayName>MetroDemo</DisplayName>
+    <PublisherDisplayName>robert</PublisherDisplayName>
+    <Logo>Images\StoreLogo.png</Logo>
+    <Description>MetroDemo</Description>
+  </Properties>
+  
+  <Prerequisites>
+    <OSMinVersion>6.2</OSMinVersion>
+    <OSMaxVersionTested>6.2</OSMaxVersionTested>
+  </Prerequisites>
+  
+  <Resources>
+    <Resource Language="en-us"/>
+  </Resources>
+  
+  <Applications>
+    <Application Id="App" 
+        Executable="metrodemo.exe" 
+        EntryPoint="MetroDemo.App">
+        <VisualElements 
+            DisplayName="MetroDemo"
+            Logo="Images\Logo.png"
+            SmallLogo="Images\SmallLogo.png"
+            Description="MetroDemo"
+            ForegroundText="light"
+            BackgroundColor="#222222">
+            <SplashScreen Image="Images\SplashScreen.png" />
+        </VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>

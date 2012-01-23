@@ -3,7 +3,6 @@ namespace AtomicMVVM
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
 #if WINRT
@@ -11,11 +10,14 @@ namespace AtomicMVVM
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
     using Windows.UI.Xaml.Controls.Primitives;
+    using Windows.UI.Core;
+    using Windows.UI.Xaml.Data;
 #else
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
-using System.Windows.Controls.Primitives;
+    using System.Windows.Controls.Primitives;
+    using System.ComponentModel;
 #endif
 
     public class Bootstrapper<TShell, TContent>
@@ -25,27 +27,40 @@ using System.Windows.Controls.Primitives;
 #if (WINRT)
         private readonly Type[] EmptyTypes = new Type[] { };
 #else
-         private readonly Type[] EmptyTypes = Type.EmptyTypes;
+        private readonly Type[] EmptyTypes = Type.EmptyTypes;
 #endif
         private IShell shell;
         private CoreData viewModel;
         private UserControl view;
         public List<Tuple<string, Action>> GlobalCommands { get; private set; }
 
-
         public Bootstrapper()
         {
-
             this.GlobalCommands = new List<Tuple<string, Action>>();
 
-            shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
+            if (shell == null)
+            {
+#if (WINRT)
+                Window.Current.Dispatcher.Invoke(CoreDispatcherPriority.High, (s, e) =>
+                    {
+#endif
+                shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
+#if (WINRT)
+                    }, this, null);
+#endif
+            }
 
             this.ChangeView<TContent>();
 
-#if (SILVERLIGHT || WINRT)
-            (shell as object as Window).Activate();
+#if WINRT
+             Window.Current.Content = shell as UIElement;
+            Window.Current.Activate();
+#else
+#if SILVERLIGHT
+             Application.Current.RootVisual = shell as UIElement;
 #else
             (shell as Window).Show();
+#endif
 #endif
         }
 
@@ -72,16 +87,17 @@ using System.Windows.Controls.Primitives;
 #else
             var viewType = Type.GetType(viewName, true, true);
 #endif
-
             view = viewType.GetConstructor(EmptyTypes).Invoke(null) as UserControl;
+
+            this.viewModel.ViewControl = view;
 
             var validMethods = (from m in viewModel.GetType().GetMethods()
                                 where m.IsPublic &&
                                      !m.IsSpecialName &&
 #if !WINRT
-                                     !m.Attributes.HasFlag(MethodAttributes.VtableLayoutMask) &&
+ !m.Attributes.HasFlag(MethodAttributes.VtableLayoutMask) &&
 #endif
-                                     m.ReturnType == typeof(void)
+ m.ReturnType == typeof(void)
                                 select m).ToList();
 
             foreach (var method in validMethods)
@@ -98,7 +114,7 @@ using System.Windows.Controls.Primitives;
 #if SILVERLIGHT
                 if (control != null && typeof(ButtonBase).IsAssignableFrom(control.GetType()))
 #else
-                          if (control != null && control is ICommandSource)
+                if (control != null && control is ICommandSource)
 #endif
 #endif
                 {
@@ -147,7 +163,7 @@ using System.Windows.Controls.Primitives;
 #if SILVERLIGHT
                 if (control != null && typeof(ButtonBase).IsAssignableFrom(control.GetType()))
 #else
-                          if (control != null && control is ICommandSource)
+                if (control != null && control is ICommandSource)
 #endif
 #endif
                 {
@@ -271,17 +287,32 @@ using System.Windows.Controls.Primitives;
         }
     }
 
+
     public class CoreData : INotifyPropertyChanged
     {
         public void RaisePropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                this.Invoke(() => PropertyChanged(this, new PropertyChangedEventArgs(propertyName)));
             }
         }
 
+        public void Invoke(Action action)
+        {
+#if (WINRT)
+            ViewControl.Dispatcher.Invoke(CoreDispatcherPriority.Normal, (s, e) =>
+                {
+#endif
+            action();
+#if (WINRT)
+                }, this, null);
+#endif
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public UserControl ViewControl { get; set; }
     }
 
     [System.AttributeUsage(System.AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
