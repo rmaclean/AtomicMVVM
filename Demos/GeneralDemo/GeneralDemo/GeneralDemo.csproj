@@ -34,9 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AtomicMVVM, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ef44276a5eebd19b, processorArchitecture=MSIL">
+    <Reference Include="AtomicMVVM, Version=1.0.6.0, Culture=neutral, PublicKeyToken=ef44276a5eebd19b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AtomicMVVM.1.0.5\lib\net40\AtomicMVVM.dll</HintPath>
+      <HintPath>..\packages\AtomicMVVM.1.0.9\lib\net45\AtomicMVVM.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro">
       <HintPath>..\packages\MahApps.Metro.0.5.0.0\lib\net40\MahApps.Metro.dll</HintPath>

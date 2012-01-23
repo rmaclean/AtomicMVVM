@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>AtomicMVVM</id>
-		<version>1.0.7</version>
+		<version>1.0.9</version>
 		<authors>Robert MacLean</authors>
 		<owners>Robert MacLean</owners>
 		<licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
@@ -10,6 +10,8 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>A supremely lightweight MVVM framework for WPF, Silverlight &amp; Metro projects.</summary>
 		<releaseNotes>
+			1.0.9 - Updated Nuget with a different icon.
+			1.0.8 - Updated Nuget with icon.
 			1.0.7 - Bug fixes for Metro &amp; Silverlight 5 support
 			1.0.6 - Added support for .NET 4.5, Silverlight 5 &amp; Metro in NuGet package
 			1.0.5 - Added support for non-default view constructors which allows for data passing. Added support for global app commands.
@@ -22,5 +24,6 @@
 		<copyright>Copyright Robert MacLean 2012</copyright>
 		<tags>MVVM WPF SILVERLIGHT METRO</tags>
 		<description>The goal of AtomicMVVM is to allow developers to work with MVVM in their XAML based solutions (XPF, Silverlight, Windows Phone, WinRT) with minimal effort while not getting in the way of the code. It requires .NET 4 or higher. The design goals of AtomicMVVM are (in order): simple over feature rich, unobtrusive over less code and convention over configuration.</description>
+		<iconUrl>http://cdn.bitbucket.org/rmaclean/atomicmvvm/downloads/icon.png</iconUrl>
 	</metadata>
 </package>
