@@ -32,9 +32,14 @@ namespace MetroDemo.ViewModels
             GetImages();
         }
 
+        public void Refresh()
+        {
+            GetImages();
+        }
+
         private void GetImages()
         {
-            var request = WebRequest.Create("http://api.flickr.com/services/feeds/photos_public.gne?format=json&tagmode=any&tags=Windows8");
+            var request = WebRequest.Create("http://api.flickr.com/services/feeds/photos_public.gne?format=json&tagmode=any&tags=Windows8,Windows 8,Win8,WinRT");
             request.BeginGetResponse(GotImages, request);
         }
 
@@ -55,11 +60,20 @@ namespace MetroDemo.ViewModels
                 raw = raw.Substring(dataslugStart + dataslug.Length);
                 var dataslugEnd = raw.IndexOf('"');
                 var image = raw.Substring(0, dataslugEnd);
-                Debug.WriteLine(image);
-                images.Add(image);
+                if (images.Count > 0)
+                {
+                    if (!images.Contains(image))
+                    {
+                        images.Insert(0, image);
+                    }
+                }
+                else
+                {
+                    images.Add(image);
+                }
                 this.RaisePropertyChanged("Images");
                 dataslugStart = raw.IndexOf(dataslug);
-            }            
+            }
         }
     }
 }

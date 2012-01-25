@@ -21,5 +21,5 @@ using System.Runtime.InteropServices;
 #if !(SILVERLIGHT || WINRT)
 [assembly: System.Security.SecurityRules(System.Security.SecurityRuleSet.Level2)]
 #endif
-[assembly: AssemblyVersion("1.0.6.0")]
-[assembly: AssemblyFileVersion("1.0.6.0")]
+[assembly: AssemblyVersion("1.0.11.0")]
+[assembly: AssemblyFileVersion("1.0.11.0")]

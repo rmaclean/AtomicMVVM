@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AtomicMVVM;
 using MetroDemo.ViewModels;
@@ -18,7 +19,13 @@ namespace MetroDemo
 
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
-            Bootstrapper = new Bootstrapper<MainPage, Windows8>();
+            var commands = new List<Tuple<string,Action>>();
+            commands.Add(new Tuple<string, Action>("BackButton", () =>
+            {
+                App.Current.Exit();
+            }));
+
+            Bootstrapper = new Bootstrapper<MainPage, Windows8>(commands);
         }
     }
 }

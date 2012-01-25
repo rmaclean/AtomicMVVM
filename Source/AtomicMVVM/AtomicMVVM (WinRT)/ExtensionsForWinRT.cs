@@ -16,6 +16,16 @@ namespace AtomicMVVM
 
         public static PropertyInfo GetProperty(this Type type, string propertyName)
         {
+            //var typeInfo = type.GetTypeInfo();
+            //foreach (var property in typeInfo.DeclaredProperties)
+            //{
+            //    if (property.Name == propertyName)
+            //    {
+            //        return property;
+            //    }
+            //}
+
+            //return null;
             return type.GetTypeInfo().DeclaredProperties.FirstOrDefault(_ => _.Name == propertyName);
         }
 

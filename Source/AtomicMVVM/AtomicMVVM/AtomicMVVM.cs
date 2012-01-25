@@ -34,9 +34,16 @@ namespace AtomicMVVM
         private UserControl view;
         public List<Tuple<string, Action>> GlobalCommands { get; private set; }
 
-        public Bootstrapper()
+        public Bootstrapper(List<Tuple<string, Action>> commands = null)
         {
-            this.GlobalCommands = new List<Tuple<string, Action>>();
+            if (commands != null)
+            {
+                this.GlobalCommands = commands;
+            }
+            else
+            {
+                this.GlobalCommands = new List<Tuple<string, Action>>();
+            }
 
             if (shell == null)
             {
@@ -44,7 +51,7 @@ namespace AtomicMVVM
                 Window.Current.Dispatcher.Invoke(CoreDispatcherPriority.High, (s, e) =>
                     {
 #endif
-                shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
+                        shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
 #if (WINRT)
                     }, this, null);
 #endif
@@ -53,7 +60,7 @@ namespace AtomicMVVM
             this.ChangeView<TContent>();
 
 #if WINRT
-             Window.Current.Content = shell as UIElement;
+            Window.Current.Content = shell as UIElement;
             Window.Current.Activate();
 #else
 #if SILVERLIGHT
@@ -112,16 +119,26 @@ namespace AtomicMVVM
                 if (control != null && typeof(ButtonBase).GetTypeInfo().IsAssignableFrom(control.GetType().GetTypeInfo()))
 #else
 #if SILVERLIGHT
-                if (control != null && typeof(ButtonBase).IsAssignableFrom(control.GetType()))
+                if (control != null && typeof(ButtonBase).IsAssignableFrom(control.GetType()))                   
 #else
                 if (control != null && control is ICommandSource)
 #endif
 #endif
+
+#if WINRT
                 {
+                    var commandProperty = typeof(ButtonBase).GetProperty("Command");
+#else
+                     {
                     var commandProperty = control.GetType().GetProperty("Command");
+#endif
                     if (commandProperty.GetValue(control) == null)
                     {
+#if WINRT
+                        var commandParameterProperty = typeof(ButtonBase).GetProperty("CommandParameter");
+#else
                         var commandParameterProperty = control.GetType().GetProperty("CommandParameter");
+#endif
                         if (commandProperty.CanWrite && commandParameterProperty.CanWrite)
                         {
                             var canExecuteExists = false;
@@ -167,10 +184,18 @@ namespace AtomicMVVM
 #endif
 #endif
                 {
+#if WINRT
+                    var commandProperty = typeof(ButtonBase).GetProperty("Command");
+#else
                     var commandProperty = control.GetType().GetProperty("Command");
+#endif
                     if (commandProperty.GetValue(control) == null)
                     {
+#if WINRT
+                        var commandParameterProperty = typeof(ButtonBase).GetProperty("CommandParameter");
+#else
                         var commandParameterProperty = control.GetType().GetProperty("CommandParameter");
+#endif
                         if (commandProperty.CanWrite && commandParameterProperty.CanWrite)
                         {
                             var command = new GlobalCommand(method.Item2);
@@ -304,7 +329,7 @@ namespace AtomicMVVM
             ViewControl.Dispatcher.Invoke(CoreDispatcherPriority.Normal, (s, e) =>
                 {
 #endif
-            action();
+                    action();
 #if (WINRT)
                 }, this, null);
 #endif

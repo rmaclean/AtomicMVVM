@@ -11,8 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtomicMVVM (WinRT)", "Atomi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{6BBDE25C-9140-48A2-BE24-1ECC131A1AE8}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\Nuget\AtomicMVVM.dll.nuspec = ..\..\Nuget\AtomicMVVM.dll.nuspec
-		..\..\Nuget\update-nuget.bat = ..\..\Nuget\update-nuget.bat
+		..\..\Nuget\AtomicMVVM.nuspec = ..\..\Nuget\AtomicMVVM.nuspec
+		..\..\Nuget\gogonuget.bat = ..\..\Nuget\gogonuget.bat
 	EndProjectSection
 EndProject
 Global
