@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>AtomicMVVM</id>
-		<version>1.0.9</version>
+		<version>1.0.10</version>
 		<authors>Robert MacLean</authors>
 		<owners>Robert MacLean</owners>
 		<licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
@@ -10,6 +10,7 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>A supremely lightweight MVVM framework for WPF, Silverlight &amp; Metro projects.</summary>
 		<releaseNotes>
+			1.0.10 - Improved the Nuget package quality (and managed to knock off about 90% of the file size too) and published a symbols version.
 			1.0.9 - Updated Nuget with a different icon.
 			1.0.8 - Updated Nuget with icon.
 			1.0.7 - Bug fixes for Metro &amp; Silverlight 5 support
@@ -22,8 +23,24 @@
 			1.0.0 - First release.
 		</releaseNotes>
 		<copyright>Copyright Robert MacLean 2012</copyright>
-		<tags>MVVM WPF SILVERLIGHT METRO</tags>
+		<tags>MVVM WPF SILVERLIGHT METRO WINRT BINDING</tags>
 		<description>The goal of AtomicMVVM is to allow developers to work with MVVM in their XAML based solutions (XPF, Silverlight, Windows Phone, WinRT) with minimal effort while not getting in the way of the code. It requires .NET 4 or higher. The design goals of AtomicMVVM are (in order): simple over feature rich, unobtrusive over less code and convention over configuration.</description>
 		<iconUrl>http://cdn.bitbucket.org/rmaclean/atomicmvvm/downloads/icon.png</iconUrl>
 	</metadata>
+<files>
+    <file src="..\Source\AtomicMVVM\AtomicMVVM\bin\Release\AtomicMVVM.dll" target="lib\net40" /> 
+    <file src="..\Source\AtomicMVVM\AtomicMVVM (4.5)\bin\Release\AtomicMVVM.dll" target="lib\net45" /> 
+    <file src="..\Source\AtomicMVVM\AtomicMVVM (Silverlight 5)\Bin\Release\AtomicMVVM.dll" target="lib\sl5" /> 
+    <file src="..\Source\AtomicMVVM\AtomicMVVM (WinRT)\bin\Release\AtomicMVVM.dll" target="lib\NetCore45" /> 
+
+    <file src="..\Source\AtomicMVVM\AtomicMVVM\bin\Release\AtomicMVVM.pdb" target="lib\net40" /> 
+    <file src="..\Source\AtomicMVVM\AtomicMVVM (4.5)\bin\Release\AtomicMVVM.pdb" target="lib\net45" /> 
+    <file src="..\Source\AtomicMVVM\AtomicMVVM (Silverlight 5)\Bin\Release\AtomicMVVM.pdb" target="lib\sl5" /> 
+    <file src="..\Source\AtomicMVVM\AtomicMVVM (WinRT)\bin\Release\AtomicMVVM.pdb" target="lib\NetCore45" /> 
+
+    <file src="..\Source\**\*.cs" target="src" />
+
+    <file src="CREDITS.TXT" target="" /> 
+    <file src="LICENSE.TXT" target="" /> 
+</files>
 </package>
