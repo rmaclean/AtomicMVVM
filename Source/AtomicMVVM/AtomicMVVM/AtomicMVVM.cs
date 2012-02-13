@@ -45,17 +45,15 @@ namespace AtomicMVVM
                 this.GlobalCommands = new List<Tuple<string, Action>>();
             }
 
-            if (shell == null)
-            {
+
 #if (WINRT)
                 Window.Current.Dispatcher.Invoke(CoreDispatcherPriority.High, (s, e) =>
                     {
 #endif
-                        shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
+            shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
 #if (WINRT)
                     }, this, null);
 #endif
-            }
 
             this.ChangeView<TContent>();
 
@@ -64,7 +62,7 @@ namespace AtomicMVVM
             Window.Current.Activate();
 #else
 #if SILVERLIGHT
-             Application.Current.RootVisual = shell as UIElement;
+            Application.Current.RootVisual = shell as UIElement;
 #else
             (shell as Window).Show();
 #endif
@@ -101,10 +99,7 @@ namespace AtomicMVVM
             var validMethods = (from m in viewModel.GetType().GetMethods()
                                 where m.IsPublic &&
                                      !m.IsSpecialName &&
-#if !WINRT
- !m.Attributes.HasFlag(MethodAttributes.VtableLayoutMask) &&
-#endif
- m.ReturnType == typeof(void)
+                                      m.ReturnType == typeof(void)
                                 select m).ToList();
 
             foreach (var method in validMethods)
@@ -119,7 +114,7 @@ namespace AtomicMVVM
                 if (control != null && typeof(ButtonBase).GetTypeInfo().IsAssignableFrom(control.GetType().GetTypeInfo()))
 #else
 #if SILVERLIGHT
-                if (control != null && typeof(ButtonBase).IsAssignableFrom(control.GetType()))                   
+                if (control != null && typeof(ButtonBase).IsAssignableFrom(control.GetType()))
 #else
                 if (control != null && control is ICommandSource)
 #endif
@@ -129,7 +124,7 @@ namespace AtomicMVVM
                 {
                     var commandProperty = typeof(ButtonBase).GetProperty("Command");
 #else
-                     {
+                {
                     var commandProperty = control.GetType().GetProperty("Command");
 #endif
                     if (commandProperty.GetValue(control) == null)
@@ -329,7 +324,7 @@ namespace AtomicMVVM
             ViewControl.Dispatcher.Invoke(CoreDispatcherPriority.Normal, (s, e) =>
                 {
 #endif
-                    action();
+            action();
 #if (WINRT)
                 }, this, null);
 #endif

@@ -7,5 +7,7 @@ namespace MetroDemo.Views
         {
             InitializeComponent();
         }
+
+      
     }
 }

@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AtomicMVVM;
-using MetroDemo.ViewModels;
-using Windows.ApplicationModel.Activation;
-using Windows.UI.Xaml;
 
 namespace MetroDemo
 {
+    using System;
+    using System.Collections.Generic;
+    using AtomicMVVM;
+    using MetroDemo.ViewModels;
+    using Windows.ApplicationModel.Activation;
+
     partial class App
     {
         public static Bootstrapper<MainPage, Windows8> Bootstrapper;
