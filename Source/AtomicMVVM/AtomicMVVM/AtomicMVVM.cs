@@ -106,7 +106,7 @@ namespace AtomicMVVM
             {
                 foreach (var attribute in method.GetCustomAttributes<TriggerPropertyAttribute>(false))
                 {
-                    AddTrigger(attribute.PropertyName, method.Name);
+                    AddTrigger(attribute.PropertyNames, method.Name);
                 }
 
                 var control = view.FindName(method.Name);
@@ -151,13 +151,13 @@ namespace AtomicMVVM
                                 {
                                     viewModel.PropertyChanged += (s, e) =>
                                     {
-                                        if (e.PropertyName == attribute.PropertyName)
+                                        if (attribute.PropertyNames.Contains(e.PropertyName))
                                         {
                                             command.RaiseCanExecuteChanged();
                                         }
                                     };
                                 }
-                            }
+                            }                            
 
                             commandProperty.SetValue(control, command);
                             commandParameterProperty.SetValue(control, viewModel);
@@ -202,16 +202,18 @@ namespace AtomicMVVM
                 }
             }
 
+            viewModel.RaiseBound();
+
             view.DataContext = viewModel;
 
             shell.ChangeContent(view);
         }
 
-        private void AddTrigger(string propertyName, string methodName)
+        private void AddTrigger(string[] propertyNames, string methodName)
         {
             this.viewModel.PropertyChanged += (s, e) =>
                 {
-                    if (e.PropertyName == propertyName)
+                    if (propertyNames.Contains(e.PropertyName))
                     {
                         viewModel.GetType().GetMethod(methodName).Invoke(viewModel, null);
                     }
@@ -226,11 +228,14 @@ namespace AtomicMVVM
             return true;
         }
 
+#pragma warning disable 67
 #if (WINRT)
         public event Windows.UI.Xaml.EventHandler CanExecuteChanged;
 #else
         public event EventHandler CanExecuteChanged;
 #endif
+#pragma warning restore 67
+
         private Action action;
 
         public GlobalCommand(Action action)
@@ -314,7 +319,7 @@ namespace AtomicMVVM
         {
             if (PropertyChanged != null)
             {
-                this.Invoke(() => PropertyChanged(this, new PropertyChangedEventArgs(propertyName)));
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 
@@ -333,28 +338,38 @@ namespace AtomicMVVM
         public event PropertyChangedEventHandler PropertyChanged;
 
         public UserControl ViewControl { get; set; }
+
+        public event System.EventHandler OnBound;
+
+        public void RaiseBound()
+        {
+            if (OnBound != null)
+            {
+                OnBound(this, new EventArgs());
+            }
+        }
     }
 
-    [System.AttributeUsage(System.AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
+    [AttributeUsage(System.AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
     public sealed class ReevaluatePropertyAttribute : System.Attribute
     {
-        public ReevaluatePropertyAttribute(string propertyName)
+        public ReevaluatePropertyAttribute(params string[] propertyNames)
         {
-            this.PropertyName = propertyName;
+            this.PropertyNames = propertyNames;
         }
 
-        public string PropertyName { get; private set; }
+        public string[] PropertyNames { get; private set; }
     }
 
-    [System.AttributeUsage(System.AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
+    [AttributeUsage(System.AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
     public sealed class TriggerPropertyAttribute : System.Attribute
     {
-        public TriggerPropertyAttribute(string propertyName)
+        public TriggerPropertyAttribute(params string[] propertyNames)
         {
-            this.PropertyName = propertyName;
+            this.PropertyNames = propertyNames;
         }
 
-        public string PropertyName { get; private set; }
+        public string[] PropertyNames { get; private set; }
     }
 
     public interface IShell

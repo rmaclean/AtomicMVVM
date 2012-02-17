@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>AtomicMVVM</id>
-		<version>1.0.11</version>
+		<version>2.0.0</version>
 		<authors>Robert MacLean</authors>
 		<owners>Robert MacLean</owners>
 		<licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
@@ -10,6 +10,7 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>A supremely lightweight MVVM framework for WPF, Silverlight &amp; Metro projects.</summary>
 		<releaseNotes>
+			2.0.0 - Changed the way attributes (Trigger &amp; Reevaluate) work. No longer can you do multiple. Now you can only have one, but with multiple properties. This solves some edge case bugs &amp; improves performance. Added small tweak around warning of unused event. Create the 'Views' &amp; 'ViewModels' folder for you. 
 			1.0.11 - Bug fixes for WinRT command support (grr) and ability to pass in global commands in the constructor so they can be applied to the first view too.
 			1.0.10 - Improved the Nuget package quality (and managed to knock off about 90% of the file size too) and published a symbols version.
 			1.0.9 - Updated Nuget with a different icon.
@@ -42,6 +43,7 @@
     <file src="..\Source\**\*.cs" target="src" />
 
     <file src="CREDITS.TXT" target="" /> 
-    <file src="LICENSE.TXT" target="" /> 
+    <file src="LICENSE.TXT" target="" />
+	<file src="Install.ps1" target="tools" />
 </files>
 </package>
