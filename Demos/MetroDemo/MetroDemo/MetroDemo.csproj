@@ -83,17 +83,15 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="AtomicMVVM, Version=2.0.0.0, Culture=neutral, PublicKeyToken=ef44276a5eebd19b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AtomicMVVM.2.0.1\lib\NetCore45\AtomicMVVM.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MetroDemo_TemporaryKey.pfx" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Source\AtomicMVVM\AtomicMVVM %28Metro%29\AtomicMVVM %28Metro%29.csproj">
-      <Project>{82c0491b-122d-4700-ab4c-5c3854a018ae}</Project>
-      <Name>AtomicMVVM %28Metro%29</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v11.0\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

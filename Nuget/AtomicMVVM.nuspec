@@ -34,12 +34,12 @@
     <file src="..\Source\AtomicMVVM\AtomicMVVM\bin\Release\AtomicMVVM.dll" target="lib\net40" /> 
     <file src="..\Source\AtomicMVVM\AtomicMVVM (4.5)\bin\Release\AtomicMVVM.dll" target="lib\net45" /> 
     <file src="..\Source\AtomicMVVM\AtomicMVVM (Silverlight 5)\Bin\Release\AtomicMVVM.dll" target="lib\sl5" /> 
-    <file src="..\Source\AtomicMVVM\AtomicMVVM (WinRT)\bin\Release\AtomicMVVM.dll" target="lib\NetCore45" /> 
+    <file src="..\Source\AtomicMVVM\AtomicMVVM (Metro)\bin\Release\AtomicMVVM.dll" target="lib\NetCore45" /> 
 
     <file src="..\Source\AtomicMVVM\AtomicMVVM\bin\Release\AtomicMVVM.pdb" target="lib\net40" /> 
     <file src="..\Source\AtomicMVVM\AtomicMVVM (4.5)\bin\Release\AtomicMVVM.pdb" target="lib\net45" /> 
     <file src="..\Source\AtomicMVVM\AtomicMVVM (Silverlight 5)\Bin\Release\AtomicMVVM.pdb" target="lib\sl5" /> 
-    <file src="..\Source\AtomicMVVM\AtomicMVVM (WinRT)\bin\Release\AtomicMVVM.pdb" target="lib\NetCore45" /> 
+    <file src="..\Source\AtomicMVVM\AtomicMVVM (Metro)\bin\Release\AtomicMVVM.pdb" target="lib\NetCore45" /> 
 
     <file src="..\Source\**\*.cs" target="src" />
 
