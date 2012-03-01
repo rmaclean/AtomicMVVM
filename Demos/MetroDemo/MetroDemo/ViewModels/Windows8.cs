@@ -12,14 +12,14 @@ namespace MetroDemo.ViewModels
 
     public class Windows8 : CoreData
     {
-        private ObservableCollection<string> images = new ObservableCollection<string>();
-        public IObservableVector<string> Images
-        {
-            get
-            {
-                return new ObservableCollectionShim<string>(images);
-            }
-        }
+        //private ObservableCollection<string> images = new ObservableCollection<string>();
+        public ObservableCollection<string> Images {get;set;}
+        //{
+        //    get
+        //    {
+        //        return new ObservableCollectionShim<string>(images);
+        //    }
+        //}
 
         private string _search = "Windows8,Windows 8,Win8,WinRT";
 
@@ -73,6 +73,7 @@ namespace MetroDemo.ViewModels
 
         public Windows8()
         {
+            Images = new ObservableCollection<string>();
             GetImages();
         }
 
@@ -81,26 +82,21 @@ namespace MetroDemo.ViewModels
             GetImages();
         }
 
-        private void GetImages()
+        private async void GetImages()
         {
             InProgress = true;
             var query = "http://api.flickr.com/services/feeds/photos_public.gne?format=json&tagmode=any&tags=" + this.Search;
             Debug.WriteLine(query);
             var request = WebRequest.Create(query);
-            request.BeginGetResponse(GotImages, request);
-        }
-
-        private void GotImages(IAsyncResult result)
-        {
-            InProgress = false;
-            var request = result.AsyncState as WebRequest;
-            WebResponse response;
+            WebResponse response = null;
             try
             {
-                response = request.EndGetResponse(result);
+                response = await request.GetResponseAsync();
+                InProgress = false;                
             }
             catch (WebException)
             {
+                InProgress = false;
                 ErrorMessage = "We cannot connect to Flickr, check your Internet connection, firewall settings and try again.";
                 Errored = true;
                 return;
@@ -120,7 +116,7 @@ namespace MetroDemo.ViewModels
                 var dataslugEnd = raw.IndexOf('"');
                 var image = raw.Substring(0, dataslugEnd);
                 Debug.WriteLine(image);
-                images.Add(image);
+                Images.Add(image);
                 this.RaisePropertyChanged("Images");
                 dataslugStart = raw.IndexOf(dataslug);
             }

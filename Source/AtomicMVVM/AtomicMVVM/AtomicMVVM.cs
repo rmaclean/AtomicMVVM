@@ -43,16 +43,7 @@ namespace AtomicMVVM
                 this.GlobalCommands = new List<Tuple<string, Action>>();
             }
 
-
-#if (NETFX_CORE)
-                Window.Current.Dispatcher.Invoke(CoreDispatcherPriority.High, (s, e) =>
-                    {
-#endif
             shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
-#if (NETFX_CORE)
-                    }, this, null);
-#endif
-
             this.ChangeView<TContent>();
 
 #if NETFX_CORE
