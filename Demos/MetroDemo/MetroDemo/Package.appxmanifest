@@ -16,7 +16,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="metrodemo.exe" EntryPoint="MetroDemo.App">
-      <VisualElements DisplayName="AtomicMVVM Metro Style App Demo" Logo="Images\Logo.png" SmallLogo="Images\SmallLogo.png" Description="AtomicMVVM Metro Style App Demo" ForegroundText="light" BackgroundColor="#000000" InitialRotationPreference="portrait">
+      <VisualElements DisplayName="AtomicMVVM Metro Style App Demo" Logo="Images\Logo.png" SmallLogo="Images\SmallLogo.png" Description="AtomicMVVM Metro Style App Demo" ForegroundText="light" BackgroundColor="#000000">
         <DefaultTile />
         <SplashScreen Image="Images\SplashScreen.png" />
       </VisualElements>

@@ -5,26 +5,24 @@ namespace AtomicMVVM
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-#if WINRT
-    using Windows.UI.Xaml;
-    using Windows.UI.Xaml.Controls;
-    using Windows.UI.Xaml.Input;
-    using Windows.UI.Xaml.Controls.Primitives;
-    using Windows.UI.Core;
-    using Windows.UI.Xaml.Data;
-#else
-    using System.Windows;
-    using System.Windows.Controls;
     using System.Windows.Input;
+    using System.Windows;    
+    using System.ComponentModel;    
+#if NETFX_CORE
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml;
+    using Windows.UI.Core;
+    using Windows.UI.Xaml.Controls.Primitives;
+#else
+    using System.Windows.Controls;    
     using System.Windows.Controls.Primitives;
-    using System.ComponentModel;
 #endif
 
     public class Bootstrapper<TShell, TContent>
         where TShell : IShell
         where TContent : CoreData
     {
-#if (WINRT)
+#if (NETFX_CORE)        
         private readonly Type[] EmptyTypes = new Type[] { };
 #else
         private readonly Type[] EmptyTypes = Type.EmptyTypes;
@@ -46,18 +44,18 @@ namespace AtomicMVVM
             }
 
 
-#if (WINRT)
+#if (NETFX_CORE)
                 Window.Current.Dispatcher.Invoke(CoreDispatcherPriority.High, (s, e) =>
                     {
 #endif
             shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
-#if (WINRT)
+#if (NETFX_CORE)
                     }, this, null);
 #endif
 
             this.ChangeView<TContent>();
 
-#if WINRT
+#if NETFX_CORE
             Window.Current.Content = shell as UIElement;
             Window.Current.Activate();
 #else
@@ -87,7 +85,7 @@ namespace AtomicMVVM
         {
             var viewName = viewModel.GetType().AssemblyQualifiedName.Replace(".ViewModels.", ".Views.");
 
-#if WINRT
+#if NETFX_CORE
             var viewType = Type.GetType(viewName);
 #else
             var viewType = Type.GetType(viewName, true, true);
@@ -110,7 +108,7 @@ namespace AtomicMVVM
                 }
 
                 var control = view.FindName(method.Name);
-#if WINRT
+#if NETFX_CORE
                 if (control != null && typeof(ButtonBase).GetTypeInfo().IsAssignableFrom(control.GetType().GetTypeInfo()))
 #else
 #if SILVERLIGHT
@@ -120,7 +118,7 @@ namespace AtomicMVVM
 #endif
 #endif
 
-#if WINRT
+#if NETFX_CORE
                 {
                     var commandProperty = typeof(ButtonBase).GetProperty("Command");
 #else
@@ -129,7 +127,7 @@ namespace AtomicMVVM
 #endif
                     if (commandProperty.GetValue(control) == null)
                     {
-#if WINRT
+#if NETFX_CORE
                         var commandParameterProperty = typeof(ButtonBase).GetProperty("CommandParameter");
 #else
                         var commandParameterProperty = control.GetType().GetProperty("CommandParameter");
@@ -169,7 +167,7 @@ namespace AtomicMVVM
             foreach (var method in GlobalCommands)
             {
                 var control = view.FindName(method.Item1);
-#if WINRT
+#if NETFX_CORE
                 if (control != null && typeof(ButtonBase).GetTypeInfo().IsAssignableFrom(control.GetType().GetTypeInfo()))
 #else
 #if SILVERLIGHT
@@ -179,14 +177,14 @@ namespace AtomicMVVM
 #endif
 #endif
                 {
-#if WINRT
+#if NETFX_CORE
                     var commandProperty = typeof(ButtonBase).GetProperty("Command");
 #else
                     var commandProperty = control.GetType().GetProperty("Command");
 #endif
                     if (commandProperty.GetValue(control) == null)
                     {
-#if WINRT
+#if NETFX_CORE
                         var commandParameterProperty = typeof(ButtonBase).GetProperty("CommandParameter");
 #else
                         var commandParameterProperty = control.GetType().GetProperty("CommandParameter");
@@ -229,11 +227,7 @@ namespace AtomicMVVM
         }
 
 #pragma warning disable 67
-#if (WINRT)
-        public event Windows.UI.Xaml.EventHandler CanExecuteChanged;
-#else
         public event EventHandler CanExecuteChanged;
-#endif
 #pragma warning restore 67
 
         private Action action;
@@ -252,7 +246,7 @@ namespace AtomicMVVM
 
     public class AttachedCommand : ICommand
     {
-#if (WINRT)
+#if (NETFX_CORE)
         private readonly Type[] EmptyTypes = new Type[] { };
 #else
         private readonly Type[] EmptyTypes = Type.EmptyTypes;
@@ -285,11 +279,7 @@ namespace AtomicMVVM
             }
         }
 
-#if (WINRT)
-        public event Windows.UI.Xaml.EventHandler CanExecuteChanged;
-#else
         public event EventHandler CanExecuteChanged;
-#endif
         private string methodName;
         private MethodInfo executeMethod;
         private MethodInfo canExecuteMethod;
@@ -319,18 +309,25 @@ namespace AtomicMVVM
         {
             if (PropertyChanged != null)
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+#if (NETFX_CORE)
+                ViewControl.Dispatcher.Invoke(CoreDispatcherPriority.Normal, (s, e) =>
+                {
+#endif
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+#if (NETFX_CORE)
+                }, this, null);
+#endif                
             }
         }
 
         public void Invoke(Action action)
         {
-#if (WINRT)
+#if (NETFX_CORE)
             ViewControl.Dispatcher.Invoke(CoreDispatcherPriority.Normal, (s, e) =>
                 {
 #endif
             action();
-#if (WINRT)
+#if (NETFX_CORE)
                 }, this, null);
 #endif
         }

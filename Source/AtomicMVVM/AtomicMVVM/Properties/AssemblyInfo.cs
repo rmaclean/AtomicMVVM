@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 [assembly:System.Resources.NeutralResourcesLanguage("en")]
 [assembly: ComVisible(false)]
 [assembly: Guid("dd623e44-e327-437d-8462-00676ccd42f0")]
-#if !(SILVERLIGHT || WINRT)
+#if !(SILVERLIGHT || NETFX_CORE)
 [assembly: System.Security.SecurityRules(System.Security.SecurityRuleSet.Level2)]
 #endif
 [assembly: AssemblyVersion("2.0.0.0")]

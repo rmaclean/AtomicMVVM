@@ -9,13 +9,13 @@ using Windows.UI.Xaml.Data;
 namespace ObservableCollectionExample
 {
     public class ObservableCollectionAdapter : IValueConverter
-    {
-        public object Convert(object value, string typeName, object parameter, string language)
+    {        
+        public object Convert(object value, Type targetType, object parameter, string language)
         {
             return ((INotifyCollectionChanged)value).ToObservableVector();
         }
 
-        public object ConvertBack(object value, string typeName, object parameter, string language)
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             throw new NotImplementedException();
         }
