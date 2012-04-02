@@ -118,7 +118,9 @@
     <Compile Include="..\AtomicMVVM\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ExtensionsForWinRT.cs" />
+    <Compile Include="ExtensionsForWinRT.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>

@@ -1,10 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿
 
 namespace AtomicMVVM
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+#if WINDOWS_PHONE
+    using ActionCommand = Tuple<string, System.Action>;
+#else
+    using ActionCommand = System.Tuple<string,System.Action>;
+#endif
+    using System.Reflection;
+
+    public static class AtomicMVVMExtensions
+    {
+        public static void ExecuteGlobalCommand<TShell, TContent>(this Bootstrapper<TShell, TContent> bootstrapper, string commandId)            
+            where TShell : IShell
+            where TContent : CoreData
+        {
+            bootstrapper.GlobalCommands.Single(_ => _.Item1 == commandId).Item2();
+        }
+
+        public static void Add(this List<ActionCommand> globalCommands, string commandId, Action action)
+        {
+            var actionCommand = new ActionCommand(commandId, action);
+            globalCommands.Add(actionCommand);
+        }
+    }
+
     public static class ExtensionsForNET40
     {
         public static IEnumerable<T> GetCustomAttributes<T>(this MethodInfo method, bool inherit)

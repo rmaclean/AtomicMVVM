@@ -6,23 +6,31 @@ namespace AtomicMVVM
     using System.Linq;
     using System.Reflection;
     using System.Windows.Input;
-    using System.Windows;    
-    using System.ComponentModel;    
+    using System.Windows;
+    using System.ComponentModel;
+    using System.Globalization;
+#if WINDOWS_PHONE
+    using ActionCommand = Tuple<string, System.Action>;
+#else
+    using ActionCommand = System.Tuple<string,System.Action>;
+#endif
 #if NETFX_CORE
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml;
     using Windows.UI.Core;
     using Windows.UI.Xaml.Controls.Primitives;
+    using System.Reflection.RuntimeExtensions;
 #else
-    using System.Windows.Controls;    
+    using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
+    using System.Windows.Navigation;
 #endif
 
     public class Bootstrapper<TShell, TContent>
         where TShell : IShell
         where TContent : CoreData
     {
-#if (NETFX_CORE)        
+#if (NETFX_CORE)
         private readonly Type[] EmptyTypes = new Type[] { };
 #else
         private readonly Type[] EmptyTypes = Type.EmptyTypes;
@@ -30,19 +38,15 @@ namespace AtomicMVVM
         private IShell shell;
         private CoreData viewModel;
         private UserControl view;
-        public List<Tuple<string, Action>> GlobalCommands { get; private set; }
+        public List<ActionCommand> GlobalCommands { get; private set; }
 
-        public Bootstrapper(List<Tuple<string, Action>> commands = null)
+        public Bootstrapper()
         {
-            if (commands != null)
-            {
-                this.GlobalCommands = commands;
-            }
-            else
-            {
-                this.GlobalCommands = new List<Tuple<string, Action>>();
-            }
+            this.GlobalCommands = new List<ActionCommand>();
+        }
 
+        public void Start()
+        {
             shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
             this.ChangeView<TContent>();
 
@@ -76,7 +80,7 @@ namespace AtomicMVVM
         {
             var viewName = viewModel.GetType().AssemblyQualifiedName.Replace(".ViewModels.", ".Views.");
 
-#if NETFX_CORE
+#if (NETFX_CORE || WINDOWS_PHONE)
             var viewType = Type.GetType(viewName);
 #else
             var viewType = Type.GetType(viewName, true, true);
@@ -85,15 +89,21 @@ namespace AtomicMVVM
 
             this.viewModel.ViewControl = view;
 
+#if NETFX_CORE
+            var validMethods = (from m in viewModel.GetType().GetRuntimeMethods()
+#else
             var validMethods = (from m in viewModel.GetType().GetMethods()
-                                where m.IsPublic &&
-                                     !m.IsSpecialName &&
+#endif
+                                where !m.IsSpecialName &&
                                       m.ReturnType == typeof(void)
                                 select m).ToList();
 
             foreach (var method in validMethods)
             {
-                foreach (var attribute in method.GetCustomAttributes<TriggerPropertyAttribute>(false))
+                var attributes = from _ in method.GetCustomAttributes<TriggerPropertyAttribute>(false)
+                                 orderby _.Order ascending
+                                 select _;
+                foreach (var attribute in attributes)
                 {
                     AddTrigger(attribute.PropertyNames, method.Name);
                 }
@@ -111,7 +121,7 @@ namespace AtomicMVVM
 
 #if NETFX_CORE
                 {
-                    var commandProperty = typeof(ButtonBase).GetProperty("Command");
+                    var commandProperty = typeof(ButtonBase).GetRuntimeProperty("Command");
 #else
                 {
                     var commandProperty = control.GetType().GetProperty("Command");
@@ -119,14 +129,18 @@ namespace AtomicMVVM
                     if (commandProperty.GetValue(control) == null)
                     {
 #if NETFX_CORE
-                        var commandParameterProperty = typeof(ButtonBase).GetProperty("CommandParameter");
+                        var commandParameterProperty = typeof(ButtonBase).GetRuntimeProperty("CommandParameter");
 #else
                         var commandParameterProperty = control.GetType().GetProperty("CommandParameter");
 #endif
                         if (commandProperty.CanWrite && commandParameterProperty.CanWrite)
                         {
                             var canExecuteExists = false;
+#if NETFX_CORE
+                            var canExecuteMethod = viewModel.GetType().GetRuntimeMethod("Can" + method.Name, EmptyTypes);
+#else
                             var canExecuteMethod = viewModel.GetType().GetMethod("Can" + method.Name, EmptyTypes);
+#endif
                             if (canExecuteMethod != null)
                             {
                                 canExecuteExists = canExecuteMethod.ReturnType == typeof(bool);
@@ -136,7 +150,10 @@ namespace AtomicMVVM
 
                             if (canExecuteMethod != null)
                             {
-                                foreach (var attribute in canExecuteMethod.GetCustomAttributes<ReevaluatePropertyAttribute>(false))
+                                var reevaluateAttributes = from _ in canExecuteMethod.GetCustomAttributes<ReevaluatePropertyAttribute>(false)
+                                                           orderby _ ascending
+                                                           select _;
+                                foreach (var attribute in reevaluateAttributes)
                                 {
                                     viewModel.PropertyChanged += (s, e) =>
                                     {
@@ -146,7 +163,7 @@ namespace AtomicMVVM
                                         }
                                     };
                                 }
-                            }                            
+                            }
 
                             commandProperty.SetValue(control, command);
                             commandParameterProperty.SetValue(control, viewModel);
@@ -169,14 +186,14 @@ namespace AtomicMVVM
 #endif
                 {
 #if NETFX_CORE
-                    var commandProperty = typeof(ButtonBase).GetProperty("Command");
+                    var commandProperty = typeof(ButtonBase).GetRuntimeProperty("Command");
 #else
                     var commandProperty = control.GetType().GetProperty("Command");
 #endif
                     if (commandProperty.GetValue(control) == null)
                     {
 #if NETFX_CORE
-                        var commandParameterProperty = typeof(ButtonBase).GetProperty("CommandParameter");
+                        var commandParameterProperty = typeof(ButtonBase).GetRuntimeProperty("CommandParameter");
 #else
                         var commandParameterProperty = control.GetType().GetProperty("CommandParameter");
 #endif
@@ -192,9 +209,7 @@ namespace AtomicMVVM
             }
 
             viewModel.RaiseBound();
-
             view.DataContext = viewModel;
-
             shell.ChangeContent(view);
         }
 
@@ -204,7 +219,17 @@ namespace AtomicMVVM
                 {
                     if (propertyNames.Contains(e.PropertyName))
                     {
-                        viewModel.GetType().GetMethod(methodName).Invoke(viewModel, null);
+#if NETFX_CORE
+                        var method = viewModel.GetType().GetRuntimeMethod(methodName, EmptyTypes);
+#else
+                        var method = viewModel.GetType().GetMethod(methodName, EmptyTypes);
+#endif
+                        if (method == null)
+                        {
+                            throw new Exception(string.Format(CultureInfo.CurrentCulture, "Cannot find method '{0}' - make sure it is a public method?", methodName));
+                        }
+
+                        method.Invoke(viewModel, null);
                     }
                 };
         }
@@ -256,7 +281,11 @@ namespace AtomicMVVM
 
             if (canExecuteMethod == null)
             {
+#if NETFX_CORE
+                canExecuteMethod = parameter.GetType().GetRuntimeMethod("Can" + this.methodName, EmptyTypes);
+#else
                 canExecuteMethod = parameter.GetType().GetMethod("Can" + this.methodName, EmptyTypes);
+#endif
             }
 
             return (bool)canExecuteMethod.Invoke(parameter, null);
@@ -286,7 +315,11 @@ namespace AtomicMVVM
         {
             if (executeMethod == null)
             {
-                executeMethod = parameter.GetType().GetMethod(this.methodName);
+#if NETFX_CORE
+                executeMethod = parameter.GetType().GetRuntimeMethod(this.methodName, EmptyTypes);
+#else
+                executeMethod = parameter.GetType().GetMethod(this.methodName, EmptyTypes);
+#endif
             }
 
             executeMethod.Invoke(parameter, null);
@@ -298,16 +331,16 @@ namespace AtomicMVVM
     {
         public void RaisePropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
+            if (PropertyChanged != null && ViewControl != null)
             {
 #if (NETFX_CORE)
                 ViewControl.Dispatcher.Invoke(CoreDispatcherPriority.Normal, (s, e) =>
                 {
 #endif
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 #if (NETFX_CORE)
                 }, this, null);
-#endif                
+#endif
             }
         }
 
@@ -342,22 +375,36 @@ namespace AtomicMVVM
     public sealed class ReevaluatePropertyAttribute : System.Attribute
     {
         public ReevaluatePropertyAttribute(params string[] propertyNames)
+            : this(0, propertyNames)
+        {
+        }
+
+        public ReevaluatePropertyAttribute(int order, params string[] propertyNames)
         {
             this.PropertyNames = propertyNames;
+            this.Order = order;
         }
 
         public string[] PropertyNames { get; private set; }
+        public int Order { get; private set; }
     }
 
     [AttributeUsage(System.AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
     public sealed class TriggerPropertyAttribute : System.Attribute
     {
         public TriggerPropertyAttribute(params string[] propertyNames)
+            : this(0, propertyNames)
+        {
+        }
+
+        public TriggerPropertyAttribute(int order, params string[] propertyNames)
         {
             this.PropertyNames = propertyNames;
+            this.Order = order;
         }
 
         public string[] PropertyNames { get; private set; }
+        public int Order { get; private set; }
     }
 
     public interface IShell
