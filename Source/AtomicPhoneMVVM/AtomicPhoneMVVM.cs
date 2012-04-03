@@ -19,9 +19,23 @@ namespace AtomicPhoneMVVM
     {
         public static void BindData<T>(this PhoneApplicationPage page)
         {
+            BindData<T, object>(page, null);
+        }
+
+        public static void BindData<T, Y>(this PhoneApplicationPage page, Y data)
+        {
             var viewModelName = typeof(T).AssemblyQualifiedName;
 
-            var viewModel = typeof(T).GetConstructor(Type.EmptyTypes).Invoke(null) as CoreData;
+            CoreData viewModel;
+            if (data == null)
+            {
+                viewModel = typeof(T).GetConstructor(Type.EmptyTypes).Invoke(null) as CoreData;
+            }
+            else
+            {
+                viewModel = typeof(T).GetConstructor(new[] { typeof(Y) }).Invoke(new object[] { data }) as CoreData;
+            }
+
             if (typeof(IPushMessage).IsAssignableFrom(page.GetType()))
             {
                 viewModel.Page = (IPushMessage)page;
@@ -30,7 +44,8 @@ namespace AtomicPhoneMVVM
             var validMethods = (from m in viewModel.GetType().GetMethods()
                                 where !m.IsSpecialName &&
                                        m.ReturnType == typeof(void) &&
-                                       m.DeclaringType != typeof(CoreData)
+                                       m.DeclaringType != typeof(CoreData) &&
+                                       m.DeclaringType != typeof(IWhenReady)
                                 select m).ToList();
 
             foreach (var method in validMethods)
@@ -85,8 +100,11 @@ namespace AtomicPhoneMVVM
                 }
             }
 
-            viewModel.RaiseBound();
             page.DataContext = viewModel;
+            if (typeof(IWhenReady).IsAssignableFrom(viewModel.GetType()))
+            {
+                (viewModel as IWhenReady).Ready();
+            }
         }
 
         private static void AddTrigger(CoreData viewModel, string[] propertyNames, string methodName)
@@ -190,6 +208,11 @@ namespace AtomicPhoneMVVM
         void Push(string message);
     }
 
+    public interface IWhenReady
+    {
+        void Ready();
+    }
+
     public class CoreData : INotifyPropertyChanged
     {
         public IPushMessage Page { get; set; }
@@ -201,22 +224,8 @@ namespace AtomicPhoneMVVM
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
-        public void Invoke(Action action)
-        {
-            action();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public event System.EventHandler OnBound;
-
-        public void RaiseBound()
-        {
-            if (OnBound != null)
-            {
-                OnBound(this, new EventArgs());
-            }
-        }
+       
+        public event PropertyChangedEventHandler PropertyChanged;        
 
         public void Navigate(string page)
         {
@@ -231,7 +240,7 @@ namespace AtomicPhoneMVVM
             }
         }
     }
-                                                
+
     [AttributeUsage(System.AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
     public sealed class ReevaluatePropertyAttribute : System.Attribute
     {
