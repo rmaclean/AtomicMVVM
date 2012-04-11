@@ -14,6 +14,7 @@ namespace AtomicPhoneMVVM
     using System.Windows.Controls.Primitives;
     using System.Windows.Navigation;
     using Microsoft.Phone.Controls;
+    using Microsoft.Phone.Shell;
 
     public static class Bootstrapper
     {
@@ -45,7 +46,7 @@ namespace AtomicPhoneMVVM
                                 where !m.IsSpecialName &&
                                        m.ReturnType == typeof(void) &&
                                        m.DeclaringType != typeof(CoreData) &&
-                                       m.DeclaringType != typeof(IWhenReady)
+                                       !m.GetCustomAttributes<AppBarCommandAttribute>(false).Any()
                                 select m).ToList();
 
             foreach (var method in validMethods)
@@ -97,6 +98,67 @@ namespace AtomicPhoneMVVM
                             commandParameterProperty.SetValue(control, viewModel);
                         }
                     }
+                }
+            }
+
+            if (page.ApplicationBar != null && page.ApplicationBar.Buttons != null)
+            {
+                var appBarMethods = (from m in viewModel.GetType().GetMethods()
+                                     where !m.IsSpecialName &&
+                                           m.ReturnType == typeof(void) &&
+                                           m.DeclaringType != typeof(CoreData) &&
+                                           m.GetCustomAttributes<AppBarCommandAttribute>(false).Any()
+                                     select m).ToList();
+
+                foreach (var method in appBarMethods)
+                {
+                    ApplicationBarIconButton selectedAppBarItem = null;
+                    var itemText = method.GetCustomAttributes<AppBarCommandAttribute>(false).Single().AppBarText;
+                    foreach (ApplicationBarIconButton appBarItem in page.ApplicationBar.Buttons)
+                    {
+                        if (appBarItem.Text == itemText)
+                        {
+                            selectedAppBarItem = appBarItem;
+                            break;
+                        }
+                    }
+
+                    if (selectedAppBarItem == null)
+                    {
+                        continue;
+                    }
+
+                    var canExecuteExists = false;
+                    var canExecuteMethod = viewModel.GetType().GetMethod("Can" + method.Name, Type.EmptyTypes);
+                    if (canExecuteMethod != null)
+                    {
+                        canExecuteExists = canExecuteMethod.ReturnType == typeof(bool);
+                    }
+
+                    if (canExecuteExists)
+                    {
+                        var reevaluateAttributes = from _ in canExecuteMethod.GetCustomAttributes<ReevaluatePropertyAttribute>(false)
+                                                   orderby _ ascending
+                                                   select _;
+                        foreach (var attribute in reevaluateAttributes)
+                        {
+                            viewModel.PropertyChanged += (s, e) =>
+                            {
+                                if (attribute.PropertyNames.Contains(e.PropertyName))
+                                {
+                                    var result = (bool)canExecuteMethod.Invoke(viewModel, null);
+                                    selectedAppBarItem.IsEnabled = result;
+                                }
+                            };
+                        }
+
+                        selectedAppBarItem.IsEnabled = (bool)canExecuteMethod.Invoke(viewModel, null); 
+                    }
+
+                    selectedAppBarItem.Click += (s,e) =>
+                        {
+                            method.Invoke(viewModel, null);
+                        };
                 }
             }
 
@@ -224,8 +286,8 @@ namespace AtomicPhoneMVVM
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-       
-        public event PropertyChangedEventHandler PropertyChanged;        
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public void Navigate(string page)
         {
@@ -275,5 +337,15 @@ namespace AtomicPhoneMVVM
 
         public string[] PropertyNames { get; private set; }
         public int Order { get; private set; }
+    }
+
+    [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
+    public sealed class AppBarCommandAttribute : Attribute
+    {
+        public string AppBarText { get; private set; }
+        public AppBarCommandAttribute(string appBarText)
+        {
+            this.AppBarText = appBarText;
+        }
     }
 }

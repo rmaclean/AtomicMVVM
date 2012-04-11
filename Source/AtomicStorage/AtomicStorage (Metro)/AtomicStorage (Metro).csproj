@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{82C0491B-122D-4700-AB4C-5C3854A018AE}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{BC723D4B-C455-438E-B99F-A07F809F735C}</ProjectGuid>
+    <OutputType>winmdobj</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AtomicMVVM</RootNamespace>
-    <AssemblyName>AtomicMVVM</AssemblyName>
+    <RootNamespace>AtomicStorage</RootNamespace>
+    <AssemblyName>AtomicStorage</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -109,30 +109,22 @@
     <None Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\AtomicMVVM\AtomicMVVM.cs">
-      <Link>AtomicMVVM.cs</Link>
-    </Compile>
-    <Compile Include="..\AtomicMVVM\Extensions.cs">
-      <Link>Extensions.cs</Link>
-    </Compile>
-    <Compile Include="..\AtomicMVVM\Properties\AssemblyInfo.cs">
-      <Link>Properties\AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="ExtensionsForWinRT.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="DataStoreExtensions.cs" />
+    <Compile Include="IDataStore.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StorageAttribute.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
