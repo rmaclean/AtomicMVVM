@@ -2,17 +2,14 @@
 namespace AtomicPhoneMVVM
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using System.Windows.Input;
-    using System.Windows;
     using System.ComponentModel;
     using System.Globalization;
-    using ActionCommand = Tuple<string, System.Action>;
+    using System.Linq;
+    using System.Reflection;
+    using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
-    using System.Windows.Navigation;
+    using System.Windows.Input;
     using Microsoft.Phone.Controls;
     using Microsoft.Phone.Shell;
 
@@ -112,9 +109,18 @@ namespace AtomicPhoneMVVM
 
                 foreach (var method in appBarMethods)
                 {
-                    ApplicationBarIconButton selectedAppBarItem = null;
+                    IApplicationBarMenuItem selectedAppBarItem = null;
                     var itemText = method.GetCustomAttributes<AppBarCommandAttribute>(false).Single().AppBarText;
                     foreach (ApplicationBarIconButton appBarItem in page.ApplicationBar.Buttons)
+                    {
+                        if (appBarItem.Text == itemText)
+                        {
+                            selectedAppBarItem = appBarItem;
+                            break;
+                        }
+                    }
+
+                    foreach (ApplicationBarMenuItem appBarItem in page.ApplicationBar.MenuItems)
                     {
                         if (appBarItem.Text == itemText)
                         {
