@@ -3,12 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 11
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorldDemo", "HelloWorldDemo\HelloWorldDemo.csproj", "{E0CBF5A6-ABCC-4494-BA93-1C6DB475E005}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtomicMVVM (4.5)", "..\..\Source\AtomicMVVM\AtomicMVVM (4.5)\AtomicMVVM (4.5).csproj", "{9FB37F00-3B38-441C-8800-2E380FC2FD91}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9FB37F00-3B38-441C-8800-2E380FC2FD91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FB37F00-3B38-441C-8800-2E380FC2FD91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FB37F00-3B38-441C-8800-2E380FC2FD91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FB37F00-3B38-441C-8800-2E380FC2FD91}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E0CBF5A6-ABCC-4494-BA93-1C6DB475E005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E0CBF5A6-ABCC-4494-BA93-1C6DB475E005}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0CBF5A6-ABCC-4494-BA93-1C6DB475E005}.Release|Any CPU.ActiveCfg = Release|Any CPU
