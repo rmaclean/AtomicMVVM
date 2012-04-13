@@ -1,17 +1,22 @@
-﻿
-namespace WP71Demo
-{
-    using System.Windows;
-    using System.Windows.Navigation;
-    using AtomicMVVM;
-    using Microsoft.Phone.Controls;
-    using Microsoft.Phone.Shell;
-    using WP71Demo.ViewModels;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
 
+namespace AtomicPhoneMVVMDemo
+{
     public partial class App : Application
     {
-        public static Bootstrapper<MainPage,Main> Bootstrapper { get; set; }
-
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
         /// </summary>
@@ -23,7 +28,6 @@ namespace WP71Demo
         /// </summary>
         public App()
         {
-            Bootstrapper = new Bootstrapper<MainPage,Main>();
             // Global handler for uncaught exceptions. 
             UnhandledException += Application_UnhandledException;
 
@@ -31,7 +35,9 @@ namespace WP71Demo
             InitializeComponent();
 
             // Phone-specific initialization
-            InitializePhoneApplication();           
+            InitializePhoneApplication();
+            
+
         }
 
         // Code to execute when the application is launching (eg, from Start)
@@ -91,12 +97,11 @@ namespace WP71Demo
 
             // Create the frame but don't set it as RootVisual yet; this allows the splash
             // screen to remain active until the application is ready to render.
-            //RootFrame = new PhoneApplicationFrame();
-            //RootFrame.Navigated += CompleteInitializePhoneApplication;
+            RootFrame = new PhoneApplicationFrame();
+            RootFrame.Navigated += CompleteInitializePhoneApplication;
 
-            //// Handle navigation failures
-            //RootFrame.NavigationFailed += RootFrame_NavigationFailed;            
-            Bootstrapper.Start();
+            // Handle navigation failures
+            RootFrame.NavigationFailed += RootFrame_NavigationFailed;
 
             // Ensure we don't initialize again
             phoneApplicationInitialized = true;

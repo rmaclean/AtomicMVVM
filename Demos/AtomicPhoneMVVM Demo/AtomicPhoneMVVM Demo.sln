@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010 Express for Windows Phone
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtomicPhoneMVVM Demo", "AtomicPhoneMVVM Demo\AtomicPhoneMVVM Demo.csproj", "{D2D9760D-B73E-42F6-ABD6-CAFDD44F2BA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtomicPhoneMVVM", "..\..\Source\AtomicPhoneMVVM\AtomicPhoneMVVM.csproj", "{ED66752F-B157-4076-B335-4F8AEA1AB19A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtomicStorage (WP7.1)", "..\..\Source\AtomicStorage\AtomicStorage (WP7.1)\AtomicStorage (WP7.1).csproj", "{EA9BAAE3-4499-49B3-ABCF-6050CC4946C7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug - Faked|Any CPU = Debug - Faked|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2D9760D-B73E-42F6-ABD6-CAFDD44F2BA6}.Debug - Faked|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2D9760D-B73E-42F6-ABD6-CAFDD44F2BA6}.Debug - Faked|Any CPU.Build.0 = Debug|Any CPU
+		{D2D9760D-B73E-42F6-ABD6-CAFDD44F2BA6}.Debug - Faked|Any CPU.Deploy.0 = Debug|Any CPU
+		{D2D9760D-B73E-42F6-ABD6-CAFDD44F2BA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2D9760D-B73E-42F6-ABD6-CAFDD44F2BA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2D9760D-B73E-42F6-ABD6-CAFDD44F2BA6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D2D9760D-B73E-42F6-ABD6-CAFDD44F2BA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2D9760D-B73E-42F6-ABD6-CAFDD44F2BA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2D9760D-B73E-42F6-ABD6-CAFDD44F2BA6}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{ED66752F-B157-4076-B335-4F8AEA1AB19A}.Debug - Faked|Any CPU.ActiveCfg = Debug - Faked|Any CPU
+		{ED66752F-B157-4076-B335-4F8AEA1AB19A}.Debug - Faked|Any CPU.Build.0 = Debug - Faked|Any CPU
+		{ED66752F-B157-4076-B335-4F8AEA1AB19A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED66752F-B157-4076-B335-4F8AEA1AB19A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED66752F-B157-4076-B335-4F8AEA1AB19A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED66752F-B157-4076-B335-4F8AEA1AB19A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA9BAAE3-4499-49B3-ABCF-6050CC4946C7}.Debug - Faked|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA9BAAE3-4499-49B3-ABCF-6050CC4946C7}.Debug - Faked|Any CPU.Build.0 = Debug|Any CPU
+		{EA9BAAE3-4499-49B3-ABCF-6050CC4946C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA9BAAE3-4499-49B3-ABCF-6050CC4946C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA9BAAE3-4499-49B3-ABCF-6050CC4946C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA9BAAE3-4499-49B3-ABCF-6050CC4946C7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
