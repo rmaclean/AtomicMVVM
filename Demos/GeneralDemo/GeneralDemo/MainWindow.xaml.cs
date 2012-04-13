@@ -1,10 +1,12 @@
-﻿using System.Linq;
-using System.Windows.Controls;
-using AtomicMVVM;
-using MahApps.Metro;
+﻿
 
 namespace GeneralDemo
 {
+    using System.Linq;
+    using System.Windows.Controls;
+    using AtomicMVVM;
+    using MahApps.Metro;
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -14,6 +16,7 @@ namespace GeneralDemo
         {
             InitializeComponent();
             ThemeManager.ChangeTheme(this, ThemeManager.DefaultAccents.Single(_ => _.Name == "Blue"), Theme.Light);
+            this.BindGlobalCommands(App.Bootstrapper);
         }
 
         public void ChangeContent(UserControl viewContent)

@@ -50,6 +50,7 @@
     <Compile Include="..\AtomicMVVM\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />

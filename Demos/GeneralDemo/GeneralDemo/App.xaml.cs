@@ -1,11 +1,13 @@
-﻿using System;
-using System.Windows;
-using AtomicMVVM;
-using GeneralDemo.Models;
-using GeneralDemo.ViewModels;
-
+﻿
 namespace GeneralDemo
 {
+    using System;
+    using System.Diagnostics;
+    using System.Windows;
+    using AtomicMVVM;
+    using GeneralDemo.Models;
+    using GeneralDemo.ViewModels;
+
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
@@ -17,7 +19,12 @@ namespace GeneralDemo
         public App()
         {
             Bootstrapper = new Bootstrapper<MainWindow, Menu>();
-            Bootstrapper.GlobalCommands.Add(new Tuple<string,Action>("GoToMenu", () => App.Bootstrapper.ChangeView<Menu>()));
+            Bootstrapper.GlobalCommands.Add("GoToMenu", () => App.Bootstrapper.ChangeView<Menu>());
+            Bootstrapper.GlobalCommands.Add("AboutAtomicMVVM", () =>
+            {
+                Process.Start("https://bitbucket.org/rmaclean/atomicmvvm");
+            });
+            Bootstrapper.Start();
         }
     }
 }

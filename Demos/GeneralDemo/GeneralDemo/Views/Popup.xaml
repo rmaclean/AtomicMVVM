@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:m="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -15,6 +16,7 @@
             <RowDefinition Height="4"/>
             <RowDefinition Height="32"/>
         </Grid.RowDefinitions>
+        <!--<TextBox m:TextboxHelper.Watermark="enter your name" m:TextboxHelper.ClearTextButton="True"  Grid.Row="0" Text="{Binding FullName, Mode=TwoWay}" />-->
         <TextBox Grid.Row="0" Text="{Binding FullName, Mode=TwoWay}" />
         <Button Grid.Row="2" Content="Click to say hi" x:Name="ShowName"/>
         <Button Grid.Row="4" Content="Click to say goodbye" x:Name="SayGoodbye"/>

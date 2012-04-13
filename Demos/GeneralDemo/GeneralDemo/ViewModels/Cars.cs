@@ -133,8 +133,7 @@ namespace GeneralDemo.ViewModels
             }
         }
 
-        [TriggerProperty("SelectedModel")]
-        [TriggerProperty("SelectedMake")]
+        [TriggerProperty("SelectedModel", "SelectedMake")]
         public void SetColours()
         {
             if (string.IsNullOrWhiteSpace(this.SelectedMake) || string.IsNullOrWhiteSpace(this.SelectedModel))

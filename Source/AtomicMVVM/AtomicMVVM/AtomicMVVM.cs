@@ -172,7 +172,26 @@ namespace AtomicMVVM
                 }
             }
 
-            foreach (var method in GlobalCommands)
+            BindGlobalCommands();
+
+            viewModel.RaiseBound();
+            view.DataContext = viewModel;
+            shell.ChangeContent(view);
+        }        
+
+        internal void BindGlobalCommands(ContentControl view = null, List<ActionCommand> commands = null)
+        {
+            if (view == null)
+            {
+                view = this.view;
+            }
+
+            if (commands == null)
+            {
+                commands = this.GlobalCommands;
+            }
+
+            foreach (var method in commands)
             {
                 var control = view.FindName(method.Item1);
 #if NETFX_CORE
@@ -207,10 +226,6 @@ namespace AtomicMVVM
                     }
                 }
             }
-
-            viewModel.RaiseBound();
-            view.DataContext = viewModel;
-            shell.ChangeContent(view);
         }
 
         private void AddTrigger(string[] propertyNames, string methodName)
@@ -405,6 +420,16 @@ namespace AtomicMVVM
 
         public string[] PropertyNames { get; private set; }
         public int Order { get; private set; }
+    }
+
+    public static class IShellExtensions
+    {
+        public static void BindGlobalCommands<TShell, TContent>(this ContentControl shell, Bootstrapper<TShell,TContent> bootStrapper)
+             where TShell : IShell
+             where TContent : CoreData        
+        {          
+            bootStrapper.BindGlobalCommands(shell, bootStrapper.GlobalCommands);
+        }
     }
 
     public interface IShell

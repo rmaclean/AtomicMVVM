@@ -1,0 +1,13 @@
+obj
+bin
+*.user
+*.suo
+*.[Cc]ache
+*.bak
+*.ncb
+*.log 
+*.DS_Store
+thumbs.db 
+_ReSharper.*
+*.resharper
+Ankh.NoLoad

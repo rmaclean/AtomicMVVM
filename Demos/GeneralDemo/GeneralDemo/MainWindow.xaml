@@ -3,5 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:m="http://metro.mahapps.com/winfx/xaml/controls"
         Title="AtomicMVVM Demo" Height="350" Width="525" ShowTitleBar="True">
+    <m:MetroWindow.WindowCommands>
+        <m:WindowCommands>
+            <Button Content="about atomicmvvm" x:Name="AboutAtomicMVVM" />
+        </m:WindowCommands>
+    </m:MetroWindow.WindowCommands>
+
     <ContentControl x:Name="ContentPlacement"/>
 </m:MetroWindow>
