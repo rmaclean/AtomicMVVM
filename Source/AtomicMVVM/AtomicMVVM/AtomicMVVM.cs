@@ -179,7 +179,11 @@ namespace AtomicMVVM
             shell.ChangeContent(view);
         }        
 
+#if NETFX_CORE
+        internal void BindGlobalCommands(Control view = null, List<ActionCommand> commands = null)
+#else
         internal void BindGlobalCommands(ContentControl view = null, List<ActionCommand> commands = null)
+#endif
         {
             if (view == null)
             {

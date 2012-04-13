@@ -1,26 +1,15 @@
 ﻿
 namespace MetroDemo.ViewModels
 {
-    using System;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.IO;
     using System.Net;
     using AtomicMVVM;
-    using ObservableCollectionExample;
-    using Windows.Foundation.Collections;
 
     public class Windows8 : CoreData
     {
-        //private ObservableCollection<string> images = new ObservableCollection<string>();
-        public ObservableCollection<string> Images {get;set;}
-        //{
-        //    get
-        //    {
-        //        return new ObservableCollectionShim<string>(images);
-        //    }
-        //}
-
+        public ObservableCollection<string> Images {get;set;}     
         private string _search = "Windows8,Windows 8,Win8,WinRT";
 
         public string Search

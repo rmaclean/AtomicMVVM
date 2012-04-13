@@ -17,14 +17,14 @@ namespace MetroDemo
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs args)
-        {
-            var commands = new List<Tuple<string,Action>>();
-            commands.Add(new Tuple<string, Action>("BackButton", () =>
+        {       
+            Bootstrapper = new Bootstrapper<MainPage, Windows8>();
+            Bootstrapper.GlobalCommands.Add("BackButton", () =>
             {
                 App.Current.Exit();
-            }));
+            });
 
-            Bootstrapper = new Bootstrapper<MainPage, Windows8>(commands);
+            Bootstrapper.Start();
         }
     }
 }
