@@ -95,6 +95,7 @@ namespace AtomicMVVM
             var validMethods = (from m in viewModel.GetType().GetMethods()
 #endif
                                 where !m.IsSpecialName &&
+                                      m.DeclaringType != typeof(CoreData) &&
                                       m.ReturnType == typeof(void)
                                 select m).ToList();
 
@@ -254,7 +255,7 @@ namespace AtomicMVVM
         }
     }
 
-    public class GlobalCommand : ICommand
+    class GlobalCommand : ICommand
     {
         public bool CanExecute(object parameter)
         {
@@ -279,7 +280,7 @@ namespace AtomicMVVM
     }
 
 
-    public class AttachedCommand : ICommand
+    class AttachedCommand : ICommand
     {
 #if (NETFX_CORE)
         private readonly Type[] EmptyTypes = new Type[] { };
