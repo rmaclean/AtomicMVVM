@@ -1,5 +1,5 @@
-AtomicMVVM
-Supremely Lightwie
+AtomicMVVM, AtomicStorage & AtomicPhoneMVVM
+
 Copyright 2012 Robert MacLean
 
 AtomicMVVM includes or is derivative of works distributed under the licenses listed below. 

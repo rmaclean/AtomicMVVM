@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>AtomicPhoneMVVM</id>
+		<version>1.0.0</version>
+		<authors>Robert MacLean</authors>
+		<owners>Robert MacLean</owners>
+		<licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
+		<projectUrl>https://bitbucket.org/rmaclean/atomicmvvm/</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<summary>A supremely lightweight MVVM framework for Windows Phone.</summary>
+		<releaseNotes>      
+			1.0.0 - First release.
+		</releaseNotes>
+		<copyright>Copyright Robert MacLean 2012</copyright>
+		<tags>WindowsPhone71 WindowsPhone WP7 WP7.1 WindowsPhone7.1 MVVM BINDING SL Convention Model-View-ViewModel Model View Presentation UI ViewModel mvvmlight data</tags>
+		<description>The goal of AtomicPhoneMVVM is to allow developers to work with MVVM in their Windows Phone projects with minimal effort while not getting in the way of the code. It requires Windows Phone 7.1 or higher.</description>
+		<iconUrl>http://cdn.bitbucket.org/rmaclean/atomicmvvm/downloads/icon.png</iconUrl>
+	</metadata>
+<files>
+    <file src="..\Source\AtomicPhoneMVVM\Bin\Release\AtomicPhoneMVVM.dll" target="lib\sl4-wp" />
+
+	<file src="..\Source\AtomicPhoneMVVM\Bin\Release\AtomicPhoneMVVM.pdb" target="lib\sl4-wp" />
+
+    <file src="..\Source\AtomicPhoneMVVM\**\*.cs" target="src" />
+
+    <file src="CREDITS.TXT" target="" /> 
+    <file src="LICENSE.TXT" target="" />
+	<file src="Install.ps1" target="tools" />
+</files>
+</package>
