@@ -1,20 +1,11 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using AtomicMVVM;
-
+﻿
 namespace Silverlight5.ViewModels
 {
+    using AtomicMVVM;
+
     public class Demo : CoreData
     {
-        private string message = "MUHAHAHA";
+        private string message = "Welcome to the AtomicMVVM demo for SL 5";
 
         public string Message
         {
@@ -26,5 +17,9 @@ namespace Silverlight5.ViewModels
             }
         }
 
+        public void ChangeMessage()
+        {
+            Message = "And now it is changed!";
+        }
     }
 }

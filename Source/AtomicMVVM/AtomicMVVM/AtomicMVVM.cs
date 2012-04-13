@@ -177,9 +177,9 @@ namespace AtomicMVVM
             viewModel.RaiseBound();
             view.DataContext = viewModel;
             shell.ChangeContent(view);
-        }        
+        }
 
-#if NETFX_CORE
+#if NETFX_CORE || SILVERLIGHT
         internal void BindGlobalCommands(Control view = null, List<ActionCommand> commands = null)
 #else
         internal void BindGlobalCommands(ContentControl view = null, List<ActionCommand> commands = null)

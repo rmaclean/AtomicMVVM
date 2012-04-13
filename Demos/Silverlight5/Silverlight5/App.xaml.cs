@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using AtomicMVVM;
-using Silverlight5.ViewModels;
+﻿
 
 namespace Silverlight5
 {
+    using System;
+    using System.Windows;
+    using AtomicMVVM;
+    using Silverlight5.ViewModels;
+
     public partial class App : Application
     {
-        public static Bootstrapper<MainPage, Demo> Bootstrapper;
+        public static Bootstrapper<MainPage, Demo> Bootstrapper = new Bootstrapper<MainPage, Demo>();
 
         public App()
         {
@@ -29,7 +22,7 @@ namespace Silverlight5
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {            
-            Bootstrapper = new Bootstrapper<MainPage, Demo>();
+            Bootstrapper.Start();
         }
 
         private void Application_Exit(object sender, EventArgs e)

@@ -6,5 +6,8 @@
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="400">
     
+    <StackPanel>
+        <Button HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="ChangeMessage" Content="Change Message"/>
     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Message}" FontSize="24" FontWeight="Bold"/>
+    </StackPanel>
 </UserControl>
