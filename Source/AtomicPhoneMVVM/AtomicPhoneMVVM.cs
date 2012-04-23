@@ -161,9 +161,10 @@ namespace AtomicPhoneMVVM
                         selectedAppBarItem.IsEnabled = (bool)canExecuteMethod.Invoke(viewModel, null); 
                     }
 
+                    var actionMethod = method;
                     selectedAppBarItem.Click += (s,e) =>
-                        {
-                            method.Invoke(viewModel, null);
+                        {                            
+                            actionMethod.Invoke(viewModel, null);     
                         };
                 }
             }
