@@ -462,4 +462,12 @@ namespace AtomicMVVM
     {
         void ChangeContent(UserControl viewContent);
     }
+
+    public class StubShell : IShell
+    {
+        public void ChangeContent(UserControl viewContent)
+        {
+            // sure thing :)
+        }
+    }
 }
