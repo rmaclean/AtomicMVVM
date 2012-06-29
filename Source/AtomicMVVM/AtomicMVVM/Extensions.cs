@@ -14,9 +14,7 @@ namespace AtomicMVVM
 
     public static class AtomicMVVMExtensions
     {
-        public static void ExecuteGlobalCommand<TShell, TContent>(this Bootstrapper<TShell, TContent> bootstrapper, string commandId)            
-            where TShell : IShell
-            where TContent : CoreData
+        public static void ExecuteGlobalCommand<TShell, TContent>(this Bootstrapper bootstrapper, string commandId)                    
         {
             bootstrapper.GlobalCommands.Single(_ => _.Item1 == commandId).Item2();
         }

@@ -19,7 +19,6 @@ namespace AtomicMVVM
     using Windows.UI.Xaml;
     using Windows.UI.Core;
     using Windows.UI.Xaml.Controls.Primitives;
-    using System.Reflection.RuntimeExtensions;
 #else
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
@@ -51,13 +50,25 @@ namespace AtomicMVVM
             this.ChangeView<TContent>();
 
 #if NETFX_CORE
-            Window.Current.Content = shell as UIElement;
-            Window.Current.Activate();
+            var uiShell = CurrentShell as UIElement;
+            if (uiShell != null)
+            {
+                Window.Current.Content = uiShell;
+                Window.Current.Activate();
+            }
 #else
 #if SILVERLIGHT
-            Application.Current.RootVisual = shell as UIElement;
+            var uiShell = CurrentShell as UIElement;
+            if (uiShell != null)
+            {
+                Application.Current.RootVisual = uiShell; ;
+            }
 #else
-            (CurrentShell as Window).Show();
+            var window = CurrentShell as Window;
+            if (window != null)
+            {
+                window.Show();
+            }
 #endif
 #endif
         }
@@ -70,11 +81,19 @@ namespace AtomicMVVM
             this.ChangeView<TContent, TData>(data);
 
 #if NETFX_CORE
-            Window.Current.Content = shell as UIElement;
-            Window.Current.Activate();
+            var uiShell = CurrentShell as UIElement;
+            if (uiShell != null)
+            {
+                Window.Current.Content = uiShell;
+                Window.Current.Activate();
+            }
 #else
 #if SILVERLIGHT
-            Application.Current.RootVisual = shell as UIElement;
+            var uiShell = CurrentShell as UIElement;
+            if (uiShell != null)
+            {
+                Application.Current.RootVisual = uiShell; ;
+            }
 #else
             var window = CurrentShell as Window;
             if (window != null)
@@ -115,7 +134,7 @@ namespace AtomicMVVM
             this.CurrentViewModel.ViewControl = CurrentView;
 
 #if NETFX_CORE
-            var validMethods = (from m in viewModel.GetType().GetRuntimeMethods()
+            var validMethods = (from m in CurrentViewModel.GetType().GetRuntimeMethods()
 #else
             var validMethods = (from m in CurrentViewModel.GetType().GetMethods()
 #endif
@@ -163,7 +182,7 @@ namespace AtomicMVVM
                         {
                             var canExecuteExists = false;
 #if NETFX_CORE
-                            var canExecuteMethod = viewModel.GetType().GetRuntimeMethod("Can" + method.Name, EmptyTypes);
+                            var canExecuteMethod = CurrentViewModel.GetType().GetRuntimeMethod("Can" + method.Name, EmptyTypes);
 #else
                             var canExecuteMethod = CurrentViewModel.GetType().GetMethod("Can" + method.Name, EmptyTypes);
 #endif
@@ -265,7 +284,7 @@ namespace AtomicMVVM
                     if (propertyNames.Contains(e.PropertyName))
                     {
 #if NETFX_CORE
-                        var method = viewModel.GetType().GetRuntimeMethod(methodName, EmptyTypes);
+                        var method = CurrentViewModel.GetType().GetRuntimeMethod(methodName, EmptyTypes);
 #else
                         var method = CurrentViewModel.GetType().GetMethod(methodName, EmptyTypes);
 #endif
@@ -379,12 +398,12 @@ namespace AtomicMVVM
             if (PropertyChanged != null && ViewControl != null)
             {
 #if (NETFX_CORE)
-                ViewControl.Dispatcher.Invoke(CoreDispatcherPriority.Normal, (s, e) =>
+                ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
 #endif
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 #if (NETFX_CORE)
-                }, this, null);
+                });
 #endif
             }
         }
@@ -392,12 +411,12 @@ namespace AtomicMVVM
         public void Invoke(Action action)
         {
 #if (NETFX_CORE)
-            ViewControl.Dispatcher.Invoke(CoreDispatcherPriority.Normal, (s, e) =>
+            ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
 #endif
             action();
 #if (NETFX_CORE)
-                }, this, null);
+                });
 #endif
         }
 

@@ -4,8 +4,7 @@
     using System.Linq;
     using System.Reflection;
 #if NETFX_CORE
-    using System.Reflection.RuntimeExtensions;
-        using Windows.Storage;
+    using Windows.Storage;
     using Windows.Foundation.Collections;
 #endif
     using System.Diagnostics;
