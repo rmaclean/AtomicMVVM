@@ -9,7 +9,7 @@ namespace MetroDemo
 
     partial class App
     {
-        public static Bootstrapper<MainPage, Windows8> Bootstrapper;
+        public static Bootstrapper Bootstrapper { get; set; }
 
         public App()
         {
@@ -18,13 +18,13 @@ namespace MetroDemo
 
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {       
-            Bootstrapper = new Bootstrapper<MainPage, Windows8>();
+            Bootstrapper = new Bootstrapper();
             Bootstrapper.GlobalCommands.Add("BackButton", () =>
             {
                 App.Current.Exit();
             });
 
-            Bootstrapper.Start();
+            Bootstrapper.Start<MainPage, Windows8>();
         }
     }
 }
