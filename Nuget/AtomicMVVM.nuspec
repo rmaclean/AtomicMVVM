@@ -1,58 +1,52 @@
 <?xml version="1.0"?>
-<package >
-	<metadata>
-		<id>AtomicMVVM</id>
-		<version>3.0.0</version>
-		<authors>Robert MacLean</authors>
-		<owners>Robert MacLean</owners>
-		<licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
-		<projectUrl>https://bitbucket.org/rmaclean/atomicmvvm/</projectUrl>
-		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<summary>A supremely lightweight MVVM framework for WPF, Silverlight, Windows Phone &amp; Metro projects.</summary>
-		<releaseNotes>
-      3.0.0 - Significant changes to how the boot strapper works
-Can no longer pass in commands to the boot strapper constructor (work done in 1.0.11).
-You must call the Start method to start the binding.
-Added support (finally) for Windows Phone 7.1 – not that it was a good idea.
-Switched from Mercurial to Git.
-Massive amounts of clean up to the WinRT version.
-      2.0.1 - Updated to support Visual Studio "11" &amp; Windows 8 Consumer Preview changes to Metro style app changes.
-			2.0.0 - Changed the way attributes (Trigger &amp; Reevaluate) work. No longer can you do multiple. Now you can only have one, but with multiple properties. This solves some edge case bugs &amp; improves performance. Added small tweak around warning of unused event. Create the 'Views' &amp; 'ViewModels' folder for you. 
-			1.0.11 - Bug fixes for WinRT command support (grr) and ability to pass in global commands in the constructor so they can be applied to the first view too.
-			1.0.10 - Improved the Nuget package quality (and managed to knock off about 90% of the file size too) and published a symbols version.
-			1.0.9 - Updated Nuget with a different icon.
-			1.0.8 - Updated Nuget with icon.
-			1.0.7 - Bug fixes for Metro &amp; Silverlight 5 support
-			1.0.6 - Added support for .NET 4.5, Silverlight 5 &amp; Metro in NuGet package
-			1.0.5 - Added support for non-default view constructors which allows for data passing. Added support for global app commands.
-			1.0.4 - Building for .NET 4 client profile now (rather than 4.5 as was doing).
-			1.0.3 - Doesn't help if I don't include the updated assembly. So this is 1.0.2 proper.
-			1.0.2 - Updated project to be the bitbucket site. Helps if I make classes public (doh). Added trigger property logic.
-			1.0.1 - Fixed bug in the type location.
-			1.0.0 - First release.
-		</releaseNotes>
-		<copyright>Copyright Robert MacLean 2012</copyright>
-		<tags>Windows8 Metro WinRT WindowsPhone71 WindowsPhone WP7 WP7.1 WindowsPhone7.1 MVVM WPF SILVERLIGHT METRO WINRT BINDING SL5 SL Convention Model-View-ViewModel Model View Presentation UI ViewModel mvvmlight data</tags>
-		<description>The goal of AtomicMVVM is to allow developers to work with MVVM in their XAML based solutions (XPF, Silverlight, Windows Phone, WinRT) with minimal effort while not getting in the way of the code. It requires .NET 4 or higher. The design goals of AtomicMVVM are (in order): simple over feature rich, unobtrusive over less code and convention over configuration.</description>
-		<iconUrl>http://cdn.bitbucket.org/rmaclean/atomicmvvm/downloads/icon.png</iconUrl>
-	</metadata>
-<files>
-    <file src="..\Source\AtomicMVVM\AtomicMVVM\bin\Release\AtomicMVVM.dll" target="lib\net40" /> 
-    <file src="..\Source\AtomicMVVM\AtomicMVVM (4.5)\bin\Release\AtomicMVVM.dll" target="lib\net45" /> 
-    <file src="..\Source\AtomicMVVM\AtomicMVVM (Silverlight 5)\Bin\Release\AtomicMVVM.dll" target="lib\sl5" /> 
+<package>
+  <metadata>
+    <id>AtomicMVVM</id>
+    <version>4.0.0</version>
+    <authors>Robert MacLean</authors>
+    <owners>Robert MacLean</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
+    <projectUrl>https://bitbucket.org/rmaclean/atomicmvvm/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>A supremely lightweight MVVM framework for WPF, Silverlight, Windows Phone &amp; Metro projects.</summary>
+    <releaseNotes>NOTE: This version has breaking changes from v3.
+The bootstrapper is no longer generic, rather the generic aspects have been moved to the Start method.
+  This enables the bootstrapper to be used more easily (internally &amp; externally).
+  This also enables future ideas such as switching out the shell.
+Previously internal fields for current shell, view &amp; view model are now public properties.
+  This enables the bootstrapper to be better unit tested itself &amp; used in unit testing.
+  Allows for some dynamic logic in view models.
+CoreData now has a bootstrapper property
+  When a view model is created the property is set to the creating bootstrapper allowing for the view model to be able to interact with the bootstrapper without needing global variables etc...
+  This was really only enabled with the removal of the generic aspects (above).
+Added the StubShell
+  This is a simple shell implementation for use in unit tests.
+Updated all the Metro aspects to work with Windows 8 Release Candidate
+  This was really just two things, removing an unused namespace &amp; changing to the new async invoker.
+    </releaseNotes>
+    <copyright>Copyright Robert MacLean 2012</copyright>
+    <tags>Windows8 Metro WinRT WindowsPhone71 WindowsPhone WP7 WP7.1 WindowsPhone7.1 MVVM WPF SILVERLIGHT METRO WINRT BINDING SL5 SL Convention Model-View-ViewModel Model View Presentation UI ViewModel mvvmlight data</tags>
+    <description>The goal of AtomicMVVM is to allow developers to work with MVVM in their XAML based solutions (XPF, Silverlight, Windows Phone, WinRT) with minimal effort while not getting in the way of the code. It requires .NET 4 or higher. The design goals of AtomicMVVM are (in order): simple over feature rich, unobtrusive over less code and convention over configuration.</description>
+    <iconUrl>http://cdn.bitbucket.org/rmaclean/atomicmvvm/downloads/icon.png</iconUrl>
+  </metadata>
+  <files>
+    <file src="..\Source\AtomicMVVM\AtomicMVVM\bin\Release\AtomicMVVM.dll" target="lib\net40" />
+    <file src="..\Source\AtomicMVVM\AtomicMVVM (4.5)\bin\Release\AtomicMVVM.dll" target="lib\net45" />
+    <file src="..\Source\AtomicMVVM\AtomicMVVM (Silverlight 5)\Bin\Release\AtomicMVVM.dll" target="lib\sl5" />
     <file src="..\Source\AtomicMVVM\AtomicMVVM (Metro)\bin\Release\AtomicMVVM.dll" target="lib\NetCore45" />
     <file src="..\Source\AtomicMVVM\AtommicMVVM (WP7.1)\bin\Release\AtomicMVVM.dll" target="lib\sl4-wp" />
 
-    <file src="..\Source\AtomicMVVM\AtomicMVVM\bin\Release\AtomicMVVM.pdb" target="lib\net40" /> 
-    <file src="..\Source\AtomicMVVM\AtomicMVVM (4.5)\bin\Release\AtomicMVVM.pdb" target="lib\net45" /> 
-    <file src="..\Source\AtomicMVVM\AtomicMVVM (Silverlight 5)\Bin\Release\AtomicMVVM.pdb" target="lib\sl5" /> 
+    <file src="..\Source\AtomicMVVM\AtomicMVVM\bin\Release\AtomicMVVM.pdb" target="lib\net40" />
+    <file src="..\Source\AtomicMVVM\AtomicMVVM (4.5)\bin\Release\AtomicMVVM.pdb" target="lib\net45" />
+    <file src="..\Source\AtomicMVVM\AtomicMVVM (Silverlight 5)\Bin\Release\AtomicMVVM.pdb" target="lib\sl5" />
     <file src="..\Source\AtomicMVVM\AtomicMVVM (Metro)\bin\Release\AtomicMVVM.pdb" target="lib\NetCore45" />
-  <file src="..\Source\AtomicMVVM\AtommicMVVM (WP7.1)\bin\Release\AtomicMVVM.pdb" target="lib\sl4-wp" />
+    <file src="..\Source\AtomicMVVM\AtommicMVVM (WP7.1)\bin\Release\AtomicMVVM.pdb" target="lib\sl4-wp" />
 
     <file src="..\Source\AtomicMVVM\**\*.cs" target="src" />
 
-    <file src="CREDITS.TXT" target="" /> 
+    <file src="CREDITS.TXT" target="" />
     <file src="LICENSE.TXT" target="" />
-	<file src="Install.ps1" target="tools" />
-</files>
+    <file src="Install.ps1" target="tools" />
+  </files>
 </package>
