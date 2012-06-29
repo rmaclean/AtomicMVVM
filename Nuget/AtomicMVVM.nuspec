@@ -8,7 +8,6 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
     <projectUrl>https://bitbucket.org/rmaclean/atomicmvvm/</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>A supremely lightweight MVVM framework for WPF, Silverlight, Windows Phone &amp; Metro projects.</summary>
     <releaseNotes>NOTE: This version has breaking changes from v3.
 The bootstrapper is no longer generic, rather the generic aspects have been moved to the Start method.
