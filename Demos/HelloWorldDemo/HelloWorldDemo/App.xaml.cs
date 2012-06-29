@@ -11,11 +11,12 @@ namespace HelloWorldDemo
     /// </summary>
     public partial class App : Application
     {
-        public Bootstrapper<MainWindow, HelloWorld> Bootstrapper = new Bootstrapper<MainWindow,HelloWorld>();
+        public static Bootstrapper Bootstrapper { get; set; }
 
         public App()
         {
-            Bootstrapper.Start();
+            Bootstrapper = new AtomicMVVM.Bootstrapper();
+            Bootstrapper.Start<MainWindow, HelloWorld>();
         }
     }
 }
