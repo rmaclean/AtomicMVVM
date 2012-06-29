@@ -9,7 +9,7 @@ namespace Silverlight5
 
     public partial class App : Application
     {
-        public static Bootstrapper<MainPage, Demo> Bootstrapper = new Bootstrapper<MainPage, Demo>();
+        public static Bootstrapper Bootstrapper {get;set;}
 
         public App()
         {
@@ -21,8 +21,9 @@ namespace Silverlight5
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
-        {            
-            Bootstrapper.Start();
+        {
+            Bootstrapper = new AtomicMVVM.Bootstrapper();
+            Bootstrapper.Start<MainPage, Demo>();
         }
 
         private void Application_Exit(object sender, EventArgs e)
