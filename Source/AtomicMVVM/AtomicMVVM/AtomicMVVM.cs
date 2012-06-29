@@ -76,7 +76,11 @@ namespace AtomicMVVM
 #if SILVERLIGHT
             Application.Current.RootVisual = shell as UIElement;
 #else
-            (CurrentShell as Window).Show();
+            var window = CurrentShell as Window;
+            if (window != null)
+            {
+                window.Show();
+            }
 #endif
 #endif
         }
