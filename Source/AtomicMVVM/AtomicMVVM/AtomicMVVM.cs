@@ -26,8 +26,7 @@ namespace AtomicMVVM
     using System.Windows.Navigation;
 #endif
 
-    public class Bootstrapper<TShell>
-        where TShell : IShell
+    public class Bootstrapper
     {
 #if (NETFX_CORE)
         private readonly Type[] EmptyTypes = new Type[] { };
@@ -44,7 +43,8 @@ namespace AtomicMVVM
             this.GlobalCommands = new List<ActionCommand>();
         }
 
-        public void Start<TContent>()
+        public void Start<TShell, TContent>()
+            where TShell : IShell
             where TContent : CoreData
         {
             shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
@@ -62,8 +62,9 @@ namespace AtomicMVVM
 #endif
         }
 
-        public void Start<TContent, TData>(TData data)
+        public void Start<TShell, TContent, TData>(TData data)
             where TContent : CoreData
+            where TShell : IShell
         {
             shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
             this.ChangeView<TContent, TData>(data);
@@ -84,7 +85,7 @@ namespace AtomicMVVM
             where TNewContent : CoreData
         {
             viewModel = typeof(TNewContent).GetConstructor(new[] { typeof(TData) }).Invoke(new object[] { data }) as CoreData;
-            viewModel.BootStrapper = this as Bootstrapper<IShell>;
+            viewModel.BootStrapper = this;
             ChangeView();
         }
 
@@ -92,7 +93,7 @@ namespace AtomicMVVM
             where TNewContent : CoreData
         {
             viewModel = typeof(TNewContent).GetConstructor(EmptyTypes).Invoke(null) as CoreData;
-            viewModel.BootStrapper = this as Bootstrapper<IShell>;
+            viewModel.BootStrapper = this;
             ChangeView();
         }
 
@@ -410,7 +411,7 @@ namespace AtomicMVVM
             }
         }
 
-        public Bootstrapper<IShell> BootStrapper { get; set; }
+        public Bootstrapper BootStrapper { get; set; }
     }
 
     [AttributeUsage(System.AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
@@ -451,8 +452,7 @@ namespace AtomicMVVM
 
     public static class IShellExtensions
     {
-        public static void BindGlobalCommands<TShell, TContent>(this ContentControl shell, Bootstrapper<TShell> bootStrapper)
-            where TShell : IShell        
+        public static void BindGlobalCommands<TShell, TContent>(this ContentControl shell, Bootstrapper bootStrapper)
         {
             bootStrapper.BindGlobalCommands(shell, bootStrapper.GlobalCommands);
         }
