@@ -10,7 +10,7 @@ namespace WP71Demo
 
     public partial class App : Application
     {
-        public static Bootstrapper<MainPage,Main> Bootstrapper { get; set; }
+        public static Bootstrapper Bootstrapper { get; set; }
 
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
@@ -23,7 +23,7 @@ namespace WP71Demo
         /// </summary>
         public App()
         {
-            Bootstrapper = new Bootstrapper<MainPage,Main>();
+            Bootstrapper = new Bootstrapper();
             // Global handler for uncaught exceptions. 
             UnhandledException += Application_UnhandledException;
 
@@ -96,7 +96,7 @@ namespace WP71Demo
 
             //// Handle navigation failures
             //RootFrame.NavigationFailed += RootFrame_NavigationFailed;            
-            Bootstrapper.Start();
+            Bootstrapper.Start<MainPage, Main>();
 
             // Ensure we don't initialize again
             phoneApplicationInitialized = true;
