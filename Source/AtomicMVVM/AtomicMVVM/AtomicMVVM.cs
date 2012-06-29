@@ -12,7 +12,7 @@ namespace AtomicMVVM
 #if WINDOWS_PHONE
     using ActionCommand = Tuple<string, System.Action>;
 #else
-    using ActionCommand = System.Tuple<string,System.Action>;
+    using ActionCommand = System.Tuple<string, System.Action>;
 #endif
 #if NETFX_CORE
     using Windows.UI.Xaml.Controls;
@@ -26,9 +26,8 @@ namespace AtomicMVVM
     using System.Windows.Navigation;
 #endif
 
-    public class Bootstrapper<TShell, TContent>
+    public class Bootstrapper<TShell>
         where TShell : IShell
-        where TContent : CoreData
     {
 #if (NETFX_CORE)
         private readonly Type[] EmptyTypes = new Type[] { };
@@ -45,10 +44,29 @@ namespace AtomicMVVM
             this.GlobalCommands = new List<ActionCommand>();
         }
 
-        public void Start()
+        public void Start<TContent>()
+            where TContent : CoreData
         {
             shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
             this.ChangeView<TContent>();
+
+#if NETFX_CORE
+            Window.Current.Content = shell as UIElement;
+            Window.Current.Activate();
+#else
+#if SILVERLIGHT
+            Application.Current.RootVisual = shell as UIElement;
+#else
+            (shell as Window).Show();
+#endif
+#endif
+        }
+
+        public void Start<TContent, TData>(TData data)
+            where TContent : CoreData
+        {
+            shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
+            this.ChangeView<TContent, TData>(data);
 
 #if NETFX_CORE
             Window.Current.Content = shell as UIElement;
@@ -66,6 +84,7 @@ namespace AtomicMVVM
             where TNewContent : CoreData
         {
             viewModel = typeof(TNewContent).GetConstructor(new[] { typeof(TData) }).Invoke(new object[] { data }) as CoreData;
+            viewModel.BootStrapper = this as Bootstrapper<IShell>;
             ChangeView();
         }
 
@@ -73,6 +92,7 @@ namespace AtomicMVVM
             where TNewContent : CoreData
         {
             viewModel = typeof(TNewContent).GetConstructor(EmptyTypes).Invoke(null) as CoreData;
+            viewModel.BootStrapper = this as Bootstrapper<IShell>;
             ChangeView();
         }
 
@@ -389,6 +409,8 @@ namespace AtomicMVVM
                 OnBound(this, new EventArgs());
             }
         }
+
+        public Bootstrapper<IShell> BootStrapper { get; set; }
     }
 
     [AttributeUsage(System.AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
@@ -429,10 +451,9 @@ namespace AtomicMVVM
 
     public static class IShellExtensions
     {
-        public static void BindGlobalCommands<TShell, TContent>(this ContentControl shell, Bootstrapper<TShell,TContent> bootStrapper)
-             where TShell : IShell
-             where TContent : CoreData        
-        {          
+        public static void BindGlobalCommands<TShell, TContent>(this ContentControl shell, Bootstrapper<TShell> bootStrapper)
+            where TShell : IShell        
+        {
             bootStrapper.BindGlobalCommands(shell, bootStrapper.GlobalCommands);
         }
     }
