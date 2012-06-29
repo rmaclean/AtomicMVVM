@@ -13,18 +13,19 @@ namespace GeneralDemo
     /// </summary>
     public partial class App : Application
     {
-        public static Bootstrapper<MainWindow, Menu> Bootstrapper;
-        public static CustomerData CustomerData = new CustomerData();
+        public static Bootstrapper Bootstrapper { get; set; }
+        public static CustomerData CustomerData {get;set;}
 
         public App()
         {
-            Bootstrapper = new Bootstrapper<MainWindow, Menu>();
+            CustomerData = new CustomerData();
+            Bootstrapper = new Bootstrapper();
             Bootstrapper.GlobalCommands.Add("GoToMenu", () => App.Bootstrapper.ChangeView<Menu>());
             Bootstrapper.GlobalCommands.Add("AboutAtomicMVVM", () =>
             {
                 Process.Start("https://bitbucket.org/rmaclean/atomicmvvm");
             });
-            Bootstrapper.Start();
+            Bootstrapper.Start<MainWindow, Menu>();
         }
     }
 }

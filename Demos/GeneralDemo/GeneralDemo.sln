@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 11
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralDemo", "GeneralDemo\GeneralDemo.csproj", "{A65CC140-1E5B-409B-B6E3-1F1439E52B10}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtomicMVVM (4.5)", "..\..\Source\AtomicMVVM\AtomicMVVM (4.5)\AtomicMVVM (4.5).csproj", "{9FB37F00-3B38-441C-8800-2E380FC2FD91}"

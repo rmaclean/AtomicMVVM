@@ -475,7 +475,7 @@ namespace AtomicMVVM
 
     public static class IShellExtensions
     {
-        public static void BindGlobalCommands<TShell, TContent>(this ContentControl shell, Bootstrapper bootStrapper)
+        public static void BindGlobalCommands(this ContentControl shell, Bootstrapper bootStrapper)
         {
             bootStrapper.BindGlobalCommands(shell, bootStrapper.GlobalCommands);
         }
