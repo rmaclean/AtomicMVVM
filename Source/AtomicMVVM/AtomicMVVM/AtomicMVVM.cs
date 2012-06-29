@@ -33,9 +33,9 @@ namespace AtomicMVVM
 #else
         private readonly Type[] EmptyTypes = Type.EmptyTypes;
 #endif
-        private IShell shell;
-        private CoreData viewModel;
-        private UserControl view;
+        public IShell CurrentShell { get; private set; }
+        public CoreData CurrentViewModel { get; private set; }
+        public UserControl CurrentView { get; private set; }
         public List<ActionCommand> GlobalCommands { get; private set; }
 
         public Bootstrapper()
@@ -47,7 +47,7 @@ namespace AtomicMVVM
             where TShell : IShell
             where TContent : CoreData
         {
-            shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
+            CurrentShell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
             this.ChangeView<TContent>();
 
 #if NETFX_CORE
@@ -57,7 +57,7 @@ namespace AtomicMVVM
 #if SILVERLIGHT
             Application.Current.RootVisual = shell as UIElement;
 #else
-            (shell as Window).Show();
+            (CurrentShell as Window).Show();
 #endif
 #endif
         }
@@ -66,7 +66,7 @@ namespace AtomicMVVM
             where TContent : CoreData
             where TShell : IShell
         {
-            shell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
+            CurrentShell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
             this.ChangeView<TContent, TData>(data);
 
 #if NETFX_CORE
@@ -76,7 +76,7 @@ namespace AtomicMVVM
 #if SILVERLIGHT
             Application.Current.RootVisual = shell as UIElement;
 #else
-            (shell as Window).Show();
+            (CurrentShell as Window).Show();
 #endif
 #endif
         }
@@ -84,36 +84,36 @@ namespace AtomicMVVM
         public void ChangeView<TNewContent, TData>(TData data)
             where TNewContent : CoreData
         {
-            viewModel = typeof(TNewContent).GetConstructor(new[] { typeof(TData) }).Invoke(new object[] { data }) as CoreData;
-            viewModel.BootStrapper = this;
+            CurrentViewModel = typeof(TNewContent).GetConstructor(new[] { typeof(TData) }).Invoke(new object[] { data }) as CoreData;
+            CurrentViewModel.BootStrapper = this;
             ChangeView();
         }
 
         public void ChangeView<TNewContent>()
             where TNewContent : CoreData
         {
-            viewModel = typeof(TNewContent).GetConstructor(EmptyTypes).Invoke(null) as CoreData;
-            viewModel.BootStrapper = this;
+            CurrentViewModel = typeof(TNewContent).GetConstructor(EmptyTypes).Invoke(null) as CoreData;
+            CurrentViewModel.BootStrapper = this;
             ChangeView();
         }
 
         private void ChangeView()
         {
-            var viewName = viewModel.GetType().AssemblyQualifiedName.Replace(".ViewModels.", ".Views.");
+            var viewName = CurrentViewModel.GetType().AssemblyQualifiedName.Replace(".ViewModels.", ".Views.");
 
 #if (NETFX_CORE || WINDOWS_PHONE)
             var viewType = Type.GetType(viewName);
 #else
             var viewType = Type.GetType(viewName, true, true);
 #endif
-            view = viewType.GetConstructor(EmptyTypes).Invoke(null) as UserControl;
+            CurrentView = viewType.GetConstructor(EmptyTypes).Invoke(null) as UserControl;
 
-            this.viewModel.ViewControl = view;
+            this.CurrentViewModel.ViewControl = CurrentView;
 
 #if NETFX_CORE
             var validMethods = (from m in viewModel.GetType().GetRuntimeMethods()
 #else
-            var validMethods = (from m in viewModel.GetType().GetMethods()
+            var validMethods = (from m in CurrentViewModel.GetType().GetMethods()
 #endif
                                 where !m.IsSpecialName &&
                                       m.DeclaringType != typeof(CoreData) &&
@@ -130,7 +130,7 @@ namespace AtomicMVVM
                     AddTrigger(attribute.PropertyNames, method.Name);
                 }
 
-                var control = view.FindName(method.Name);
+                var control = CurrentView.FindName(method.Name);
 #if NETFX_CORE
                 if (control != null && typeof(ButtonBase).GetTypeInfo().IsAssignableFrom(control.GetType().GetTypeInfo()))
 #else
@@ -161,7 +161,7 @@ namespace AtomicMVVM
 #if NETFX_CORE
                             var canExecuteMethod = viewModel.GetType().GetRuntimeMethod("Can" + method.Name, EmptyTypes);
 #else
-                            var canExecuteMethod = viewModel.GetType().GetMethod("Can" + method.Name, EmptyTypes);
+                            var canExecuteMethod = CurrentViewModel.GetType().GetMethod("Can" + method.Name, EmptyTypes);
 #endif
                             if (canExecuteMethod != null)
                             {
@@ -177,7 +177,7 @@ namespace AtomicMVVM
                                                            select _;
                                 foreach (var attribute in reevaluateAttributes)
                                 {
-                                    viewModel.PropertyChanged += (s, e) =>
+                                    CurrentViewModel.PropertyChanged += (s, e) =>
                                     {
                                         if (attribute.PropertyNames.Contains(e.PropertyName))
                                         {
@@ -188,7 +188,7 @@ namespace AtomicMVVM
                             }
 
                             commandProperty.SetValue(control, command);
-                            commandParameterProperty.SetValue(control, viewModel);
+                            commandParameterProperty.SetValue(control, CurrentViewModel);
                         }
                     }
                 }
@@ -196,9 +196,9 @@ namespace AtomicMVVM
 
             BindGlobalCommands();
 
-            viewModel.RaiseBound();
-            view.DataContext = viewModel;
-            shell.ChangeContent(view);
+            CurrentViewModel.RaiseBound();
+            CurrentView.DataContext = CurrentViewModel;
+            CurrentShell.ChangeContent(CurrentView);
         }
 
 #if NETFX_CORE || SILVERLIGHT
@@ -209,7 +209,7 @@ namespace AtomicMVVM
         {
             if (view == null)
             {
-                view = this.view;
+                view = this.CurrentView;
             }
 
             if (commands == null)
@@ -247,7 +247,7 @@ namespace AtomicMVVM
                             var command = new GlobalCommand(method.Item2);
 
                             commandProperty.SetValue(control, command);
-                            commandParameterProperty.SetValue(control, viewModel);
+                            commandParameterProperty.SetValue(control, CurrentViewModel);
                         }
                     }
                 }
@@ -256,21 +256,21 @@ namespace AtomicMVVM
 
         private void AddTrigger(string[] propertyNames, string methodName)
         {
-            this.viewModel.PropertyChanged += (s, e) =>
+            this.CurrentViewModel.PropertyChanged += (s, e) =>
                 {
                     if (propertyNames.Contains(e.PropertyName))
                     {
 #if NETFX_CORE
                         var method = viewModel.GetType().GetRuntimeMethod(methodName, EmptyTypes);
 #else
-                        var method = viewModel.GetType().GetMethod(methodName, EmptyTypes);
+                        var method = CurrentViewModel.GetType().GetMethod(methodName, EmptyTypes);
 #endif
                         if (method == null)
                         {
                             throw new Exception(string.Format(CultureInfo.CurrentCulture, "Cannot find method '{0}' - make sure it is a public method?", methodName));
                         }
 
-                        method.Invoke(viewModel, null);
+                        method.Invoke(CurrentViewModel, null);
                     }
                 };
         }
