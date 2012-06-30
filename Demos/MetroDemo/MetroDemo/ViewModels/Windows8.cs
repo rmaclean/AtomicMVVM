@@ -1,21 +1,39 @@
 ﻿
 namespace MetroDemo.ViewModels
 {
+    using System;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.IO;
     using System.Net;
     using AtomicMVVM;
+    using MetroDemo.Models;
+    using Newtonsoft.Json;
+    using Windows.ApplicationModel.DataTransfer;
+    using Windows.ApplicationModel.Search;
     using Windows.System;
+    using System.Linq;
 
     public class Windows8 : CoreData
     {
         private string _search;
-        private string _ErrorMessage = "";
-        private bool _Errored = false;
         private bool _InProgress = false;
+        private FlickrImage selectedItem;
 
-        public ObservableCollection<string> Images { get; set; }
+        public FlickrImage SelectedItem
+        {
+            get { return selectedItem; }
+            set
+            {
+                if (value != selectedItem)
+                {
+                    selectedItem = value;
+                    RaisePropertyChanged("SelectedItem");
+                }
+            }
+        }
+
+        public ObservableCollection<FlickrImage> Images { get; set; }
 
         public string Search
         {
@@ -25,27 +43,7 @@ namespace MetroDemo.ViewModels
                 _search = value;
                 RaisePropertyChanged("Search");
             }
-        }
-
-        public string ErrorMessage
-        {
-            get { return _ErrorMessage; }
-            set
-            {
-                _ErrorMessage = value;
-                RaisePropertyChanged("ErrorMessage");
-            }
-        }
-
-        public bool Errored
-        {
-            get { return _Errored; }
-            set
-            {
-                _Errored = value;
-                RaisePropertyChanged("Errored");
-            }
-        }
+        }        
 
         public bool InProgress
         {
@@ -57,12 +55,32 @@ namespace MetroDemo.ViewModels
             }
         }
 
-
         public Windows8(string initialSearch)
         {
-            Images = new ObservableCollection<string>();
+            Images = new ObservableCollection<FlickrImage>();
             this.Search = initialSearch;
             GetImages();
+
+            var searchPane = SearchPane.GetForCurrentView();
+            searchPane.QuerySubmitted += (sender, args) =>
+                {
+                    this.Search = args.QueryText;
+                    GetImages();
+                };
+
+            var dataTransferManager = DataTransferManager.GetForCurrentView();
+            dataTransferManager.DataRequested += (sender, args) =>
+                {
+                    if (this.SelectedItem == null)
+                    {
+                        args.Request.FailWithDisplayText("No image selected - select an image first");
+                        return;
+                    }
+
+                    args.Request.Data.SetUri(new Uri(this.SelectedItem.Link));
+                    args.Request.Data.Properties.Description = this.SelectedItem.Link;
+                    args.Request.Data.Properties.Title = this.SelectedItem.Title;
+                };
         }
 
         public void Refresh()
@@ -95,28 +113,30 @@ namespace MetroDemo.ViewModels
             catch (WebException)
             {
                 InProgress = false;
-                ErrorMessage = "We cannot connect to Flickr, check your Internet connection, firewall settings and try again.";
-                Errored = true;
+                var dialog = new Windows.UI.Popups.MessageDialog("We cannot connect to Flickr, check your Internet connection, firewall settings and try again.");
+                dialog.ShowAsync();
                 return;
             }
 
             string raw;
-            using (StreamReader streamReader1 = new StreamReader(response.GetResponseStream()))
+            using (var streamReader = new StreamReader(response.GetResponseStream()))
             {
-                raw = streamReader1.ReadToEnd();
+                raw = streamReader.ReadToEnd();
             }
 
-            var dataslug = "\"media\": {\"m\":\"";
-            var dataslugStart = raw.IndexOf(dataslug);
-            while (dataslugStart > -1)
+            var stripped = raw.Substring(15).Substring(0, raw.Length - 16);
+
+            var results = JsonConvert.DeserializeObject<FlickrFeed>(stripped);
+
+            foreach (var item in results.Items)
             {
-                raw = raw.Substring(dataslugStart + dataslug.Length);
-                var dataslugEnd = raw.IndexOf('"');
-                var image = raw.Substring(0, dataslugEnd);
-                Debug.WriteLine(image);
-                Images.Add(image);
+                if (Images.Any(_ => _.Media == item.Media))
+                {
+                    continue;
+                }
+
+                Images.Add(item);
                 this.RaisePropertyChanged("Images");
-                dataslugStart = raw.IndexOf(dataslug);
             }
         }
     }

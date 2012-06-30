@@ -109,15 +109,15 @@
                 <TextBox KeyDown="SearchBoxKeyDown" Grid.Column="2" Text="{Binding Search, Mode=TwoWay}" Style="{StaticResource DefaultTextBoxFontStyle}"/>
             </Grid>
 
-            <GridView ItemsSource="{Binding Images}" Grid.Row="2">
+            <GridView SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding Images}" Grid.Row="2">
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Left" Width="252" Height="252">
                             <Border Style="{StaticResource ImagePlaceHolderStyle}" >
-                                <Image Source="{Binding}" Margin="0" Stretch="UniformToFill"/>
+                                <Image Source="{Binding Media}" Margin="0" Stretch="UniformToFill"/>
                             </Border>
                             <StackPanel Grid.Column="1" Style="{StaticResource OverlayStackPanelStyle}">
-                                <TextBlock TextWrapping="Wrap" Text="{Binding}" Style="{StaticResource NonWrappingSmallContentTextStyle}" Margin="12,8,12,2" HorizontalAlignment="Stretch" Foreground="{StaticResource ControlTextColor}" Height="60"/>
+                                <TextBlock TextWrapping="Wrap" Text="{Binding Title}" Style="{StaticResource NonWrappingSmallContentTextStyle}" Margin="12,8,12,2" HorizontalAlignment="Stretch" Foreground="{StaticResource ControlTextColor}" Height="60"/>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>

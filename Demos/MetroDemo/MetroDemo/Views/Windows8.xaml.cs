@@ -5,7 +5,7 @@ namespace MetroDemo.Views
     {
         public Windows8()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         private void SearchBoxKeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
