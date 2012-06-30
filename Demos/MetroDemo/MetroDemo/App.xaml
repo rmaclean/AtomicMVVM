@@ -3,7 +3,7 @@
              x:Class="MetroDemo.App">
     <Application.Resources>
 
-        <x:String x:Key="AppName">AtomicMVVM Metro Style App Demo</x:String>
+        <x:String x:Key="AppName">Metro Style App Demo</x:String>
         <SolidColorBrush x:Key="PageBackgroundBrush" Color="#FF0C0C0C"/>
         <SolidColorBrush x:Key="PageForegroundBrush" Color="White"/>
         <SolidColorBrush x:Key="HighlightBrush" Color="#FF26A0DA"/>
@@ -456,5 +456,6 @@
             <!-- Workaround: this should be a virtualizing stack panel but it currently blocks touch gestures
       <VirtualizingStackPanel VirtualizationMode="Recycling" Margin="0,0,0,0" /> -->
         </ItemsPanelTemplate>
+               
     </Application.Resources>
 </Application>

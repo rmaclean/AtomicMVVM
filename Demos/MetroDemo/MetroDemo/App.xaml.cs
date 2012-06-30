@@ -24,7 +24,7 @@ namespace MetroDemo
                 App.Current.Exit();
             });
 
-            Bootstrapper.Start<MainPage, Windows8>();
+            Bootstrapper.Start<MainPage, Windows8, string>("South Africa");
         }
     }
 }

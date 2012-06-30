@@ -6,11 +6,16 @@ namespace MetroDemo.ViewModels
     using System.IO;
     using System.Net;
     using AtomicMVVM;
+    using Windows.System;
 
     public class Windows8 : CoreData
     {
-        public ObservableCollection<string> Images {get;set;}     
-        private string _search = "Windows8,Windows 8,Win8,WinRT";
+        private string _search;
+        private string _ErrorMessage = "";
+        private bool _Errored = false;
+        private bool _InProgress = false;
+
+        public ObservableCollection<string> Images { get; set; }
 
         public string Search
         {
@@ -22,8 +27,6 @@ namespace MetroDemo.ViewModels
             }
         }
 
-        private string _ErrorMessage = "";
-
         public string ErrorMessage
         {
             get { return _ErrorMessage; }
@@ -34,8 +37,6 @@ namespace MetroDemo.ViewModels
             }
         }
 
-        private bool _Errored = false;
-
         public bool Errored
         {
             get { return _Errored; }
@@ -45,9 +46,6 @@ namespace MetroDemo.ViewModels
                 RaisePropertyChanged("Errored");
             }
         }
-
-
-        private bool _InProgress = false;
 
         public bool InProgress
         {
@@ -60,9 +58,10 @@ namespace MetroDemo.ViewModels
         }
 
 
-        public Windows8()
+        public Windows8(string initialSearch)
         {
             Images = new ObservableCollection<string>();
+            this.Search = initialSearch;
             GetImages();
         }
 
@@ -71,17 +70,27 @@ namespace MetroDemo.ViewModels
             GetImages();
         }
 
+        public void ClearResults()
+        {
+            this.Images.Clear();
+        }
+
+        public void About()
+        {
+            Launcher.LaunchUriAsync(new System.Uri("https://bitbucket.org/rmaclean/atomicmvvm"));
+        }
+
         private async void GetImages()
         {
             InProgress = true;
             var query = "http://api.flickr.com/services/feeds/photos_public.gne?format=json&tagmode=any&tags=" + this.Search;
-            Debug.WriteLine(query);
+
             var request = WebRequest.Create(query);
             WebResponse response = null;
             try
             {
                 response = await request.GetResponseAsync();
-                InProgress = false;                
+                InProgress = false;
             }
             catch (WebException)
             {
