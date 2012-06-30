@@ -13,6 +13,7 @@ namespace MetroDemo.Views
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
                 var vm = this.DataContext as ViewModels.Windows8;
+                vm.Search = query.Text;
                 vm.Refresh();
             }
         }      

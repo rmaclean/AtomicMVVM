@@ -1,15 +1,13 @@
 
 namespace MetroDemo
 {
-    using System;
-    using System.Collections.Generic;
     using AtomicMVVM;
     using MetroDemo.ViewModels;
     using Windows.ApplicationModel.Activation;
 
     partial class App
     {
-        public static Bootstrapper Bootstrapper { get; set; }
+        public static Bootstrapper Bootstrapper { get; private set; }
 
         public App()
         {
@@ -21,16 +19,16 @@ namespace MetroDemo
                 App.Current.Exit();
             });
         }
-        
+
 
         protected override void OnLaunched(LaunchActivatedEventArgs args)
-        {                  
+        {
             Bootstrapper.Start<MainPage, Windows8, string>("South Africa");
         }
 
         protected override void OnSearchActivated(SearchActivatedEventArgs args)
         {
-            Bootstrapper.Start<MainPage, Windows8, string>(args.QueryText); 
+            Bootstrapper.Start<MainPage, Windows8, string>(args.QueryText);
         }
     }
 }

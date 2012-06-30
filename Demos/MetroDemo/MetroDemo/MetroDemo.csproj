@@ -38,6 +38,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Code\DownloadManager.cs" />
     <Compile Include="Converters\BoolToVis.cs" />
     <Compile Include="Converters\CountToVis.cs" />
     <Compile Include="MainPage.xaml.cs">

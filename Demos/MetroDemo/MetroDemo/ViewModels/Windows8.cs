@@ -2,20 +2,24 @@
 namespace MetroDemo.ViewModels
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using AtomicMVVM;
     using MetroDemo.Models;
     using Newtonsoft.Json;
     using Windows.ApplicationModel.DataTransfer;
     using Windows.ApplicationModel.Search;
+    using Windows.Storage.Pickers;
+    using Windows.Storage.Streams;
     using Windows.System;
-    using System.Linq;
+    using Windows.UI.Popups;
 
     public class Windows8 : CoreData
     {
+        private DownloadManager manager = DownloadManager.GetInstance();
         private string _search;
         private bool _InProgress = false;
         private FlickrImage selectedItem;
@@ -43,7 +47,7 @@ namespace MetroDemo.ViewModels
                 _search = value;
                 RaisePropertyChanged("Search");
             }
-        }        
+        }
 
         public bool InProgress
         {
@@ -77,7 +81,7 @@ namespace MetroDemo.ViewModels
                         return;
                     }
 
-                    args.Request.Data.SetUri(new Uri(this.SelectedItem.Link));
+                    args.Request.Data.SetBitmap(RandomAccessStreamReference.CreateFromUri(new Uri(this.SelectedItem.Media)));
                     args.Request.Data.Properties.Description = this.SelectedItem.Link;
                     args.Request.Data.Properties.Title = this.SelectedItem.Title;
                 };
@@ -91,6 +95,37 @@ namespace MetroDemo.ViewModels
         public void ClearResults()
         {
             this.Images.Clear();
+        }
+
+        [ReevaluateProperty("SelectedItem")]
+        public bool CanSaveSelected()
+        {
+            return this.SelectedItem != null;
+        }
+
+        public async void SaveSelected()
+        {
+            var picker = new FileSavePicker();
+            picker.SuggestedFileName = this.SelectedItem.DownloadableItem.Segments.Last();
+            picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            picker.CommitButtonText = "Save";
+            picker.FileTypeChoices.Add("Image", new List<string>() { ".jpg" });
+            var result = await picker.PickSaveFileAsync();
+            if (result != null)
+            {
+                manager.AddDownload(this.SelectedItem.DownloadableItem, result);
+            }
+        }
+
+        [ReevaluateProperty("SelectedItem")]
+        public bool CanLaunchSelected()
+        {
+            return this.SelectedItem != null;
+        }
+
+        public void LaunchSelected()
+        {
+            Launcher.LaunchUriAsync(new System.Uri(this.SelectedItem.Link));
         }
 
         public void About()
@@ -110,15 +145,16 @@ namespace MetroDemo.ViewModels
                 response = await request.GetResponseAsync();
                 InProgress = false;
             }
-            catch (WebException)
+            catch (WebException ex)
             {
                 InProgress = false;
-                var dialog = new Windows.UI.Popups.MessageDialog("We cannot connect to Flickr, check your Internet connection, firewall settings and try again.");
+                var dialog = new MessageDialog("We cannot connect to Flickr, check your Internet connection, firewall settings and try again.");
                 dialog.ShowAsync();
                 return;
+
             }
 
-            string raw;
+            string raw = string.Empty;
             using (var streamReader = new StreamReader(response.GetResponseStream()))
             {
                 raw = streamReader.ReadToEnd();

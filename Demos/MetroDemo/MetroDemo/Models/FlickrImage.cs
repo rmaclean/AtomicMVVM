@@ -2,7 +2,8 @@
 
 namespace MetroDemo.Models
 {
-    using Newtonsoft.Json;
+    using System;
+using Newtonsoft.Json;
 
     public class FlickrImage
     {       
@@ -14,6 +15,14 @@ namespace MetroDemo.Models
 
         [JsonProperty("link")]
         public string Link { get; set; }
+
+        public Uri DownloadableItem
+        {
+            get
+            {
+                return new Uri(Media.Replace("_m.jpg", "_b.jpg"));
+            }
+        }
 
         public string Media
         {

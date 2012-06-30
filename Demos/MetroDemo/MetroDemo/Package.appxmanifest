@@ -22,6 +22,16 @@
       </VisualElements>
       <Extensions>
         <Extension Category="windows.search" />
+        <Extension Category="windows.fileOpenPicker">
+          <FileOpenPicker>
+            <SupportedFileTypes>
+              <FileType>.jpg</FileType>
+              <FileType>.png</FileType>
+              <FileType>.bmp</FileType>
+              <FileType>.gif</FileType>
+            </SupportedFileTypes>
+          </FileOpenPicker>
+        </Extension>
       </Extensions>
     </Application>
   </Applications>
