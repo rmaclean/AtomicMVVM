@@ -66,6 +66,7 @@
     <Content Include="Images\StoreLogo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\WideLogo.png" />
     <Page Include="Views\Windows8.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="ee245149-af73-465f-84af-949f5fd95e16" Publisher="CN=SADev" Version="1.0.0.1" />
+  <Identity Name="ee245149-af73-465f-84af-949f5fd95e16" Publisher="CN=SADev" Version="2.0.0.0" />
   <Properties>
     <DisplayName>AtomicMVVM Metro Style App Demo</DisplayName>
     <PublisherDisplayName>robert</PublisherDisplayName>
@@ -17,13 +17,15 @@
   <Applications>
     <Application Id="App" Executable="metrodemo.exe" EntryPoint="MetroDemo.App">
       <VisualElements DisplayName="AtomicMVVM Metro Style App Demo" Logo="Images\Logo.png" SmallLogo="Images\SmallLogo.png" Description="AtomicMVVM Metro Style App Demo" ForegroundText="light" BackgroundColor="#000000">
-        <DefaultTile />
-        <SplashScreen Image="Images\SplashScreen.png" />
+        <DefaultTile WideLogo="Images\WideLogo.png" ShortName="AtomicMVVM" ShowName="noLogos" />
+        <SplashScreen Image="Images\SplashScreen.png" BackgroundColor="white" />
       </VisualElements>
+      <Extensions>
+        <Extension Category="windows.search" />
+      </Extensions>
     </Application>
   </Applications>
   <Capabilities>
-    <Capability Name="picturesLibrary" />
     <Capability Name="internetClient" />
   </Capabilities>
 </Package>
