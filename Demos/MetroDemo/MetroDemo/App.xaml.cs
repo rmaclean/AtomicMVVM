@@ -4,13 +4,15 @@ namespace MetroDemo
     using AtomicMVVM;
     using MetroDemo.ViewModels;
     using Windows.ApplicationModel.Activation;
+    using Windows.UI.ViewManagement;
+    using Windows.UI.Xaml;
 
     partial class App
     {
         public static Bootstrapper Bootstrapper { get; private set; }
 
         public App()
-        {
+        {            
             InitializeComponent();
 
             Bootstrapper = new Bootstrapper();
@@ -19,7 +21,6 @@ namespace MetroDemo
                 App.Current.Exit();
             });
         }
-
 
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {

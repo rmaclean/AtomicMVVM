@@ -6,7 +6,6 @@ namespace AtomicMVVM
     using System.Linq;
     using System.Reflection;
     using System.Windows.Input;
-    using System.Windows;
     using System.ComponentModel;
     using System.Globalization;
 #if WINDOWS_PHONE
@@ -29,6 +28,7 @@ namespace AtomicMVVM
     {
 #if (NETFX_CORE)
         private readonly Type[] EmptyTypes = new Type[] { };
+        private string ViewSuffix;
 #else
         private readonly Type[] EmptyTypes = Type.EmptyTypes;
 #endif
@@ -42,49 +42,43 @@ namespace AtomicMVVM
             this.GlobalCommands = new List<ActionCommand>();
         }
 
+        private class McGuffin { }
+
         public void Start<TShell, TContent>()
             where TShell : IShell
             where TContent : CoreData
         {
-            CurrentShell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
-            this.ChangeView<TContent>();
+            Start<TShell, TContent, McGuffin>(null);
+        }
 
 #if NETFX_CORE
-            var uiShell = CurrentShell as UIElement;
-            if (uiShell != null)
-            {
-                Window.Current.Content = uiShell;
-                Window.Current.Activate();
-            }
-#else
-#if SILVERLIGHT
-            var uiShell = CurrentShell as UIElement;
-            if (uiShell != null)
-            {
-                Application.Current.RootVisual = uiShell; ;
-            }
-#else
-            var window = CurrentShell as Window;
-            if (window != null)
-            {
-                window.Show();
-            }
-#endif
-#endif
+        private void WindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
+        {
+            this.ViewSuffix = Windows.UI.ViewManagement.ApplicationView.Value.ToString();
+            ChangeView();
         }
+#endif
 
         public void Start<TShell, TContent, TData>(TData data)
             where TContent : CoreData
             where TShell : IShell
         {
             CurrentShell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
-            this.ChangeView<TContent, TData>(data);
+            if (typeof(TData) == typeof(McGuffin))
+            {                
+                this.ChangeView<TContent>();
+            }
+            else
+            {
+                this.ChangeView<TContent, TData>(data);
+            }
 
 #if NETFX_CORE
             var uiShell = CurrentShell as UIElement;
             if (uiShell != null)
             {
                 Window.Current.Content = uiShell;
+                Window.Current.SizeChanged += WindowSizeChanged;
                 Window.Current.Activate();
             }
 #else
@@ -120,14 +114,39 @@ namespace AtomicMVVM
             ChangeView();
         }
 
-        private void ChangeView()
+        private Type GetView(bool withSuffix)
         {
-            var viewName = CurrentViewModel.GetType().AssemblyQualifiedName.Replace(".ViewModels.", ".Views.");
+            var viewNamespace = ".Views.";
+            if (withSuffix)
+            {
+                viewNamespace += this.ViewSuffix + ".";
+            }
+
+            var viewName = CurrentViewModel.GetType().AssemblyQualifiedName.Replace(".ViewModels.", viewNamespace);
 
 #if (NETFX_CORE || WINDOWS_PHONE)
             var viewType = Type.GetType(viewName);
 #else
             var viewType = Type.GetType(viewName, true, true);
+#endif
+            if (viewType == null && withSuffix)
+            {
+                return GetView(false);
+            }
+
+            return viewType;
+        }
+
+        private void ChangeView()
+        {
+#if NETFX_CORE
+            var viewType = GetView(true);
+            if (CurrentView != null && viewType == CurrentView.GetType())
+            {
+                return;
+            }
+#else
+            var viewType = GetView(false);
 #endif
             CurrentView = viewType.GetConstructor(EmptyTypes).Invoke(null) as UserControl;
 
@@ -401,7 +420,7 @@ namespace AtomicMVVM
                 ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
 #endif
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 #if (NETFX_CORE)
                 });
 #endif
@@ -414,7 +433,7 @@ namespace AtomicMVVM
             ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
 #endif
-            action();
+                    action();
 #if (NETFX_CORE)
                 });
 #endif

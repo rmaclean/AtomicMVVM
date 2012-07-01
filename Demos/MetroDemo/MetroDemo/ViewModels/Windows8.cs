@@ -145,7 +145,7 @@ namespace MetroDemo.ViewModels
                 response = await request.GetResponseAsync();
                 InProgress = false;
             }
-            catch (WebException ex)
+            catch (WebException)
             {
                 InProgress = false;
                 var dialog = new MessageDialog("We cannot connect to Flickr, check your Internet connection, firewall settings and try again.");
