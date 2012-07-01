@@ -18,13 +18,28 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="160"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="100"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Text="{StaticResource AppName}" Style="{StaticResource SnappedPageHeaderTextStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0" Foreground="{StaticResource ApplicationPressedForegroundThemeBrush}" />
             <TextBox Grid.Row="1" KeyDown="SearchBoxKeyDown" Grid.Column="2" Text="{Binding Search, Mode=TwoWay}" x:Name="query" FontSize="26.667"/>
+            <Grid Grid.Row="2" Margin="0,20,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="SaveSelected" Width="120" Grid.Row="0" Grid.Column="0" Content="save image" />
+                <Button x:Name="LaunchSelected" Width="120" Grid.Row="0" Grid.Column="1" Content="image info"/>
+                <Button x:Name="ClearResults" Width="120" Grid.Row="1" Grid.Column="0" Content="clear results"/>
+                <Button x:Name="Refresh" Width="120" Grid.Row="1" Grid.Column="1" Content="refresh" />
+            </Grid>
 
-            <ListView SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding Images}" Grid.Row="2" Margin="0,20,0,0">
+            <ListView SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding Images}" Grid.Row="3" Margin="0,20,0,0">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Left" Width="252" Height="252">
@@ -41,7 +56,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <ProgressRing Grid.Row="2" Visibility="{Binding InProgress, Converter={StaticResource boolToVis}}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="200" IsActive="True" Foreground="{StaticResource ApplicationPressedForegroundThemeBrush}" />
+            <ProgressRing Grid.Row="3" Visibility="{Binding InProgress, Converter={StaticResource boolToVis}}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="200" IsActive="True" Foreground="{StaticResource ApplicationPressedForegroundThemeBrush}" />
         </Grid>
     </Grid>
 </UserControl>
