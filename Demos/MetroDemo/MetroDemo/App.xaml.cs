@@ -5,6 +5,7 @@ namespace MetroDemo
     using MetroDemo.ViewModels;
     using Windows.ApplicationModel.Activation;
     using Windows.UI.ViewManagement;
+    using Windows.UI.WebUI;
     using Windows.UI.Xaml;
 
     partial class App
@@ -13,7 +14,7 @@ namespace MetroDemo
 
         public App()
         {            
-            InitializeComponent();
+            InitializeComponent();            
 
             Bootstrapper = new Bootstrapper();
             Bootstrapper.GlobalCommands.Add("BackButton", () =>
@@ -24,6 +25,12 @@ namespace MetroDemo
 
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
+            if (args.PreviousExecutionState == ApplicationExecutionState.Running)
+            {
+                Window.Current.Activate();
+                return;
+            }
+
             Bootstrapper.Start<MainPage, Windows8, string>("South Africa");
         }
 
@@ -31,5 +38,6 @@ namespace MetroDemo
         {
             Bootstrapper.Start<MainPage, Windows8, string>(args.QueryText);
         }
+
     }
 }
