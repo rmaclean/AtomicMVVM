@@ -1,0 +1,92 @@
+﻿<UserControl x:Class="MetroDemo.Views.FullScreenPortrait.Windows8"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:c="using:MetroDemo.Converters"
+    mc:Ignorable="d"
+    d:DesignHeight="1366" d:DesignWidth="768">
+    <UserControl.Resources>
+        <c:BoolToVis x:Key="boolToVis"/>
+    </UserControl.Resources>
+
+    <Grid Style="{StaticResource LayoutRootStyle}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="160"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Button Margin="40,0,0,0" x:Name="BackButton" Style="{StaticResource BackButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Margin="20,0,0,0" Text="{StaticResource AppName}" Grid.Column="1" Style="{StaticResource PageHeaderTextStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource ApplicationPressedForegroundThemeBrush}" />
+            </StackPanel>            
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Search For" Style="{StaticResource PageSubheaderTextStyle}" Grid.Column="1" Margin="0" Padding="0,0,20,0" VerticalAlignment="Center" />
+                <TextBox KeyDown="SearchBoxKeyDown" Grid.Column="2" Text="{Binding Search, Mode=TwoWay}" x:Name="query" FontSize="26.667"/>
+            </Grid>
+
+            <GridView SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding Images}" Grid.Row="2" Margin="0,20,0,0">
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid HorizontalAlignment="Left" Width="252" Height="252">
+                            <Border>
+                                <Image Source="{Binding Media}" Margin="0" Stretch="UniformToFill"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
+                                <StackPanel.Background>
+                                    <SolidColorBrush Color="Black" Opacity="0.2"/>
+                                </StackPanel.Background>
+                                <TextBlock Text="{Binding Title}" Margin="12,8,12,2" HorizontalAlignment="Left" Height="60" Style="{StaticResource ItemTextStyle}" Foreground="White" TextWrapping="NoWrap" VerticalAlignment="Bottom"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+            <ProgressRing Grid.Row="2" Visibility="{Binding InProgress, Converter={StaticResource boolToVis}}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="200" IsActive="True" Foreground="{StaticResource ApplicationPressedForegroundThemeBrush}" />
+        </Grid>
+
+        <AppBar VerticalAlignment="Bottom" Background="{StaticResource AppBarBackgroundThemeBrush}" BorderBrush="{StaticResource AppBarBorderThemeBrush}" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button AutomationProperties.Name="Save" x:Name="SaveSelected" Style="{StaticResource AppBarButtonStyle}">
+                        <Viewbox Width="24" Height="24" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                            <Path Data="M0,38.699624L5.2197278,38.699624 5.2197278,48.822655C5.2197273,50.312829,6.4396413,51.533396,7.9295614,51.533396L54.737437,51.533396C56.227359,51.533396,57.447272,50.312829,57.447272,48.822655L57.447272,38.699624 62.667002,38.699624 62.667002,48.822655C62.667002,53.203798,59.11724,56.754625,54.737437,56.754625L7.9295614,56.754625C3.5497613,56.754625,0,53.203798,0,48.822655z M31.332997,0C31.91311,0 32.443213,0.17999268 32.883296,0.46997452 33.623439,0.96994781 34.113536,1.8099022 34.113536,2.7698479L34.113536,28.388441 42.33512,20.158894C43.415328,19.078953 45.165667,19.078953 46.245875,20.158894 47.326083,21.238834 47.326083,22.988738 46.245875,24.078678L33.293376,37.017968C33.15335,37.14796 33.093337,37.197958 33.033324,37.247955 32.983317,37.287953 32.933307,37.317951 32.883296,37.347949 32.823287,37.397947 32.763274,37.437944 32.693259,37.477942 32.643248,37.497941 32.583239,37.527939 32.523227,37.557937 32.483218,37.577937 32.443213,37.607935 32.403205,37.627934 32.263179,37.667932 32.213168,37.687931 32.153155,37.70793 32.073142,37.727928 32.003127,37.747927 31.933114,37.767926 31.873101,37.777926 31.823092,37.787925 31.763079,37.797925 31.683064,37.797925 31.613051,37.817923 31.533036,37.827923 31.473025,37.827923 31.413012,37.827923 31.353001,37.827923 31.282988,37.827923 31.212973,37.827923 31.132958,37.827923 31.072947,37.807924 31.012936,37.807924 30.952924,37.797925 30.882911,37.787925 30.802895,37.777926 30.732882,37.767926 30.672869,37.747927 30.622861,37.727928 30.552846,37.717929 30.482833,37.687931 30.41282,37.667932 30.342807,37.637933 30.102759,37.537939 30.042748,37.507941 29.972735,37.467942 29.912722,37.437944 29.862714,37.397947 29.802703,37.357949 29.752692,37.317951 29.692681,37.287953 29.64267,37.247955 29.58266,37.197958 29.522649,37.14796 29.472638,37.097964L29.382621,37.027967 16.430121,24.078678C15.890016,23.528708 15.619964,22.828747 15.619964,22.118786 15.619964,21.408825 15.890016,20.698864 16.430121,20.158894 17.510329,19.078953 19.260667,19.078953 20.340874,20.158894L28.572465,28.388441 28.572465,2.7698479C28.572465,2.0098915 28.882523,1.3099289 29.382621,0.8099556 29.882718,0.3099823 30.57285,0 31.332997,0z" Stretch="Uniform" Fill="#FFFFFFFF" Width="17" Height="17" Margin="0,0,0,0" />
+                        </Viewbox>
+                    </Button>
+                    <Button AutomationProperties.Name="Info" x:Name="LaunchSelected" Style="{StaticResource AppBarButtonStyle}">
+                        <Viewbox Width="24" Height="24" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                            <Path Data="M5.4024398,19.019988C8.3839419,19.019988,10.805001,21.439915,10.805001,24.419903L10.805001,57.270075C10.805001,60.250063 8.3839419,62.669989 5.4024398,62.669989 2.4110443,62.669989 4.7530193E-08,60.250063 0,57.270075L0,24.419903C4.7530193E-08,21.439915,2.4110443,19.019988,5.4024398,19.019988z M6.1925695,0C9.1739351,0 11.595044,2.4188671 11.595044,5.4074678 11.595044,8.3860731 9.1739351,10.804941 6.1925695,10.804941 3.2112031,10.804941 0.79009363,8.3860731 0.79009321,5.4074678 0.79009363,2.4188671 3.2112031,0 6.1925695,0z" Stretch="Uniform" Fill="#FFFFFFFF" Width="16" Height="16" Margin="0,0,0,0" />
+                        </Viewbox>
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button AutomationProperties.Name="Clear" x:Name="ClearResults" Style="{StaticResource AppBarButtonStyle}">
+                        <Viewbox Width="24" Height="24" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                            <Path Data="M25.687036,32.339824L25.687036,55.452068C25.687036,57.09185,27.016836,58.422037,28.656658,58.422037L29.056635,58.422037C30.696457,58.422037,32.026256,57.09185,32.026256,55.452068L32.026256,32.339824z M9.2889448,32.339824L9.2889448,55.452068C9.2889448,57.09185,10.618744,58.422037,12.258566,58.422037L12.658542,58.422037C14.298363,58.422037,15.618154,57.09185,15.618154,55.452068L15.618154,32.339824z M0.040034352,27.029819L41.275165,27.029819C41.295181,27.289605,41.3152,27.539626,41.3152,27.809179L41.3152,54.881708C41.3152,59.181866,37.825622,62.662621,33.536087,62.662621L7.779112,62.662621C3.4795705,62.662621,2.2690074E-08,59.181866,0,54.881708L0,27.809179C2.2690074E-08,27.539626,0.010008609,27.289605,0.040034352,27.029819z M35.055431,0.00011062622C36.008892,0.0083141327,36.940868,0.47164917,37.509586,1.3217468L43.439243,10.252777 46.739051,8.0625248C48.10897,7.15242,49.948864,7.5224628,50.85881,8.8926201L59.058338,21.244045C59.968284,22.604202,59.598304,24.454415,58.228386,25.354519L54.928577,27.554773 60.868232,36.485803C61.778179,37.84596,61.398201,39.696174,60.03828,40.596277L57.738414,42.126453C57.428432,42.336478,57.088451,42.466493,56.74847,42.546502L30.320001,2.7719135C30.519991,2.4818802,30.779976,2.2218513,31.089956,2.0218277L33.389824,0.49165154C33.903541,0.15411186,34.483352,-0.0048122406,35.055431,0.00011062622z" Stretch="Uniform" Fill="#FFFFFFFF" Width="16" Height="16" Margin="0,0,0,0" />
+                        </Viewbox>
+                    </Button>
+                    <Button AutomationProperties.Name="Refresh" x:Name="Refresh" Style="{StaticResource AppBarButtonStyle}">
+                        <Viewbox Width="24" Height="24" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                            <Path Data="F1M2278.07,1272.94C2265.47,1272.94,2254.91,1281.77,2252.19,1293.55L2241.99,1293.43 2255.8,1315.74 2270.14,1293.77 2260.66,1293.66C2263.13,1286.36 2269.96,1281.07 2278.07,1281.07 2288.24,1281.07 2296.52,1289.35 2296.52,1299.52 2296.52,1309.7 2288.24,1317.98 2278.07,1317.98 2274.31,1317.98 2270.81,1316.84 2267.89,1314.9L2263.45,1321.7C2267.65,1324.48 2272.67,1326.11 2278.07,1326.11 2292.73,1326.11 2304.65,1314.18 2304.65,1299.52 2304.65,1284.87 2292.73,1272.94 2278.07,1272.94" Stretch="Uniform" Fill="#FFFFFFFF" Width="17" Height="17" Margin="0,0,0,0" />
+                        </Viewbox>
+                    </Button>
+                    <Button x:Name="About" AutomationProperties.Name="About" Style="{StaticResource AppBarButtonStyle}">
+                        <Image HorizontalAlignment="Center" Grid.Row="0" Width="24" Height="24" Source="../Images/atom.png" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </AppBar>
+    </Grid>
+</UserControl>

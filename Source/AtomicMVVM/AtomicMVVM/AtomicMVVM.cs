@@ -64,6 +64,9 @@ namespace AtomicMVVM
             where TShell : IShell
         {
             CurrentShell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
+#if NETFX_CORE
+            this.ViewSuffix = Windows.UI.ViewManagement.ApplicationView.Value.ToString();
+#endif
             if (typeof(TData) == typeof(McGuffin))
             {                
                 this.ChangeView<TContent>();
@@ -117,7 +120,7 @@ namespace AtomicMVVM
         private Type GetView(bool withSuffix)
         {
             var viewNamespace = ".Views.";
-            if (withSuffix)
+            if (withSuffix && !string.IsNullOrWhiteSpace(this.ViewSuffix))
             {
                 viewNamespace += this.ViewSuffix + ".";
             }
