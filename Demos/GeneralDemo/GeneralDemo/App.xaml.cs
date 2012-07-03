@@ -25,6 +25,7 @@ namespace GeneralDemo
             {
                 Process.Start("https://bitbucket.org/rmaclean/atomicmvvm");
             });
+
             Bootstrapper.Start<MainWindow, Menu>();
         }
     }

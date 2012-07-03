@@ -22,6 +22,7 @@ namespace AtomicMVVM
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Navigation;
+    using System.Windows;
 #endif
 
     public class Bootstrapper
@@ -120,10 +121,12 @@ namespace AtomicMVVM
         private Type GetView(bool withSuffix)
         {
             var viewNamespace = ".Views.";
+#if NETFX_CORE
             if (withSuffix && !string.IsNullOrWhiteSpace(this.ViewSuffix))
             {
                 viewNamespace += this.ViewSuffix + ".";
             }
+#endif
 
             var viewName = CurrentViewModel.GetType().AssemblyQualifiedName.Replace(".ViewModels.", viewNamespace);
 
