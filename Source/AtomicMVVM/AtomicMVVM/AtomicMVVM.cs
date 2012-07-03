@@ -45,38 +45,20 @@ namespace AtomicMVVM
 
         private class McGuffin { }
 
-        public void Start<TShell, TContent>()
-            where TShell : IShell
-            where TContent : CoreData
+        public void Start(Type shell, Type content)
         {
-            Start<TShell, TContent, McGuffin>(null);
+            Start(shell, content, new McGuffin());
         }
 
-#if NETFX_CORE
-        private void WindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
+        public void Start<TData>(Type shell, Type content, TData data)
         {
-            this.ViewSuffix = Windows.UI.ViewManagement.ApplicationView.Value.ToString();
-            ChangeView();
-        }
-#endif
+            CurrentShell = shell.GetConstructor(EmptyTypes).Invoke(null) as IShell;
 
-        public void Start<TShell, TContent, TData>(TData data)
-            where TContent : CoreData
-            where TShell : IShell
-        {
-            CurrentShell = (IShell)typeof(TShell).GetConstructor(EmptyTypes).Invoke(null);
 #if NETFX_CORE
             this.ViewSuffix = Windows.UI.ViewManagement.ApplicationView.Value.ToString();
-#endif
-            if (typeof(TData) == typeof(McGuffin))
-            {                
-                this.ChangeView<TContent>();
-            }
-            else
-            {
-                this.ChangeView<TContent, TData>(data);
-            }
-
+#endif            
+            this.ChangeView(content, data);
+            
 #if NETFX_CORE
             var uiShell = CurrentShell as UIElement;
             if (uiShell != null)
@@ -102,20 +84,58 @@ namespace AtomicMVVM
 #endif
         }
 
+        public void Start<TShell, TContent>()
+            where TShell : IShell
+            where TContent : CoreData
+        {
+            Start(typeof(TShell), typeof(TContent));
+        }
+
+#if NETFX_CORE
+        private void WindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
+        {
+            this.ViewSuffix = Windows.UI.ViewManagement.ApplicationView.Value.ToString();
+            ChangeView();
+        }
+#endif
+
+        public void Start<TShell, TContent, TData>(TData data)
+            where TContent : CoreData
+            where TShell : IShell
+        {
+            Start(typeof(TShell), typeof(TContent), data);    
+        }
+
+        public void ChangeView<TData>(Type newContent, TData data)
+        {
+            if (typeof(TData) == typeof(McGuffin))
+            {
+                CurrentViewModel = newContent.GetConstructor(EmptyTypes).Invoke(null) as CoreData;
+            }
+            else
+            {
+                CurrentViewModel = newContent.GetConstructor(new[] { typeof(TData) }).Invoke(new object[] { data }) as CoreData;
+            }
+
+            CurrentViewModel.BootStrapper = this;
+            ChangeView();
+        }
+
+        public void ChangeView(Type newContent)
+        {
+            ChangeView(newContent, new McGuffin());
+        }
+
         public void ChangeView<TNewContent, TData>(TData data)
             where TNewContent : CoreData
         {
-            CurrentViewModel = typeof(TNewContent).GetConstructor(new[] { typeof(TData) }).Invoke(new object[] { data }) as CoreData;
-            CurrentViewModel.BootStrapper = this;
-            ChangeView();
+            ChangeView(typeof(TNewContent), data);
         }
 
         public void ChangeView<TNewContent>()
             where TNewContent : CoreData
         {
-            CurrentViewModel = typeof(TNewContent).GetConstructor(EmptyTypes).Invoke(null) as CoreData;
-            CurrentViewModel.BootStrapper = this;
-            ChangeView();
+            ChangeView(typeof(TNewContent), new McGuffin());
         }
 
         private Type GetView(bool withSuffix)
