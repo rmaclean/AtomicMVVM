@@ -44,11 +44,35 @@
     <None Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\AtomicMVVM\AtomicMVVM.cs">
-      <Link>AtomicMVVM.cs</Link>
+    <Compile Include="..\AtomicMVVM\AttachedCommand.cs">
+      <Link>AttachedCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\AtomicMVVM\Bootstrapper.cs">
+      <Link>Bootstrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\AtomicMVVM\CoreData.cs">
+      <Link>CoreData.cs</Link>
+    </Compile>
+    <Compile Include="..\AtomicMVVM\GlobalCommand.cs">
+      <Link>GlobalCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\AtomicMVVM\IShell.cs">
+      <Link>IShell.cs</Link>
+    </Compile>
+    <Compile Include="..\AtomicMVVM\IShellExtensions.cs">
+      <Link>IShellExtensions.cs</Link>
     </Compile>
     <Compile Include="..\AtomicMVVM\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\AtomicMVVM\ReevaluateAttribute.cs">
+      <Link>ReevaluateAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\AtomicMVVM\StubShell.cs">
+      <Link>StubShell.cs</Link>
+    </Compile>
+    <Compile Include="..\AtomicMVVM\TriggerAttribute.cs">
+      <Link>TriggerAttribute.cs</Link>
     </Compile>
     <Compile Include="Extensions.cs" />
   </ItemGroup>

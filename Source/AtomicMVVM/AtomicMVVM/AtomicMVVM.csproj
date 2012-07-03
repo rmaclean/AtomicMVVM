@@ -39,9 +39,18 @@
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AtomicMVVM.cs" />
+    <Compile Include="AttachedCommand.cs" />
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="CoreData.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="ExtensionsForNET40.cs" />
+    <Compile Include="GlobalCommand.cs" />
+    <Compile Include="IShell.cs" />
+    <Compile Include="IShellExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReevaluateAttribute.cs" />
+    <Compile Include="StubShell.cs" />
+    <Compile Include="TriggerAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
