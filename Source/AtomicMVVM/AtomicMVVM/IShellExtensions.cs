@@ -2,9 +2,10 @@
 
 namespace AtomicMVVM
 {
+    using System;
 #if NETFX_CORE
     using Windows.UI.Xaml.Controls;
-#else
+#else    
     using System.Windows.Controls;
 #endif
 
@@ -21,6 +22,11 @@ namespace AtomicMVVM
         /// <param name="bootStrapper">The bootstrapper.</param>
         public static void BindGlobalCommands(this ContentControl shell, Bootstrapper bootStrapper)
         {
+            if (bootStrapper == null)
+            {
+                throw new ArgumentNullException("bootStrapper");
+            }
+
             bootStrapper.BindGlobalCommands(shell, bootStrapper.GlobalCommands);
         }
     }

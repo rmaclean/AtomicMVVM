@@ -2,6 +2,7 @@
 namespace AtomicMVVM
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Instructs the bootstrapper that if any of the listed properties change, the attributed method should be run.
@@ -35,7 +36,7 @@ namespace AtomicMVVM
         /// <value>
         /// The property names.
         /// </value>
-        public string[] PropertyNames { get; private set; }
+        public IEnumerable<string> PropertyNames { get; private set; }
 
         /// <summary>
         /// Gets the priority.

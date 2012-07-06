@@ -20,6 +20,21 @@ namespace AtomicMVVM
         /// <param name="action">The action.</param>
         public static void Add(this List<ActionCommand> globalCommands, string commandId, Action action)
         {
+            if (string.IsNullOrWhiteSpace(commandId))
+            {
+                throw new ArgumentNullException("commandId");
+            }
+
+            if (action == null)
+            {
+                throw new ArgumentNullException("action");
+            }
+
+            if (globalCommands == null)
+            {
+                throw new ArgumentNullException("globalCommands");
+            }
+
             var actionCommand = new ActionCommand(commandId, action);
             globalCommands.Add(actionCommand);  
         }

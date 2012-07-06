@@ -106,6 +106,16 @@ namespace AtomicMVVM
         /// <param name="data">The data to pass to the initial view model.</param>
         public void Start<TData>(Type shell, Type content, TData data)
         {
+            if (shell == null)
+            {
+                throw new ArgumentNullException("shell");
+            }
+
+            if (content == null)
+            {
+                throw new ArgumentNullException("content");
+            }
+
             CurrentShell = shell.GetConstructor(EmptyTypes).Invoke(null) as IShell;
 
 #if NETFX_CORE
@@ -180,6 +190,11 @@ namespace AtomicMVVM
         /// <param name="data">The data to pass to the view model.</param>
         public void ChangeView<TData>(Type newContent, TData data)
         {
+            if (newContent == null)
+            {
+                throw new ArgumentNullException("newContent");
+            }
+
             if (typeof(TData) == typeof(McGuffin))
             {
                 CurrentViewModel = newContent.GetConstructor(EmptyTypes).Invoke(null) as CoreData;
@@ -406,7 +421,7 @@ namespace AtomicMVVM
             }
         }
 
-        private void AddTrigger(string[] propertyNames, string methodName)
+        private void AddTrigger(IEnumerable<string> propertyNames, string methodName)
         {
             this.CurrentViewModel.PropertyChanged += (s, e) =>
                 {
@@ -419,7 +434,7 @@ namespace AtomicMVVM
 #endif
                         if (method == null)
                         {
-                            throw new Exception(string.Format(CultureInfo.CurrentCulture, "Cannot find method '{0}' - make sure it is a public method?", methodName));
+                            throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Cannot find method '{0}' - make sure it is a public method?", methodName), "methodName");
                         }
 
                         method.Invoke(CurrentViewModel, null);

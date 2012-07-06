@@ -33,6 +33,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>..\..\..\AtomicMVVM.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -52,6 +53,12 @@
     </Compile>
     <Compile Include="..\AtomicMVVM\CoreData.cs">
       <Link>CoreData.cs</Link>
+    </Compile>
+    <Compile Include="..\AtomicMVVM\Extensions.cs">
+      <Link>Extensions.cs</Link>
+    </Compile>
+    <Compile Include="..\AtomicMVVM\ExtensionsForNET40.cs">
+      <Link>ExtensionsForNET40.cs</Link>
     </Compile>
     <Compile Include="..\AtomicMVVM\GlobalCommand.cs">
       <Link>GlobalCommand.cs</Link>
@@ -74,7 +81,6 @@
     <Compile Include="..\AtomicMVVM\TriggerAttribute.cs">
       <Link>TriggerAttribute.cs</Link>
     </Compile>
-    <Compile Include="Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />

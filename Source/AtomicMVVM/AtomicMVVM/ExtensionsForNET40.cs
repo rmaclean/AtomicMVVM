@@ -16,11 +16,13 @@ namespace AtomicMVVM
                    select a as T;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification="It is called from other projects")]
         public static void SetValue(this PropertyInfo property, object obj, object value)
         {
             property.SetValue(obj, value, null);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "It is called from other projects")]
         public static object GetValue(this PropertyInfo property, object obj)
         {
             return property.GetValue(obj, null);

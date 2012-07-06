@@ -2,6 +2,7 @@
 namespace AtomicMVVM
 {
     using System;
+    using System.Collections.Generic;
     /// <summary>
     /// Indicates that the attribute method is affected by the listed properties.
     /// </summary>
@@ -26,6 +27,6 @@ namespace AtomicMVVM
         /// <value>
         /// The property names.
         /// </value>
-        public string[] PropertyNames { get; private set; }
+        public IEnumerable<string> PropertyNames { get; private set; }
     }
 }

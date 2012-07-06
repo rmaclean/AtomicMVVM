@@ -58,6 +58,11 @@ namespace AtomicMVVM
 
         public void Execute(object parameter)
         {
+            if (parameter == null)
+            {
+                throw new ArgumentNullException("parameter");
+            }
+
             if (executeMethod == null)
             {
 #if NETFX_CORE

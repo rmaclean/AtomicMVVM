@@ -34,8 +34,14 @@ namespace AtomicMVVM
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification="While it makes sense in SL & WPF, it doesn't work for Metro apps which need this to not be static.")]
         public void Invoke(Action action)
         {
+            if (action == null)
+            {
+                throw new ArgumentNullException("action");
+            }
+
 #if (NETFX_CORE)
             ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
