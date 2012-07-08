@@ -25,6 +25,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\..\AtomicMVVM.ruleset = ..\..\AtomicMVVM.ruleset
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Checks", "Checks", "{8F8AF9AE-6976-4182-A0B2-A669C156A2C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtomicMVVM.Checks", "AtomicMVVM.Checks\AtomicMVVM.Checks.csproj", "{DB354A97-A613-4214-9D72-6FD44F77CF68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -99,8 +103,21 @@ Global
 		{BC723D4B-C455-438E-B99F-A07F809F735C}.Release|x64.Build.0 = Release|x64
 		{BC723D4B-C455-438E-B99F-A07F809F735C}.Release|x86.ActiveCfg = Release|x86
 		{BC723D4B-C455-438E-B99F-A07F809F735C}.Release|x86.Build.0 = Release|x86
+		{DB354A97-A613-4214-9D72-6FD44F77CF68}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{DB354A97-A613-4214-9D72-6FD44F77CF68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB354A97-A613-4214-9D72-6FD44F77CF68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB354A97-A613-4214-9D72-6FD44F77CF68}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DB354A97-A613-4214-9D72-6FD44F77CF68}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DB354A97-A613-4214-9D72-6FD44F77CF68}.Release|ARM.ActiveCfg = Release|Any CPU
+		{DB354A97-A613-4214-9D72-6FD44F77CF68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB354A97-A613-4214-9D72-6FD44F77CF68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB354A97-A613-4214-9D72-6FD44F77CF68}.Release|x64.ActiveCfg = Release|Any CPU
+		{DB354A97-A613-4214-9D72-6FD44F77CF68}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DB354A97-A613-4214-9D72-6FD44F77CF68} = {8F8AF9AE-6976-4182-A0B2-A669C156A2C1}
 	EndGlobalSection
 EndGlobal
