@@ -20,6 +20,7 @@ namespace AtomicMVVM
         /// </summary>
         /// <param name="shell">The shell.</param>
         /// <param name="bootStrapper">The bootstrapper.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public static void BindGlobalCommands(this ContentControl shell, Bootstrapper bootStrapper)
         {
             if (bootStrapper == null)

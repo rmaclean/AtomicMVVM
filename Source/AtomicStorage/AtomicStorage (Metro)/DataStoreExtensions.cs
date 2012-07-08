@@ -15,6 +15,7 @@
 
     public static class DataStoreExtensions
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
         public static void SaveSettings(this IDataStore store, bool roam = false)
         {
 #if NETFX_CORE

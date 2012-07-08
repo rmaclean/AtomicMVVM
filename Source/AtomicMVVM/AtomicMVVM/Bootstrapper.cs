@@ -421,6 +421,7 @@ namespace AtomicMVVM
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly", Justification="It is the parameter the user passes in - however it is not from the anonymous method that it is in")]
         private void AddTrigger(IEnumerable<string> propertyNames, string methodName)
         {
             this.CurrentViewModel.PropertyChanged += (s, e) =>

@@ -2,13 +2,10 @@
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("AtomicMVVM")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Robert MacLean")]
 [assembly: AssemblyProduct("AtomicMVVM")]
 [assembly: AssemblyCopyright("Copyright © Robert MacLean 2012")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+[assembly: AssemblyCulture("en")]
 [assembly:System.CLSCompliant(false)]
 [assembly:System.Resources.NeutralResourcesLanguage("en")]
 [assembly: ComVisible(false)]
@@ -16,5 +13,5 @@ using System.Runtime.InteropServices;
 #if !(SILVERLIGHT || NETFX_CORE)
 [assembly: System.Security.SecurityRules(System.Security.SecurityRuleSet.Level2)]
 #endif
-[assembly: AssemblyVersion("3.0.0.0")]
-[assembly: AssemblyFileVersion("3.0.0.0")]
+[assembly: AssemblyVersion("5.0.0.0")]
+[assembly: AssemblyFileVersion("5.0.0.0")]
