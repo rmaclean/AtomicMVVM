@@ -1,4 +1,9 @@
-﻿
+﻿///-----------------------------------------------------------------------
+/// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+/// License: MS-PL http://www.opensource.org/licenses/MS-PL
+/// Notes:
+///-----------------------------------------------------------------------
+
 namespace AtomicMVVM
 {
     using System;
@@ -116,7 +121,7 @@ namespace AtomicMVVM
                 throw new ArgumentNullException("content");
             }
 
-            CurrentShell = shell.GetConstructor(EmptyTypes).Invoke(null) as IShell;
+            this.CurrentShell = shell.GetConstructor(EmptyTypes).Invoke(null) as IShell;
 
 #if NETFX_CORE
             this.ViewSuffix = Windows.UI.ViewManagement.ApplicationView.Value.ToString();

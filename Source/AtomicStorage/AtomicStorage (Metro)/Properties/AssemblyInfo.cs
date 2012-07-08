@@ -1,4 +1,10 @@
-﻿using System.Reflection;
+﻿///-----------------------------------------------------------------------
+/// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+/// License: MS-PL http://www.opensource.org/licenses/MS-PL
+/// Notes:
+///-----------------------------------------------------------------------
+
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("AtomicStorage")]

@@ -1,4 +1,10 @@
-﻿namespace AtomicStorage
+﻿///-----------------------------------------------------------------------
+/// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+/// License: MS-PL http://www.opensource.org/licenses/MS-PL
+/// Notes:
+///-----------------------------------------------------------------------
+
+namespace AtomicStorage
 {
     using System.Collections.Generic;
     using System.Linq;
