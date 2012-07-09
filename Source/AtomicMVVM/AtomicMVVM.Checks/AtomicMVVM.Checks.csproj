@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BootstrapperChecks.cs" />
+    <Compile Include="StubWindow.cs" />
     <Compile Include="ViewModels\CoreDataSample1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\CoreDataSample2.cs" />

@@ -155,7 +155,7 @@ namespace AtomicMVVM
         }
 
         [Fact]
-        public void AddGlobalCommandNullCommandId()
+        public void AddGlobalCommandNullAction()
         {
             var bootStrapper = new Bootstrapper();
             var ex = Assert.Throws<ArgumentNullException>(() => bootStrapper.GlobalCommands.Add("horse", null));
