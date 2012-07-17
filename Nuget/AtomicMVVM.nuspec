@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>AtomicMVVM</id>
     <version>5.0.0</version>
@@ -10,7 +10,10 @@
     <projectUrl>https://bitbucket.org/rmaclean/atomicmvvm/</projectUrl>
     <summary>A supremely lightweight MVVM framework for WPF, Silverlight, Windows Phone &amp; Metro projects.</summary>
     <releaseNotes>NOTE: This version has breaking changes from v4.
-...
+Added view state support for the Metro apps into the framework.
+Added non-generic versions of Start &amp; ChangeView methods.
+Added IntelliSense documentation.
+Many internal cleanups.
     </releaseNotes>
     <copyright>Copyright Robert MacLean 2012</copyright>
     <tags>Windows8 Metro WinRT WindowsPhone71 WindowsPhone WP7 WP7.1 WindowsPhone7.1 MVVM WPF SILVERLIGHT METRO WINRT BINDING SL5 SL Convention Model-View-ViewModel Model View Presentation UI ViewModel mvvmlight data</tags>
