@@ -2,27 +2,15 @@
 <package>
   <metadata>
     <id>AtomicMVVM</id>
-    <version>4.0.0</version>
+    <version>5.0.0</version>
     <authors>Robert MacLean</authors>
     <owners>Robert MacLean</owners>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
     <projectUrl>https://bitbucket.org/rmaclean/atomicmvvm/</projectUrl>
     <summary>A supremely lightweight MVVM framework for WPF, Silverlight, Windows Phone &amp; Metro projects.</summary>
-    <releaseNotes>NOTE: This version has breaking changes from v3.
-The bootstrapper is no longer generic, rather the generic aspects have been moved to the Start method.
-  This enables the bootstrapper to be used more easily (internally &amp; externally).
-  This also enables future ideas such as switching out the shell.
-Previously internal fields for current shell, view &amp; view model are now public properties.
-  This enables the bootstrapper to be better unit tested itself &amp; used in unit testing.
-  Allows for some dynamic logic in view models.
-CoreData now has a bootstrapper property
-  When a view model is created the property is set to the creating bootstrapper allowing for the view model to be able to interact with the bootstrapper without needing global variables etc...
-  This was really only enabled with the removal of the generic aspects (above).
-Added the StubShell
-  This is a simple shell implementation for use in unit tests.
-Updated all the Metro aspects to work with Windows 8 Release Candidate
-  This was really just two things, removing an unused namespace &amp; changing to the new async invoker.
+    <releaseNotes>NOTE: This version has breaking changes from v4.
+...
     </releaseNotes>
     <copyright>Copyright Robert MacLean 2012</copyright>
     <tags>Windows8 Metro WinRT WindowsPhone71 WindowsPhone WP7 WP7.1 WindowsPhone7.1 MVVM WPF SILVERLIGHT METRO WINRT BINDING SL5 SL Convention Model-View-ViewModel Model View Presentation UI ViewModel mvvmlight data</tags>

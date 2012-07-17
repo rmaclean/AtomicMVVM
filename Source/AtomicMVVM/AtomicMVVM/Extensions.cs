@@ -15,6 +15,9 @@ namespace AtomicMVVM
     using ActionCommand = System.Tuple<string,System.Action>;
 #endif
 
+    /// <summary>
+    /// Extension methods for AtomicMVVM
+    /// </summary>
     public static class Extensions
     {
         /// <summary>

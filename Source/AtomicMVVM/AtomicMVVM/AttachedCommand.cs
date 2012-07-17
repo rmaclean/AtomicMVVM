@@ -50,10 +50,10 @@ namespace AtomicMVVM
         }
 
         public event EventHandler CanExecuteChanged;
-        private string methodName;
+        private readonly string methodName;
         private MethodInfo executeMethod;
         private MethodInfo canExecuteMethod;
-        private bool canExecuteExists;
+        private readonly bool canExecuteExists;
 
         public AttachedCommand(string methodName, bool canExecuteExists)
         {

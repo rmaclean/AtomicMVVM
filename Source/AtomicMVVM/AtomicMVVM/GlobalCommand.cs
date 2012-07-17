@@ -12,7 +12,7 @@ namespace AtomicMVVM
     /// <summary>
     /// Defines a command that can be attached to a button, if no match is found in the model.
     /// </summary>
-    class GlobalCommand : ICommand
+    sealed class GlobalCommand : ICommand
     {
         /// <summary>
         /// Determines whether this instance can execute the specified parameter.
@@ -33,7 +33,7 @@ namespace AtomicMVVM
         public event EventHandler CanExecuteChanged;
 #pragma warning restore 67
 
-        private Action action;
+        private readonly Action action;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlobalCommand" /> class.

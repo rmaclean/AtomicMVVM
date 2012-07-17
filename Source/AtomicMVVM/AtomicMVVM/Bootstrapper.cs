@@ -10,6 +10,7 @@ namespace AtomicMVVM
     using System.Collections.Generic;
     using System.Linq;    
     using System.Globalization;
+    using System.Reflection;
 #if WINDOWS_PHONE
     using ActionCommand = Tuple<string, System.Action>;
 #else
@@ -20,7 +21,6 @@ namespace AtomicMVVM
     using Windows.UI.Xaml;
     using Windows.UI.Core;
     using Windows.UI.Xaml.Controls.Primitives;
-    using System.Reflection;
 #else
     using System.Windows.Controls;
     using System.Windows;
@@ -36,7 +36,7 @@ namespace AtomicMVVM
     /// </summary>
     public class Bootstrapper
     {
-        private class McGuffin { }
+        private sealed class McGuffin { }
         
 #if (NETFX_CORE)
         private readonly Type[] EmptyTypes = new Type[] { };
@@ -292,6 +292,17 @@ namespace AtomicMVVM
                                       m.ReturnType == typeof(void)
                                 select m).ToList();
 
+            BindMethods(validMethods);
+
+            BindGlobalCommands();
+
+            CurrentViewModel.RaiseBound();
+            CurrentView.DataContext = CurrentViewModel;
+            CurrentShell.ChangeContent(CurrentView);
+        }
+
+        private void BindMethods(List<MethodInfo> validMethods)
+        {
             foreach (var method in validMethods)
             {
                 var attributes = from _ in method.GetCustomAttributes<TriggerPropertyAttribute>(false)
@@ -365,12 +376,6 @@ namespace AtomicMVVM
                     }
                 }
             }
-
-            BindGlobalCommands();
-
-            CurrentViewModel.RaiseBound();
-            CurrentView.DataContext = CurrentViewModel;
-            CurrentShell.ChangeContent(CurrentView);
         }
 
 #if NETFX_CORE || SILVERLIGHT
