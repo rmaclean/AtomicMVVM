@@ -1,10 +1,10 @@
 ﻿//-----------------------------------------------------------------------
-// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+// Project: AtomicPhoneMVVM https://bitbucket.org/rmaclean/atomicmvvm
 // License: MS-PL http://www.opensource.org/licenses/MS-PL
 // Notes:
 //-----------------------------------------------------------------------
 
-namespace AtomicMVVM
+namespace AtomicPhoneMVVM
 {
     using System;
     using System.Reflection;
@@ -12,11 +12,6 @@ namespace AtomicMVVM
 
     class AttachedCommand : ICommand
     {
-#if (NETFX_CORE)
-        private readonly Type[] EmptyTypes = new Type[] { };
-#else
-        private readonly Type[] EmptyTypes = Type.EmptyTypes;
-#endif
         public bool CanExecute(object parameter)
         {
             if (!canExecuteExists)
@@ -31,11 +26,7 @@ namespace AtomicMVVM
 
             if (canExecuteMethod == null)
             {
-#if NETFX_CORE
-                canExecuteMethod = parameter.GetType().GetRuntimeMethod("Can" + this.methodName, EmptyTypes);
-#else
-                canExecuteMethod = parameter.GetType().GetMethod("Can" + this.methodName, EmptyTypes);
-#endif
+                canExecuteMethod = parameter.GetType().GetMethod("Can" + this.methodName, Type.EmptyTypes);
             }
 
             return (bool)canExecuteMethod.Invoke(parameter, null);
@@ -50,10 +41,10 @@ namespace AtomicMVVM
         }
 
         public event EventHandler CanExecuteChanged;
-        private readonly string methodName;
+        private string methodName;
         private MethodInfo executeMethod;
         private MethodInfo canExecuteMethod;
-        private readonly bool canExecuteExists;
+        private bool canExecuteExists;
 
         public AttachedCommand(string methodName, bool canExecuteExists)
         {
@@ -63,18 +54,9 @@ namespace AtomicMVVM
 
         public void Execute(object parameter)
         {
-            if (parameter == null)
-            {
-                throw new ArgumentNullException("parameter");
-            }
-
             if (executeMethod == null)
             {
-#if NETFX_CORE
-                executeMethod = parameter.GetType().GetRuntimeMethod(this.methodName, EmptyTypes);
-#else
-                executeMethod = parameter.GetType().GetMethod(this.methodName, EmptyTypes);
-#endif
+                executeMethod = parameter.GetType().GetMethod(this.methodName, Type.EmptyTypes);
             }
 
             executeMethod.Invoke(parameter, null);

@@ -1,8 +1,8 @@
-﻿///-----------------------------------------------------------------------
-/// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
-/// License: MS-PL http://www.opensource.org/licenses/MS-PL
-/// Notes:
-///-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
+// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+// License: MS-PL http://www.opensource.org/licenses/MS-PL
+// Notes:
+//-----------------------------------------------------------------------
 
 namespace AtomicMVVM
 {
@@ -23,8 +23,10 @@ namespace AtomicMVVM
         /// <summary>
         /// Adds the specified command to the global commands.
         /// </summary>
+        /// <param name="globalCommands">The global commands.</param>
         /// <param name="commandId">The command id.</param>
         /// <param name="action">The action.</param>
+        /// <exception cref="System.ArgumentNullException">If any of the parameters are null.</exception>
         public static void Add(this List<ActionCommand> globalCommands, string commandId, Action action)
         {
             if (string.IsNullOrWhiteSpace(commandId))

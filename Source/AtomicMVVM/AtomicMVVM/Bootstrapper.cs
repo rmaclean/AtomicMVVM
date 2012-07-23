@@ -1,8 +1,8 @@
-﻿///-----------------------------------------------------------------------
-/// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
-/// License: MS-PL http://www.opensource.org/licenses/MS-PL
-/// Notes:
-///-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
+// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+// License: MS-PL http://www.opensource.org/licenses/MS-PL
+// Notes:
+//-----------------------------------------------------------------------
 
 namespace AtomicMVVM
 {
@@ -58,7 +58,7 @@ namespace AtomicMVVM
         /// <remarks>
         /// This can be change by calling the ChangeView method. 
         /// </remarks>
-        /// <seealso cref="ChangeView"/>
+        /// <seealso cref="ChangeView(System.Type)"/>
         public CoreData CurrentViewModel { get; private set; }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace AtomicMVVM
         /// <remarks>
         /// This can be change by calling the ChangeView method. 
         /// </remarks>
-        /// <seealso cref="ChangeView"/>
+        /// <seealso cref="ChangeView(System.Type)"/>
         public UserControl CurrentView { get; private set; }
 
         /// <summary>
@@ -298,6 +298,12 @@ namespace AtomicMVVM
 
             CurrentViewModel.RaiseBound();
             CurrentView.DataContext = CurrentViewModel;
+            var whenDataBound = CurrentView as IWhenDataBound;
+            if (whenDataBound != null)
+            {
+                whenDataBound.DataContextBound();
+            }
+
             CurrentShell.ChangeContent(CurrentView);
         }
 

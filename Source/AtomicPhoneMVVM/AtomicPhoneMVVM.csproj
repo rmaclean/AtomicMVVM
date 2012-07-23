@@ -62,10 +62,19 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AtomicPhoneMVVM.cs" />
+    <Compile Include="AppBarCommandAttribute.cs" />
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="AttachedCommand.cs" />
+    <Compile Include="CoreData.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="GlobalCommand.cs" />
+    <Compile Include="IPushMessage.cs" />
+    <Compile Include="IWhenReady.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReevaluatePropertyAttribute.cs" />
+    <Compile Include="TriggerPropertyAttribute.cs" />
     <Compile Include="Tuple.cs" />
+    <Compile Include="XAMLExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />

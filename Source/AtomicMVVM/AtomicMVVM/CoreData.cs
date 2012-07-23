@@ -1,8 +1,8 @@
-﻿///-----------------------------------------------------------------------
-/// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
-/// License: MS-PL http://www.opensource.org/licenses/MS-PL
-/// Notes:
-///-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
+// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+// License: MS-PL http://www.opensource.org/licenses/MS-PL
+// Notes:
+//-----------------------------------------------------------------------
 
 namespace AtomicMVVM
 {
@@ -13,6 +13,9 @@ namespace AtomicMVVM
     using Windows.UI.Core;
 #else
     using System.Windows.Controls;
+#endif
+#if ASYNC
+    using System.Threading.Tasks;
 #endif
 
     /// <summary>
@@ -28,33 +31,66 @@ namespace AtomicMVVM
         {
             if (PropertyChanged != null && ViewControl != null)
             {
-#if (NETFX_CORE)
+#if NETFX_CORE
                 ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
 #endif
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-#if (NETFX_CORE)
-                });
+#if NET45
+                ViewControl.Dispatcher.InvokeAsync(() =>
+                    {
+#endif
+                        PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+#if (NETFX_CORE || NET45)
+                    });
 #endif
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification="While it makes sense in SL & WPF, it doesn't work for Metro apps which need this to not be static.")]
+#if (ASYNC)
+        /// <summary>
+        /// Invokes the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="System.ArgumentNullException">If the action provide is null.</exception>
+        public async void Invoke(Action action)
+        {
+            await Task.Run(() => InvokeAsync(action));
+        }
+#endif
+
+        /// <summary>
+        /// Invokes the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="System.ArgumentNullException">If the action provide is null.</exception>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "While it makes sense in SL & WPF, it doesn't work for Metro apps which need this to not be static.")]
+#if (ASYNC)
+#pragma warning disable 1998
+        public async void InvokeAsync(Action action)
+#pragma warning restore 1998
+#else
         public void Invoke(Action action)
+#endif
         {
             if (action == null)
             {
                 throw new ArgumentNullException("action");
             }
 
+#pragma warning disable 4014
 #if (NETFX_CORE)
             ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
 #endif
-            action();
-#if (NETFX_CORE)
+#if (NET45)
+            ViewControl.Dispatcher.InvokeAsync(() =>
+                {
+#endif
+                    action();
+#if (NETFX_CORE || NET45)
                 });
 #endif
+#pragma warning restore 4014
         }
 
         /// <summary>
