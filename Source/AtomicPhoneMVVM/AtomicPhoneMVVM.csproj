@@ -67,7 +67,6 @@
     <Compile Include="AttachedCommand.cs" />
     <Compile Include="CoreData.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="GlobalCommand.cs" />
     <Compile Include="IPushMessage.cs" />
     <Compile Include="IWhenReady.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

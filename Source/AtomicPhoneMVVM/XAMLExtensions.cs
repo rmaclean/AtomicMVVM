@@ -9,7 +9,7 @@ namespace AtomicPhoneMVVM
     using System.Windows;
     public class XAMLExtensions
     {
-        public static readonly DependencyProperty CommandNameProperty = DependencyProperty.RegisterAttached("CommandName", typeof(string), typeof(XAMLExtensions), new PropertyMetadata(false));
+        public static readonly DependencyProperty CommandNameProperty = DependencyProperty.RegisterAttached("CommandName", typeof(string), typeof(XAMLExtensions), new PropertyMetadata(string.Empty));
 
         public static void SetCommandName(UIElement element, string value)
         {
