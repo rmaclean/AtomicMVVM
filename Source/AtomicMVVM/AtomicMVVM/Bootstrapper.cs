@@ -295,6 +295,7 @@ namespace AtomicMVVM
             BindMethods(validMethods);
 
             BindGlobalCommands();
+            CurrentViewModel.ViewControl = CurrentView;
 
             CurrentViewModel.RaiseBound();
             CurrentView.DataContext = CurrentViewModel;
