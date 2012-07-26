@@ -148,6 +148,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IWhenDataBound.cs" />
+    <Compile Include="NotifyPropertyOptionsAttribute.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>

@@ -8,6 +8,7 @@ namespace AtomicMVVM
 {
     using System;
     using System.ComponentModel;
+    using System.Reflection;
 #if NETFX_CORE
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Core;
@@ -31,18 +32,43 @@ namespace AtomicMVVM
         {
             if (PropertyChanged != null && ViewControl != null)
             {
-#if NETFX_CORE
-                ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+#if ASYNC
+                var methodDispatchMode = MethodDispatchMode.Async;
+                var attribute = this.GetType().GetRuntimeProperty(propertyName).GetCustomAttribute<NotifyPropertyOptionsAttribute>();
+                if (attribute != null)
                 {
+                    methodDispatchMode = attribute.MethodDispatchMode;
+                }
+#if NETFX_CORE
+                if (methodDispatchMode == MethodDispatchMode.Async)
+                {
+                    ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                    });
+                }
+                else
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                }
 #endif
 #if NET45
+                if (methodDispatchMode == MethodDispatchMode.Async)
+                { 
                 ViewControl.Dispatcher.InvokeAsync(() =>
                     {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                });
+                }
+                else
+                {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                }
 #endif
-                        PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-#if (NETFX_CORE || NET45)
-                    });
+#else
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 #endif
+
             }
         }
 
