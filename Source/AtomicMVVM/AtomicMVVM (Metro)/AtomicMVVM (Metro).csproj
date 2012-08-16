@@ -144,6 +144,7 @@
     <Compile Include="..\AtomicMVVM\TriggerAttribute.cs">
       <Link>TriggerAttribute.cs</Link>
     </Compile>
+    <Compile Include="UIExtensions.cs" />
     <Compile Include="ExtensionsForWinRT.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -8,7 +8,7 @@ namespace AtomicMVVM
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;    
+    using System.Linq;
     using System.Globalization;
     using System.Reflection;
 #if WINDOWS_PHONE
@@ -37,10 +37,11 @@ namespace AtomicMVVM
     public class Bootstrapper
     {
         private sealed class McGuffin { }
-        
+
 #if (NETFX_CORE)
         private readonly Type[] EmptyTypes = new Type[] { };
         private string ViewSuffix;
+        private List<object> CurrentViewExtendedChildControls;
 #else
         private readonly Type[] EmptyTypes = Type.EmptyTypes;
 #endif
@@ -51,7 +52,7 @@ namespace AtomicMVVM
         /// As of AtomicMVVM 4.1 there is no way to change the shell at runtime, this is a read-only parameter and should always match the shell passed to the start method.
         /// </remarks>
         public IShell CurrentShell { get; private set; }
-        
+
         /// <summary>
         /// The current view model that is being used to render the screen.
         /// </summary>
@@ -81,7 +82,7 @@ namespace AtomicMVVM
         public Bootstrapper()
         {
             this.GlobalCommands = new List<ActionCommand>();
-        }        
+        }
 
         /// <summary>
         /// Executes the global command.
@@ -90,7 +91,7 @@ namespace AtomicMVVM
         public void ExecuteGlobalCommand(string commandId)
         {
             this.GlobalCommands.Single(_ => _.Item1 == commandId).Item2();
-        }       
+        }
 
         /// <summary>
         /// Instructs the bootstrapper to start the process of loading the shell, loading the view model &amp; and loading the view and binding them together.
@@ -125,9 +126,9 @@ namespace AtomicMVVM
 
 #if NETFX_CORE
             this.ViewSuffix = Windows.UI.ViewManagement.ApplicationView.Value.ToString();
-#endif            
+#endif
             this.ChangeView(content, data);
-            
+
 #if NETFX_CORE
             var uiShell = CurrentShell as UIElement;
             if (uiShell != null)
@@ -184,7 +185,7 @@ namespace AtomicMVVM
             where TContent : CoreData
             where TShell : IShell
         {
-            Start(typeof(TShell), typeof(TContent), data);    
+            Start(typeof(TShell), typeof(TContent), data);
         }
 
         /// <summary>
@@ -271,6 +272,7 @@ namespace AtomicMVVM
 
         private void ChangeView()
         {
+            //this.CurrentViewExtendedChildControls = UIExtendedControls();
 #if NETFX_CORE
             var viewType = GetView(true);
             if (CurrentView != null && viewType == CurrentView.GetType())
@@ -308,6 +310,73 @@ namespace AtomicMVVM
             CurrentShell.ChangeContent(CurrentView);
         }
 
+        private List<object> UIExtendedControls()
+        {
+            var result = new List<object>();
+
+            GetChildControls(CurrentView, result);
+
+            return result;
+        }
+
+        private void GetChildControls(DependencyObject uiObject, List<object> result)
+        {
+            var buttonBase = uiObject as ButtonBase;
+            if (buttonBase != null)
+            {
+                var o = buttonBase.GetValue(UIExtensions.CommandNameProperty);
+                if (o != null)
+                {
+                    result.Add(buttonBase);
+                }
+            }
+
+            var userControl = uiObject as UserControl;
+            if (userControl != null)
+            {
+                GetChildControls(userControl.Content, result);
+            }
+
+            var panel = uiObject as Panel;
+            if (panel != null)
+            {
+                foreach (var item in panel.Children)
+                {
+                    GetChildControls(item, result);
+                }
+            }
+
+            var contentControl = uiObject as ContentControl;
+            if (contentControl != null)
+            {
+                var depObject = contentControl.Content as DependencyObject;
+                if (depObject != null)
+                {
+                    GetChildControls(depObject, result);
+                }
+            }
+
+            var itemsControl = uiObject as ItemsControl;
+            if (itemsControl != null)
+            {
+                foreach (var item in itemsControl.Items)
+                {
+                    var depObject = item as DependencyObject;
+                    if (depObject != null)
+                    {
+                        GetChildControls(depObject, result);
+                    }
+                }
+            }
+        }
+
+        private object FindControl(string methodName)
+        {
+            var result = CurrentView.FindName(methodName);            
+
+            return result;
+        }
+
         private void BindMethods(List<MethodInfo> validMethods)
         {
             foreach (var method in validMethods)
@@ -320,9 +389,16 @@ namespace AtomicMVVM
                     AddTrigger(attribute.PropertyNames, method.Name);
                 }
 
-                var control = CurrentView.FindName(method.Name);
+                var control = FindControl(method.Name);
+                BindControl(method, control);
+            }
+        }
+
+        private void BindControl(MethodInfo method, object control)
+        {
+
 #if NETFX_CORE
-                if (control != null && typeof(ButtonBase).GetTypeInfo().IsAssignableFrom(control.GetType().GetTypeInfo()))
+            if (control != null && typeof(ButtonBase).GetTypeInfo().IsAssignableFrom(control.GetType().GetTypeInfo()))
 #else
 #if SILVERLIGHT
                 if (control != null && typeof(ButtonBase).IsAssignableFrom(control.GetType()))
@@ -332,54 +408,53 @@ namespace AtomicMVVM
 #endif
 
 #if NETFX_CORE
-                {
-                    var commandProperty = typeof(ButtonBase).GetRuntimeProperty("Command");
+            {
+                var commandProperty = typeof(ButtonBase).GetRuntimeProperty("Command");
 #else
                 {
                     var commandProperty = control.GetType().GetProperty("Command");
 #endif
-                    if (commandProperty.GetValue(control) == null)
-                    {
+                if (commandProperty.GetValue(control) == null)
+                {
 #if NETFX_CORE
-                        var commandParameterProperty = typeof(ButtonBase).GetRuntimeProperty("CommandParameter");
+                    var commandParameterProperty = typeof(ButtonBase).GetRuntimeProperty("CommandParameter");
 #else
                         var commandParameterProperty = control.GetType().GetProperty("CommandParameter");
 #endif
-                        if (commandProperty.CanWrite && commandParameterProperty.CanWrite)
-                        {
-                            var canExecuteExists = false;
+                    if (commandProperty.CanWrite && commandParameterProperty.CanWrite)
+                    {
+                        var canExecuteExists = false;
 #if NETFX_CORE
-                            var canExecuteMethod = CurrentViewModel.GetType().GetRuntimeMethod("Can" + method.Name, EmptyTypes);
+                        var canExecuteMethod = CurrentViewModel.GetType().GetRuntimeMethod("Can" + method.Name, EmptyTypes);
 #else
                             var canExecuteMethod = CurrentViewModel.GetType().GetMethod("Can" + method.Name, EmptyTypes);
 #endif
-                            if (canExecuteMethod != null)
-                            {
-                                canExecuteExists = canExecuteMethod.ReturnType == typeof(bool);
-                            }
-
-                            var command = new AttachedCommand(method.Name, canExecuteExists);
-
-                            if (canExecuteMethod != null)
-                            {
-                                var reevaluateAttributes = from _ in canExecuteMethod.GetCustomAttributes<ReevaluatePropertyAttribute>(false)
-                                                           orderby _ ascending
-                                                           select _;
-                                foreach (var attribute in reevaluateAttributes)
-                                {
-                                    CurrentViewModel.PropertyChanged += (s, e) =>
-                                    {
-                                        if (attribute.PropertyNames.Contains(e.PropertyName))
-                                        {
-                                            command.RaiseCanExecuteChanged();
-                                        }
-                                    };
-                                }
-                            }
-
-                            commandProperty.SetValue(control, command);
-                            commandParameterProperty.SetValue(control, CurrentViewModel);
+                        if (canExecuteMethod != null)
+                        {
+                            canExecuteExists = canExecuteMethod.ReturnType == typeof(bool);
                         }
+
+                        var command = new AttachedCommand(method.Name, canExecuteExists);
+
+                        if (canExecuteMethod != null)
+                        {
+                            var reevaluateAttributes = from _ in canExecuteMethod.GetCustomAttributes<ReevaluatePropertyAttribute>(false)
+                                                       orderby _ ascending
+                                                       select _;
+                            foreach (var attribute in reevaluateAttributes)
+                            {
+                                CurrentViewModel.PropertyChanged += (s, e) =>
+                                {
+                                    if (attribute.PropertyNames.Contains(e.PropertyName))
+                                    {
+                                        command.RaiseCanExecuteChanged();
+                                    }
+                                };
+                            }
+                        }
+
+                        commandProperty.SetValue(control, command);
+                        commandParameterProperty.SetValue(control, CurrentViewModel);
                     }
                 }
             }
@@ -404,6 +479,7 @@ namespace AtomicMVVM
             foreach (var method in commands)
             {
                 var control = view.FindName(method.Item1);
+
 #if NETFX_CORE
                 if (control != null && typeof(ButtonBase).GetTypeInfo().IsAssignableFrom(control.GetType().GetTypeInfo()))
 #else
@@ -438,7 +514,7 @@ namespace AtomicMVVM
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly", Justification="It is the parameter the user passes in - however it is not from the anonymous method that it is in")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly", Justification = "It is the parameter the user passes in - however it is not from the anonymous method that it is in")]
         private void AddTrigger(IEnumerable<string> propertyNames, string methodName)
         {
             this.CurrentViewModel.PropertyChanged += (s, e) =>
@@ -459,5 +535,5 @@ namespace AtomicMVVM
                     }
                 };
         }
-    }              
+    }
 }
