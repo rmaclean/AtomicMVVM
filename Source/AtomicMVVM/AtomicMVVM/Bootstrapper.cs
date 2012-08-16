@@ -272,7 +272,7 @@ namespace AtomicMVVM
 
         private void ChangeView()
         {
-            //this.CurrentViewExtendedChildControls = UIExtendedControls();
+            this.CurrentViewExtendedChildControls = UIExtendedControls();
 #if NETFX_CORE
             var viewType = GetView(true);
             if (CurrentView != null && viewType == CurrentView.GetType())
@@ -370,9 +370,23 @@ namespace AtomicMVVM
             }
         }
 
-        private object FindControl(string methodName)
+        private List<object> FindControl(string methodName)
         {
-            var result = CurrentView.FindName(methodName);            
+            var result = new List<object>();
+            var nameMatch = CurrentView.FindName(methodName);            
+            if (nameMatch != null)
+            {
+                result.Add(nameMatch);
+            }
+
+            foreach (ButtonBase item in this.CurrentViewExtendedChildControls)
+            {
+                var extendedName = (string)item.GetValue(UIExtensions.CommandNameProperty);
+                if (extendedName == methodName)
+                {
+                    result.Add(item);
+                }
+            }
 
             return result;
         }
@@ -389,8 +403,11 @@ namespace AtomicMVVM
                     AddTrigger(attribute.PropertyNames, method.Name);
                 }
 
-                var control = FindControl(method.Name);
-                BindControl(method, control);
+                var controls = FindControl(method.Name);
+                foreach (var item in controls)
+                {
+                    BindControl(method, item);   
+                }                
             }
         }
 
