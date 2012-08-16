@@ -9,6 +9,7 @@ namespace AtomicMVVM
     using System;
     using System.ComponentModel;
     using System.Reflection;
+    using System.Linq;
 #if NETFX_CORE
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Core;
@@ -17,13 +18,33 @@ namespace AtomicMVVM
 #endif
 #if ASYNC
     using System.Threading.Tasks;
+    using System.Collections.Generic;
 #endif
+
+    //todo: document and move to it's own file
+    public class CoreDataLight : INotifyPropertyChanged
+    {
+        public void RaisePropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+    }
+
 
     /// <summary>
     /// Provides the plumbing services needed in the view model for the bootstrapper to handle the binding.
     /// </summary>
     public class CoreData : INotifyPropertyChanged
     {
+#if ASYNC
+        private Dictionary<string, MethodDispatchMode> propertyDispatchModes;
+#endif
+
         /// <summary>
         /// Raises the property changed event.
         /// </summary>
@@ -33,11 +54,23 @@ namespace AtomicMVVM
             if (PropertyChanged != null && ViewControl != null)
             {
 #if ASYNC
-                var methodDispatchMode = MethodDispatchMode.Async;
-                var attribute = this.GetType().GetRuntimeProperty(propertyName).GetCustomAttribute<NotifyPropertyOptionsAttribute>();
-                if (attribute != null)
+                if (propertyDispatchModes == null)
                 {
-                    methodDispatchMode = attribute.MethodDispatchMode;
+                    propertyDispatchModes = new Dictionary<string, MethodDispatchMode>(this.GetType().GetRuntimeProperties().Count());
+                }
+
+                var methodDispatchMode = MethodDispatchMode.Async;
+                if (propertyDispatchModes.ContainsKey(propertyName))
+                {
+                    methodDispatchMode = propertyDispatchModes[propertyName];
+                }
+                else
+                {
+                    var attribute = this.GetType().GetRuntimeProperty(propertyName).GetCustomAttribute<NotifyPropertyOptionsAttribute>();
+                    if (attribute != null)
+                    {
+                        methodDispatchMode = attribute.MethodDispatchMode;
+                    }
                 }
 #if NETFX_CORE
                 if (methodDispatchMode == MethodDispatchMode.Async)
