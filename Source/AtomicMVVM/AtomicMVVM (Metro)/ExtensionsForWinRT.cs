@@ -39,7 +39,12 @@ namespace AtomicMVVM
                 var found = true;
                 var constructorParameters = constructor.GetParameters().Select(_ => _.ParameterType).ToArray();
 
-                for (int counter = 0; counter < parameters.Length; counter++)
+                if (constructorParameters.Length != parameters.Length)
+                {
+                    continue;
+                }
+
+                for (int counter = 0; counter < constructorParameters.Length; counter++)
                 {
                     if (constructorParameters[counter] != parameters[counter])
                     {

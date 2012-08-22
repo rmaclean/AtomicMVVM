@@ -24,15 +24,31 @@ namespace AtomicMVVM
     //todo: document and move to it's own file
     public class CoreDataLight : INotifyPropertyChanged
     {
+        public CoreDataLight(Bootstrapper bootstrapper)
+        {
+            this.BootStrapper = bootstrapper;
+        }
+
         public void RaisePropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                if (BootStrapper != null)
+                {
+                    BootStrapper.CurrentViewModel.InvokeAsync(() =>
+                        {
+                            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                        });
+                }
+                else
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                }
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        private Bootstrapper BootStrapper;
     }
 
 
