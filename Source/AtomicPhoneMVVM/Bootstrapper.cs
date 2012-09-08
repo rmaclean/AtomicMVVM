@@ -9,34 +9,71 @@ namespace AtomicPhoneMVVM
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using System.Windows.Controls;
+    using System.Reflection;
     using System.Windows.Controls.Primitives;
     using Microsoft.Phone.Controls;
     using Microsoft.Phone.Shell;
-    using System.Windows;
-    using System.Reflection;
-    using System.Diagnostics;
-    using System.Windows.Media;
 
+    /// <summary>
+    /// The heart of AtomicPhoneMVVM.
+    /// </summary>
     public static class Bootstrapper
     {
+        /// <summary>
+        /// Binds this page to a specific view model.
+        /// </summary>
+        /// <typeparam name="T">The type of view model to use.</typeparam>
         public static void BindData<T>(this PhoneApplicationPage page)
         {
             BindData<T, object>(page, null);
-        }       
+        }
 
+        /// <summary>
+        /// Binds this page to a specific view model using the naming convention.
+        /// </summary>
+        public static void BindData(this PhoneApplicationPage page)
+        {
+            BindData<object>(page, null);
+        }
+
+        /// <summary>
+        /// Binds this page to a specific view model using the naming convention.
+        /// </summary>
+        /// <typeparam name="Y">The type of data to pass to the view model.</typeparam>
+        /// <param name="data">The data to pass to the view model.</param>
+        public static void BindData<Y>(this PhoneApplicationPage page, Y data)
+        {
+            var pageName = page.GetType().AssemblyQualifiedName;
+            var firstDot = pageName.IndexOf(".");
+            var viewModel = pageName.Insert(firstDot, ".ViewModels");
+            var pageType = Type.GetType(viewModel);
+
+            BindData(pageType, page, data);
+        } 
+
+        /// <summary>
+        /// Binds this page to a specific view model with the option to pass data in.
+        /// </summary>
+        /// <typeparam name="T">The type of view model to use.</typeparam>
+        /// <typeparam name="Y">The type of data to pass to the view model.</typeparam>
+        /// <param name="data">The data to pass to the view model.</param>
         public static void BindData<T, Y>(this PhoneApplicationPage page, Y data)
         {
-            var viewModelName = typeof(T).AssemblyQualifiedName;
+            BindData(typeof(T), page, data);
+        }
+
+        private static void BindData<Y>(Type viewModelType, PhoneApplicationPage page, Y data)
+        {
+            var viewModelName = viewModelType.AssemblyQualifiedName;
 
             CoreData viewModel;
             if (data == null)
             {
-                viewModel = typeof(T).GetConstructor(Type.EmptyTypes).Invoke(null) as CoreData;
+                viewModel = viewModelType.GetConstructor(Type.EmptyTypes).Invoke(null) as CoreData;
             }
             else
             {
-                viewModel = typeof(T).GetConstructor(new[] { typeof(Y) }).Invoke(new object[] { data }) as CoreData;
+                viewModel = viewModelType.GetConstructor(new[] { typeof(Y) }).Invoke(new object[] { data }) as CoreData;
             }
 
             if (typeof(IPushMessage).IsAssignableFrom(page.GetType()))

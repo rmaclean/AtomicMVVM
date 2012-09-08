@@ -11,10 +11,20 @@ namespace AtomicPhoneMVVM
     using System.Windows;
     using Microsoft.Phone.Controls;
 
+    /// <summary>
+    /// Provides the implementation details for the view model page and helper methods.
+    /// </summary>
     public class CoreData : INotifyPropertyChanged
     {
-        public IPushMessage Page { get; set; }
+        /// <summary>
+        /// The page as a message reciever.
+        /// </summary>
+        public IPushMessage Page { get; internal set; }
 
+        /// <summary>
+        /// Raises the PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">The property name</param>
         public void RaisePropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
@@ -23,13 +33,32 @@ namespace AtomicPhoneMVVM
             }
         }
 
+        /// <summary>
+        /// Occurs when a property is changed.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Instructs the page to navigate to the specific page.
+        /// </summary>
+        /// <param name="page">The path to the new page.</param>
         public void Navigate(string page)
         {
             (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(new Uri(page, UriKind.Relative));
         }
 
+        /// <summary>
+        /// Instructs the page to navigate back in the phone back stack.
+        /// </summary>
+        public void NavigateBack()
+        {
+            (Application.Current.RootVisual as PhoneApplicationFrame).GoBack();
+        }
+
+        /// <summary>
+        /// Pushes a message to the page.
+        /// </summary>
+        /// <param name="message">The message</param>
         public void PushMessage(string message)
         {
             if (Page != null)

@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>AtomicPhoneMVVM</id>
-		<version>1.1.2-beta</version>
+		<version>2.0</version>
 		<authors>Robert MacLean</authors>
 		<owners>Robert MacLean</owners>
 		<licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
@@ -10,7 +10,10 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>A supremely lightweight MVVM framework for Windows Phone.</summary>
 		<releaseNotes>
-Beta for the 1.1 release
+Includes the 1.1.2 bug fixes.
+Includes the new convention based binding options.
+Includes intellisense documentation.
+Minor cleanup &amp; improvements.
 		</releaseNotes>
 		<copyright>Copyright Robert MacLean 2012</copyright>
 		<tags>WindowsPhone71 WindowsPhone WP7 WP7.1 WindowsPhone7.1 MVVM BINDING SL Convention Model-View-ViewModel Model View Presentation UI ViewModel mvvmlight data</tags>
