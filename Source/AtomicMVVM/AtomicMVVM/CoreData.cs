@@ -18,7 +18,10 @@ namespace AtomicMVVM
 #endif
 #if ASYNC
     using System.Threading.Tasks;
-    using System.Collections.Generic;
+    using System.Collections.Generic;    
+#endif
+#if CALLERINFO
+    using System.Runtime.CompilerServices;
 #endif
 
     //todo: document and move to it's own file
@@ -29,7 +32,11 @@ namespace AtomicMVVM
             this.BootStrapper = bootstrapper;
         }
 
+#if CALLERINFO
+        public void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+#else
         public void RaisePropertyChanged(string propertyName)
+#endif
         {
             if (PropertyChanged != null)
             {
@@ -65,7 +72,11 @@ namespace AtomicMVVM
         /// Raises the property changed event.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
+#if CALLERINFO
+        public void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+#else
         public void RaisePropertyChanged(string propertyName)
+#endif
         {
             if (PropertyChanged != null && ViewControl != null)
             {
@@ -150,6 +161,12 @@ namespace AtomicMVVM
             if (action == null)
             {
                 throw new ArgumentNullException("action");
+            }
+
+            if (ViewControl == null)
+            {
+                action();
+                return;
             }
 
 #pragma warning disable 4014
