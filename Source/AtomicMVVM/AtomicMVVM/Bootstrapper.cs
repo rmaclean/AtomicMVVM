@@ -29,6 +29,7 @@ namespace AtomicMVVM
     using System.Windows.Controls.Primitives;
 #else
     using System.Windows.Input;
+    using System.Diagnostics;
 #endif
 
     /// <summary>
@@ -75,6 +76,11 @@ namespace AtomicMVVM
         /// The list of global commands that can be bound to a button if no matching command exist in the view model.
         /// </summary>
         public List<ActionCommand> GlobalCommands { get; private set; }
+
+        /// <summary>
+        /// Is raised after the start has completed (i.e. when we have the first screen up).
+        /// </summary>
+        public event Action AfterStartCompletes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Bootstrapper" /> class.
@@ -152,6 +158,11 @@ namespace AtomicMVVM
             }
 #endif
 #endif
+
+            if (AfterStartCompletes != null)
+            {
+                AfterStartCompletes();
+            }
         }
 
         /// <summary>
@@ -195,7 +206,7 @@ namespace AtomicMVVM
         /// <param name="newContent">The type of the new view model to load.</param>
         /// <param name="data">The data to pass to the view model.</param>
         public void ChangeView<TData>(Type newContent, TData data)
-        {
+        {            
             if (newContent == null)
             {
                 throw new ArgumentNullException("newContent");

@@ -77,6 +77,11 @@ namespace AtomicMVVM
 #endif
             }
 
+            if (executeMethod == null)
+            {
+                throw new Exception("Unable to find a public method named " + methodName);
+            }
+
             executeMethod.Invoke(parameter, null);
         }
     }
