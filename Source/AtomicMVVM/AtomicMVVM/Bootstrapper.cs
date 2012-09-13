@@ -315,7 +315,7 @@ namespace AtomicMVVM
             var whenDataBound = CurrentView as IWhenDataBound;
             if (whenDataBound != null)
             {
-                whenDataBound.DataContextBound();
+                whenDataBound.DataContextBound(CurrentViewModel);
             }
 
             CurrentShell.ChangeContent(CurrentView);
