@@ -16,7 +16,6 @@ namespace AtomicMVVM
             obj.SetValue(CommandNameProperty, value);
         }
 
-        // Using a DependencyProperty as the backing store for CommandName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CommandNameProperty = DependencyProperty.RegisterAttached("CommandName", typeof(string), typeof(UIExtensions), null);
     }
 }

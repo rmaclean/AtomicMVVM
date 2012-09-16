@@ -81,6 +81,7 @@ namespace AtomicMVVM
         /// Is raised after the start has completed (i.e. when we have the first screen up).
         /// </summary>
         public event Action AfterStartCompletes;
+        private List<MethodInfo> validMethods;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Bootstrapper" /> class.
@@ -282,8 +283,7 @@ namespace AtomicMVVM
         }
 
         private void ChangeView()
-        {
-            this.CurrentViewExtendedChildControls = UIExtendedControls();
+        {            
 #if NETFX_CORE
             var viewType = GetView(true);
             if (CurrentView != null && viewType == CurrentView.GetType())
@@ -294,24 +294,27 @@ namespace AtomicMVVM
             var viewType = GetView(false);
 #endif
             CurrentView = viewType.GetConstructor(EmptyTypes).Invoke(null) as UserControl;
-
+            
 #if NETFX_CORE
-            var validMethods = (from m in CurrentViewModel.GetType().GetRuntimeMethods()
+            this.validMethods = (from m in CurrentViewModel.GetType().GetRuntimeMethods()
 #else
-            var validMethods = (from m in CurrentViewModel.GetType().GetMethods()
+            this.validMethods = (from m in CurrentViewModel.GetType().GetMethods()
 #endif
-                                where !m.IsSpecialName &&
+                                 where !m.IsSpecialName &&
                                       m.DeclaringType != typeof(CoreData) &&
                                       m.ReturnType == typeof(void)
                                 select m).ToList();
+            
+            CurrentViewModel.ViewControl = CurrentView;            
 
-            BindMethods(validMethods);
+            CurrentView.DataContext = CurrentViewModel;
+
+            this.CurrentViewExtendedChildControls = UIExtendedControls();
+            BindMethods(this.CurrentView, validMethods);
 
             BindGlobalCommands();
-            CurrentViewModel.ViewControl = CurrentView;
-
             CurrentViewModel.RaiseBound();
-            CurrentView.DataContext = CurrentViewModel;
+
             var whenDataBound = CurrentView as IWhenDataBound;
             if (whenDataBound != null)
             {
@@ -330,8 +333,21 @@ namespace AtomicMVVM
             return result;
         }
 
+        public void UpdateCommands(FrameworkElement uiObject)
+        {
+            var result = new List<object>();
+
+            GetChildControls(uiObject, result);
+            BindMethods(uiObject, validMethods);
+        }
+
         private void GetChildControls(DependencyObject uiObject, List<object> result)
         {
+            if (uiObject == null)
+            {
+                return;
+            }
+
             var buttonBase = uiObject as ButtonBase;
             if (buttonBase != null)
             {
@@ -381,10 +397,10 @@ namespace AtomicMVVM
             }
         }
 
-        private List<object> FindControl(string methodName)
+        private List<object> FindControl(FrameworkElement uiObject, string methodName)
         {
             var result = new List<object>();
-            var nameMatch = CurrentView.FindName(methodName);            
+            var nameMatch = uiObject.FindName(methodName);            
             if (nameMatch != null)
             {
                 result.Add(nameMatch);
@@ -402,7 +418,7 @@ namespace AtomicMVVM
             return result;
         }
 
-        private void BindMethods(List<MethodInfo> validMethods)
+        private void BindMethods(FrameworkElement uiObject, List<MethodInfo> validMethods)
         {
             foreach (var method in validMethods)
             {
@@ -414,7 +430,7 @@ namespace AtomicMVVM
                     AddTrigger(attribute.PropertyNames, method.Name);
                 }
 
-                var controls = FindControl(method.Name);
+                var controls = FindControl(uiObject, method.Name);
                 foreach (var item in controls)
                 {
                     BindControl(method, item);   
