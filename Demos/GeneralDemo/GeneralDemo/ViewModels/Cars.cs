@@ -1,12 +1,18 @@
-﻿using System.Collections.ObjectModel;
-using AtomicMVVM;
+﻿//-----------------------------------------------------------------------
+// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+// License: MS-PL http://www.opensource.org/licenses/MS-PL
+// Notes:
+//-----------------------------------------------------------------------
+
+using System.Collections.ObjectModel;
 using System.Linq;
+using AtomicMVVM;
 
 namespace GeneralDemo.ViewModels
 {
+    using System.Collections.Generic;
     using MakeData = HeaderedArray<HeaderedArray<string>>;
     using ModelData = HeaderedArray<string>;
-    using System.Collections.Generic;
 
     public class HeaderedArray<T>
     {
@@ -66,7 +72,7 @@ namespace GeneralDemo.ViewModels
             set
             {
                 _selectedMake = value;
-                RaisePropertyChanged("SelectedMake");
+                RaisePropertyChanged();
             }
         }
 
@@ -78,7 +84,7 @@ namespace GeneralDemo.ViewModels
             set
             {
                 _selectedModel = value;
-                RaisePropertyChanged("SelectedModel");
+                RaisePropertyChanged();
             }
         }
 

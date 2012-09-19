@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//-----------------------------------------------------------------------
+// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+// License: MS-PL http://www.opensource.org/licenses/MS-PL
+// Notes:
+//-----------------------------------------------------------------------
+
+
+using System;
 using GeneralDemo.ViewModels;
 
 namespace GeneralDemo.Models
 {
-    using Order = Tuple<string, DateTime, double>;
     using Customer = HeaderedArray<Tuple<string, DateTime, double>>;
+    using Order = Tuple<string, DateTime, double>;
 
     public class CustomerData
     {

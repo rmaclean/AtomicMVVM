@@ -138,9 +138,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Source\AtomicMVVM\AtomicMVVM %284.5%29\AtomicMVVM %284.5%29.csproj">
-      <Project>{9fb37f00-3b38-441c-8800-2e380fc2fd91}</Project>
-      <Name>AtomicMVVM %284.5%29</Name>
+    <ProjectReference Include="..\..\..\Source\AtomicMVVM\AtomicMVVM\AtomicMVVM.csproj">
+      <Project>{27b5d238-468e-4bb4-92f3-da281c75e882}</Project>
+      <Name>AtomicMVVM</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,10 @@
-﻿using System.Windows;
+﻿//-----------------------------------------------------------------------
+// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+// License: MS-PL http://www.opensource.org/licenses/MS-PL
+// Notes:
+//-----------------------------------------------------------------------
+
+using System.Windows;
 using AtomicMVVM;
 
 namespace GeneralDemo.ViewModels
@@ -13,7 +19,7 @@ namespace GeneralDemo.ViewModels
             set
             {
                 _fullName = value;
-                RaisePropertyChanged("FullName");
+                RaisePropertyChanged();
             }
         }
 

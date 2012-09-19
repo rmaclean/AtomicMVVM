@@ -1,11 +1,14 @@
-﻿
+﻿//-----------------------------------------------------------------------
+// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+// License: MS-PL http://www.opensource.org/licenses/MS-PL
+// Notes:
+//-----------------------------------------------------------------------
+
 
 namespace GeneralDemo
 {
-    using System.Linq;
     using System.Windows.Controls;
     using AtomicMVVM;
-    using MahApps.Metro;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -14,9 +17,7 @@ namespace GeneralDemo
     {
         public MainWindow()
         {
-            InitializeComponent();
-            ThemeManager.ChangeTheme(this, ThemeManager.DefaultAccents.Single(_ => _.Name == "Blue"), Theme.Light);
-            this.BindGlobalCommands(App.Bootstrapper);
+            InitializeComponent();            
         }
 
         public void ChangeContent(UserControl viewContent)

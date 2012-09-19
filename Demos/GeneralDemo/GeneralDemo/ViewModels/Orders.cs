@@ -1,8 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//-----------------------------------------------------------------------
+// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+// License: MS-PL http://www.opensource.org/licenses/MS-PL
+// Notes:
+//-----------------------------------------------------------------------
+
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AtomicMVVM;
 
 namespace GeneralDemo.ViewModels
