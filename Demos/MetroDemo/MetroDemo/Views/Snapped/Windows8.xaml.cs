@@ -1,4 +1,9 @@
-﻿namespace MetroDemo.Views.Snapped
+﻿//-----------------------------------------------------------------------
+// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+// License: MS-PL http://www.opensource.org/licenses/MS-PL
+// Notes:
+//-----------------------------------------------------------------------
+namespace MetroDemo.Views.Snapped
 {
     using Windows.UI.Xaml.Controls;
 

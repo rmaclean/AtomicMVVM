@@ -1,4 +1,8 @@
-﻿
+﻿//-----------------------------------------------------------------------
+// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+// License: MS-PL http://www.opensource.org/licenses/MS-PL
+// Notes:
+//-----------------------------------------------------------------------
 namespace MetroDemo.ViewModels
 {
     using System;
@@ -9,15 +13,15 @@ namespace MetroDemo.ViewModels
     using System.Net;
     using AtomicMVVM;
     using MetroDemo.Models;
+    using MetroDemo.ViewModels.Contracts;
     using Newtonsoft.Json;
     using Windows.ApplicationModel.DataTransfer;
-    using Windows.ApplicationModel.Search;
     using Windows.Storage.Pickers;
     using Windows.Storage.Streams;
     using Windows.System;
     using Windows.UI.Popups;
 
-    public class Windows8 : CoreData
+    public class Windows8 : CoreData, IShare, ISearch
     {
         private DownloadManager manager = DownloadManager.GetInstance();
         private string _search;
@@ -32,7 +36,7 @@ namespace MetroDemo.ViewModels
                 if (value != selectedItem)
                 {
                     selectedItem = value;
-                    RaisePropertyChanged("SelectedItem");
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -45,7 +49,7 @@ namespace MetroDemo.ViewModels
             set
             {
                 _search = value;
-                RaisePropertyChanged("Search");
+                RaisePropertyChanged();
             }
         }
 
@@ -55,7 +59,7 @@ namespace MetroDemo.ViewModels
             set
             {
                 _InProgress = value;
-                RaisePropertyChanged("InProgress");
+                RaisePropertyChanged();
             }
         }
 
@@ -65,26 +69,7 @@ namespace MetroDemo.ViewModels
             this.Search = initialSearch;
             GetImages();
 
-            var searchPane = SearchPane.GetForCurrentView();
-            searchPane.QuerySubmitted += (sender, args) =>
-                {
-                    this.Search = args.QueryText;
-                    GetImages();
-                };
-
-            var dataTransferManager = DataTransferManager.GetForCurrentView();
-            dataTransferManager.DataRequested += (sender, args) =>
-                {
-                    if (this.SelectedItem == null)
-                    {
-                        args.Request.FailWithDisplayText("No image selected - select an image first");
-                        return;
-                    }
-
-                    args.Request.Data.SetBitmap(RandomAccessStreamReference.CreateFromUri(new Uri(this.SelectedItem.Media)));
-                    args.Request.Data.Properties.Description = this.SelectedItem.Link;
-                    args.Request.Data.Properties.Title = this.SelectedItem.Title;
-                };
+            
         }
 
         public void Refresh()
@@ -172,8 +157,26 @@ namespace MetroDemo.ViewModels
                 }
 
                 Images.Add(item);
-                this.RaisePropertyChanged("Images");
             }
+        }
+
+        void ISearch.Search(string query)
+        {
+            this.Search = query;
+            GetImages(); 
+        }
+
+        public void Share(DataRequest dataRequest)
+        {
+            if (this.SelectedItem == null)
+            {
+                dataRequest.FailWithDisplayText("No image selected - select an image first");
+                return;
+            }
+
+            dataRequest.Data.SetBitmap(RandomAccessStreamReference.CreateFromUri(new Uri(this.SelectedItem.Media)));
+            dataRequest.Data.Properties.Description = this.SelectedItem.Link;
+            dataRequest.Data.Properties.Title = this.SelectedItem.Title;
         }
     }
 }

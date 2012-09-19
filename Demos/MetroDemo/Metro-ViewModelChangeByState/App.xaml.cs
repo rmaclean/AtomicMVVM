@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using AtomicMVVM;
-using Metro_ViewModelChangeByState.ViewModels;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
+﻿//-----------------------------------------------------------------------
+// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+// License: MS-PL http://www.opensource.org/licenses/MS-PL
+// Notes:
+//-----------------------------------------------------------------------
 
 namespace Metro_ViewModelChangeByState
 {
+    using System;
+    using AtomicMVVM;
+    using Metro_ViewModelChangeByState.ViewModels;
+    using Windows.ApplicationModel;
+    using Windows.ApplicationModel.Activation;
+    using Windows.UI.Xaml;
+
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>

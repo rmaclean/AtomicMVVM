@@ -1,9 +1,13 @@
-﻿
+﻿//-----------------------------------------------------------------------
+// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+// License: MS-PL http://www.opensource.org/licenses/MS-PL
+// Notes:
+//-----------------------------------------------------------------------
 
 namespace MetroDemo.Models
 {
     using System;
-using Newtonsoft.Json;
+    using Newtonsoft.Json;
 
     public class FlickrImage
     {       

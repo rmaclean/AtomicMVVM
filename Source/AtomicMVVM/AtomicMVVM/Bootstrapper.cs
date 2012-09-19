@@ -354,7 +354,7 @@ namespace AtomicMVVM
                 var content = userControl.Content as DependencyObject;
                 GetChildControls(content, result);
 #else
-                GetChildControls(userControl, result);
+                GetChildControls(userControl.Content, result);
 #endif
             }
 
