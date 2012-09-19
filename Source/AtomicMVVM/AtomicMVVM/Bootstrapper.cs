@@ -11,12 +11,8 @@ namespace AtomicMVVM
     using System.Linq;
     using System.Globalization;
     using System.Reflection;
-#if WINDOWS_PHONE
-    using ActionCommand = Tuple<string, System.Action>;
-#else
     using ActionCommand = System.Tuple<string, System.Action>;
-#endif
-#if NETFX_CORE
+#if WINRT
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml;
     using Windows.UI.Core;
@@ -24,12 +20,9 @@ namespace AtomicMVVM
 #else
     using System.Windows.Controls;
     using System.Windows;
-#endif
-#if SILVERLIGHT
-    using System.Windows.Controls.Primitives;
-#else
     using System.Windows.Input;
     using System.Diagnostics;
+    using System.Windows.Controls.Primitives;
 #endif
 
     /// <summary>
@@ -38,11 +31,11 @@ namespace AtomicMVVM
     public class Bootstrapper
     {
         private sealed class McGuffin { }
+        private List<object> CurrentViewExtendedChildControls;
 
-#if (NETFX_CORE)
+#if (WINRT)
         private readonly Type[] EmptyTypes = new Type[] { };
         private string ViewSuffix;
-        private List<object> CurrentViewExtendedChildControls;
 #else
         private readonly Type[] EmptyTypes = Type.EmptyTypes;
 #endif
@@ -131,12 +124,12 @@ namespace AtomicMVVM
 
             this.CurrentShell = shell.GetConstructor(EmptyTypes).Invoke(null) as IShell;
 
-#if NETFX_CORE
+#if WINRT
             this.ViewSuffix = Windows.UI.ViewManagement.ApplicationView.Value.ToString();
 #endif
             this.ChangeView(content, data);
 
-#if NETFX_CORE
+#if WINRT
             var uiShell = CurrentShell as UIElement;
             if (uiShell != null)
             {
@@ -145,21 +138,12 @@ namespace AtomicMVVM
                 Window.Current.Activate();
             }
 #else
-#if SILVERLIGHT
-            var uiShell = CurrentShell as UIElement;
-            if (uiShell != null)
-            {
-                Application.Current.RootVisual = uiShell; ;
-            }
-#else
             var window = CurrentShell as Window;
             if (window != null)
             {
                 window.Show();
             }
 #endif
-#endif
-
             if (AfterStartCompletes != null)
             {
                 AfterStartCompletes();
@@ -178,7 +162,7 @@ namespace AtomicMVVM
             Start(typeof(TShell), typeof(TContent));
         }
 
-#if NETFX_CORE
+#if WINRT
         private void WindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
         {
             this.ViewSuffix = Windows.UI.ViewManagement.ApplicationView.Value.ToString();
@@ -207,7 +191,7 @@ namespace AtomicMVVM
         /// <param name="newContent">The type of the new view model to load.</param>
         /// <param name="data">The data to pass to the view model.</param>
         public void ChangeView<TData>(Type newContent, TData data)
-        {            
+        {
             if (newContent == null)
             {
                 throw new ArgumentNullException("newContent");
@@ -260,7 +244,7 @@ namespace AtomicMVVM
         private Type GetView(bool withSuffix)
         {
             var viewNamespace = ".Views.";
-#if NETFX_CORE
+#if WINRT
             if (withSuffix && !string.IsNullOrWhiteSpace(this.ViewSuffix))
             {
                 viewNamespace += this.ViewSuffix + ".";
@@ -269,7 +253,7 @@ namespace AtomicMVVM
 
             var viewName = CurrentViewModel.GetType().AssemblyQualifiedName.Replace(".ViewModels.", viewNamespace);
 
-#if (NETFX_CORE || WINDOWS_PHONE)
+#if (WINRT)
             var viewType = Type.GetType(viewName);
 #else
             var viewType = Type.GetType(viewName, true, true);
@@ -283,8 +267,8 @@ namespace AtomicMVVM
         }
 
         private void ChangeView()
-        {            
-#if NETFX_CORE
+        {
+#if WINRT
             var viewType = GetView(true);
             if (CurrentView != null && viewType == CurrentView.GetType())
             {
@@ -294,8 +278,8 @@ namespace AtomicMVVM
             var viewType = GetView(false);
 #endif
             CurrentView = viewType.GetConstructor(EmptyTypes).Invoke(null) as UserControl;
-            
-#if NETFX_CORE
+
+#if WINRT
             this.validMethods = (from m in CurrentViewModel.GetType().GetRuntimeMethods()
 #else
             this.validMethods = (from m in CurrentViewModel.GetType().GetMethods()
@@ -303,9 +287,9 @@ namespace AtomicMVVM
                                  where !m.IsSpecialName &&
                                       m.DeclaringType != typeof(CoreData) &&
                                       m.ReturnType == typeof(void)
-                                select m).ToList();
-            
-            CurrentViewModel.ViewControl = CurrentView;            
+                                 select m).ToList();
+
+            CurrentViewModel.ViewControl = CurrentView;
 
             CurrentView.DataContext = CurrentViewModel;
 
@@ -333,6 +317,11 @@ namespace AtomicMVVM
             return result;
         }
 
+        /// <summary>
+        /// Used to bind commands with the provided UIObject
+        /// </summary>
+        /// <param name="uiObject">The UIObject to traverse to see if it has ICommands compatible items that can be attached.</param>
+        /// <remarks>At this stage this is tentative and maybe removed by release of 5.0</remarks>
         public void UpdateCommands(FrameworkElement uiObject)
         {
             var result = new List<object>();
@@ -361,7 +350,12 @@ namespace AtomicMVVM
             var userControl = uiObject as UserControl;
             if (userControl != null)
             {
-                GetChildControls(userControl.Content, result);
+#if NET45
+                var content = userControl.Content as DependencyObject;
+                GetChildControls(content, result);
+#else
+                GetChildControls(userControl, result);
+#endif
             }
 
             var panel = uiObject as Panel;
@@ -369,7 +363,13 @@ namespace AtomicMVVM
             {
                 foreach (var item in panel.Children)
                 {
+#if NET45
+                    var childItem = item as DependencyObject;
+                    GetChildControls(childItem, result);
+#else
                     GetChildControls(item, result);
+#endif
+
                 }
             }
 
@@ -400,7 +400,7 @@ namespace AtomicMVVM
         private List<object> FindControl(FrameworkElement uiObject, string methodName)
         {
             var result = new List<object>();
-            var nameMatch = uiObject.FindName(methodName);            
+            var nameMatch = uiObject.FindName(methodName);
             if (nameMatch != null)
             {
                 result.Add(nameMatch);
@@ -433,25 +433,21 @@ namespace AtomicMVVM
                 var controls = FindControl(uiObject, method.Name);
                 foreach (var item in controls)
                 {
-                    BindControl(method, item);   
-                }                
+                    BindControl(method, item);
+                }
             }
         }
 
         private void BindControl(MethodInfo method, object control)
         {
 
-#if NETFX_CORE
+#if WINRT
             if (control != null && typeof(ButtonBase).GetTypeInfo().IsAssignableFrom(control.GetType().GetTypeInfo()))
-#else
-#if SILVERLIGHT
-                if (control != null && typeof(ButtonBase).IsAssignableFrom(control.GetType()))
 #else
                 if (control != null && control is ICommandSource)
 #endif
-#endif
 
-#if NETFX_CORE
+#if WINRT
             {
                 var commandProperty = typeof(ButtonBase).GetRuntimeProperty("Command");
 #else
@@ -460,7 +456,7 @@ namespace AtomicMVVM
 #endif
                 if (commandProperty.GetValue(control) == null)
                 {
-#if NETFX_CORE
+#if WINRT
                     var commandParameterProperty = typeof(ButtonBase).GetRuntimeProperty("CommandParameter");
 #else
                         var commandParameterProperty = control.GetType().GetProperty("CommandParameter");
@@ -468,7 +464,7 @@ namespace AtomicMVVM
                     if (commandProperty.CanWrite && commandParameterProperty.CanWrite)
                     {
                         var canExecuteExists = false;
-#if NETFX_CORE
+#if WINRT
                         var canExecuteMethod = CurrentViewModel.GetType().GetRuntimeMethod("Can" + method.Name, EmptyTypes);
 #else
                             var canExecuteMethod = CurrentViewModel.GetType().GetMethod("Can" + method.Name, EmptyTypes);
@@ -504,7 +500,7 @@ namespace AtomicMVVM
             }
         }
 
-#if NETFX_CORE || SILVERLIGHT
+#if WINRT
         internal void BindGlobalCommands(Control view = null, List<ActionCommand> commands = null)
 #else
         internal void BindGlobalCommands(ContentControl view = null, List<ActionCommand> commands = null)
@@ -524,24 +520,20 @@ namespace AtomicMVVM
             {
                 var control = view.FindName(method.Item1);
 
-#if NETFX_CORE
+#if WINRT
                 if (control != null && typeof(ButtonBase).GetTypeInfo().IsAssignableFrom(control.GetType().GetTypeInfo()))
-#else
-#if SILVERLIGHT
-                if (control != null && typeof(ButtonBase).IsAssignableFrom(control.GetType()))
 #else
                 if (control != null && control is ICommandSource)
 #endif
-#endif
                 {
-#if NETFX_CORE
+#if WINRT
                     var commandProperty = typeof(ButtonBase).GetRuntimeProperty("Command");
 #else
                     var commandProperty = control.GetType().GetProperty("Command");
 #endif
                     if (commandProperty.GetValue(control) == null)
                     {
-#if NETFX_CORE
+#if WINRT
                         var commandParameterProperty = typeof(ButtonBase).GetRuntimeProperty("CommandParameter");
 #else
                         var commandParameterProperty = control.GetType().GetProperty("CommandParameter");
@@ -565,7 +557,7 @@ namespace AtomicMVVM
                 {
                     if (propertyNames.Contains(e.PropertyName))
                     {
-#if NETFX_CORE
+#if WINRT
                         var method = CurrentViewModel.GetType().GetRuntimeMethod(methodName, EmptyTypes);
 #else
                         var method = CurrentViewModel.GetType().GetMethod(methodName, EmptyTypes);

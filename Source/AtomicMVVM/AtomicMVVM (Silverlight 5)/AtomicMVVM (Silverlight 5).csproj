@@ -75,6 +75,9 @@
     <Compile Include="..\AtomicMVVM\CoreData.cs">
       <Link>CoreData.cs</Link>
     </Compile>
+    <Compile Include="..\AtomicMVVM\CoreDataLight.cs">
+      <Link>CoreDataLight.cs</Link>
+    </Compile>
     <Compile Include="..\AtomicMVVM\Extensions.cs">
       <Link>Extensions.cs</Link>
     </Compile>
@@ -90,6 +93,12 @@
     <Compile Include="..\AtomicMVVM\IShellExtensions.cs">
       <Link>IShellExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\AtomicMVVM\IWhenDataBound.cs">
+      <Link>IWhenDataBound.cs</Link>
+    </Compile>
+    <Compile Include="..\AtomicMVVM\NotifyPropertyOptionsAttribute.cs">
+      <Link>NotifyPropertyOptionsAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\AtomicMVVM\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
@@ -101,6 +110,9 @@
     </Compile>
     <Compile Include="..\AtomicMVVM\TriggerAttribute.cs">
       <Link>TriggerAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\AtomicMVVM\UIExtensions.cs">
+      <Link>UIExtensions.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

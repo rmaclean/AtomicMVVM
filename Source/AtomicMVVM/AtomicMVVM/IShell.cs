@@ -6,7 +6,7 @@
 
 namespace AtomicMVVM
 {
-#if NETFX_CORE
+#if WINRT
     using Windows.UI.Xaml.Controls;
 #else
     using System.Windows.Controls;

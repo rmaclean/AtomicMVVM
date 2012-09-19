@@ -12,7 +12,7 @@ namespace AtomicMVVM
 
     class AttachedCommand : ICommand
     {
-#if (NETFX_CORE)
+#if (WINRT)
         private readonly Type[] EmptyTypes = new Type[] { };
 #else
         private readonly Type[] EmptyTypes = Type.EmptyTypes;
@@ -31,7 +31,7 @@ namespace AtomicMVVM
 
             if (canExecuteMethod == null)
             {
-#if NETFX_CORE
+#if WINRT
                 canExecuteMethod = parameter.GetType().GetRuntimeMethod("Can" + this.methodName, EmptyTypes);
 #else
                 canExecuteMethod = parameter.GetType().GetMethod("Can" + this.methodName, EmptyTypes);
@@ -70,7 +70,7 @@ namespace AtomicMVVM
 
             if (executeMethod == null)
             {
-#if NETFX_CORE
+#if WINRT
                 executeMethod = parameter.GetType().GetRuntimeMethod(this.methodName, EmptyTypes);
 #else
                 executeMethod = parameter.GetType().GetMethod(this.methodName, EmptyTypes);

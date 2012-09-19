@@ -9,7 +9,7 @@ namespace AtomicStorage
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-#if NETFX_CORE
+#if WINRT
     using Windows.Storage;
     using Windows.Foundation.Collections;
 #endif
@@ -24,7 +24,7 @@ namespace AtomicStorage
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
         public static void SaveSettings(this IDataStore store, bool roam = false)
         {
-#if NETFX_CORE
+#if WINRT
             IPropertySet settings;
             if (roam)
             {
@@ -41,7 +41,7 @@ namespace AtomicStorage
 
             foreach (var item in store.GetValues())
             {
-#if NETFX_CORE
+#if WINRT
                 if (settings.Keys.Contains(item.Key))
 #endif
 #if WINDOWS_PHONE
@@ -59,7 +59,7 @@ namespace AtomicStorage
 
         public static void LoadSettings(this IDataStore store, bool roam = false)
         {
-#if NETFX_CORE
+#if WINRT
             IPropertySet settings;
             if (roam)
             {
@@ -81,7 +81,7 @@ namespace AtomicStorage
         {
             var result = new Dictionary<string, object>();
 
-#if NETFX_CORE
+#if WINRT
             var validMembers = from _ in store.GetType().GetRuntimeProperties()
 #endif
 #if WINDOWS_PHONE
@@ -116,7 +116,7 @@ namespace AtomicStorage
 
         private static void LoadValues(this IDataStore store, IDictionary<string, object> values)
         {
-#if NETFX_CORE
+#if WINRT
             var validMembers = from _ in store.GetType().GetRuntimeProperties()
 #endif
 #if WINDOWS_PHONE

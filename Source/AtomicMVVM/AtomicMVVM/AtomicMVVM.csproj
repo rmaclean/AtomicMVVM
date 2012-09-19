@@ -8,16 +8,17 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AtomicMVVM</RootNamespace>
     <AssemblyName>AtomicMVVM</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET45</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -26,7 +27,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;NET45</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -43,15 +44,19 @@
     <Compile Include="AttachedCommand.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="CoreData.cs" />
+    <Compile Include="CoreDataLight.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="ExtensionsForNET40.cs" />
     <Compile Include="GlobalCommand.cs" />
     <Compile Include="IShell.cs" />
     <Compile Include="IShellExtensions.cs" />
+    <Compile Include="IWhenDataBound.cs" />
+    <Compile Include="NotifyPropertyOptionsAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReevaluateAttribute.cs" />
     <Compile Include="StubShell.cs" />
     <Compile Include="TriggerAttribute.cs" />
+    <Compile Include="UIExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />

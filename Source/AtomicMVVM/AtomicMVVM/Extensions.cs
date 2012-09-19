@@ -9,11 +9,7 @@ namespace AtomicMVVM
     using System;
     using System.Collections.Generic;
 
-#if WINDOWS_PHONE
-    using ActionCommand = Tuple<string, System.Action>;
-#else
     using ActionCommand = System.Tuple<string,System.Action>;
-#endif
 
     /// <summary>
     /// Extension methods for AtomicMVVM

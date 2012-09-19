@@ -10,77 +10,31 @@ namespace AtomicMVVM
     using System.ComponentModel;
     using System.Reflection;
     using System.Linq;
-#if NETFX_CORE
+#if WINRT
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Core;
 #else
     using System.Windows.Controls;
 #endif
-#if ASYNC
     using System.Threading.Tasks;
     using System.Collections.Generic;    
-#endif
-#if CALLERINFO
     using System.Runtime.CompilerServices;
-#endif
-
-    //todo: document and move to it's own file
-    public class CoreDataLight : INotifyPropertyChanged
-    {
-        public CoreDataLight(Bootstrapper bootstrapper)
-        {
-            this.BootStrapper = bootstrapper;
-        }
-
-#if CALLERINFO
-        public void RaisePropertyChanged([CallerMemberName] string propertyName = "")
-#else
-        public void RaisePropertyChanged(string propertyName)
-#endif
-        {
-            if (PropertyChanged != null)
-            {
-                if (BootStrapper != null)
-                {
-                    BootStrapper.CurrentViewModel.InvokeAsync(() =>
-                        {
-                            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                        });
-                }
-                else
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                }
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private Bootstrapper BootStrapper;
-    }
-
 
     /// <summary>
     /// Provides the plumbing services needed in the view model for the bootstrapper to handle the binding.
     /// </summary>
     public class CoreData : INotifyPropertyChanged
     {
-#if ASYNC
         private Dictionary<string, MethodDispatchMode> propertyDispatchModes;
-#endif
 
         /// <summary>
         /// Raises the property changed event.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
-#if CALLERINFO
         public void RaisePropertyChanged([CallerMemberName] string propertyName = "")
-#else
-        public void RaisePropertyChanged(string propertyName)
-#endif
         {
             if (PropertyChanged != null && ViewControl != null)
             {
-#if ASYNC
                 if (propertyDispatchModes == null)
                 {
                     propertyDispatchModes = new Dictionary<string, MethodDispatchMode>(this.GetType().GetRuntimeProperties().Count());
@@ -99,10 +53,12 @@ namespace AtomicMVVM
                         methodDispatchMode = attribute.MethodDispatchMode;
                     }
                 }
-#if NETFX_CORE
+#if WINRT
                 if (methodDispatchMode == MethodDispatchMode.Async)
                 {
+#pragma warning disable 4014
                     ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+#pragma warning restore 4014
                     {
                         PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
                     });
@@ -125,14 +81,9 @@ namespace AtomicMVVM
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
                 }
 #endif
-#else
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-#endif
-
             }
         }
 
-#if (ASYNC)
         /// <summary>
         /// Invokes the specified action.
         /// </summary>
@@ -142,7 +93,6 @@ namespace AtomicMVVM
         {
             await Task.Run(() => InvokeAsync(action));
         }
-#endif
 
         /// <summary>
         /// Invokes the specified action.
@@ -150,13 +100,9 @@ namespace AtomicMVVM
         /// <param name="action">The action.</param>
         /// <exception cref="System.ArgumentNullException">If the action provide is null.</exception>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "While it makes sense in SL & WPF, it doesn't work for Metro apps which need this to not be static.")]
-#if (ASYNC)
 #pragma warning disable 1998
         public async void InvokeAsync(Action action)
 #pragma warning restore 1998
-#else
-        public void Invoke(Action action)
-#endif
         {
             if (action == null)
             {
@@ -170,7 +116,7 @@ namespace AtomicMVVM
             }
 
 #pragma warning disable 4014
-#if (NETFX_CORE)
+#if (WINRT)
             ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
 #endif
@@ -179,7 +125,7 @@ namespace AtomicMVVM
                 {
 #endif
                     action();
-#if (NETFX_CORE || NET45)
+#if (WINRT || NET45)
                 });
 #endif
 #pragma warning restore 4014

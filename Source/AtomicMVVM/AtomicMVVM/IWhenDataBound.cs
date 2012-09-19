@@ -5,7 +5,6 @@
 //-----------------------------------------------------------------------
 namespace AtomicMVVM
 {
-    //todo: move to base
     /// <summary>
     /// This interface is applied to Views that need to be aware once they are data bound.
     /// </summary>
