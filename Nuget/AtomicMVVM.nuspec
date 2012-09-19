@@ -8,8 +8,9 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
     <projectUrl>https://bitbucket.org/rmaclean/atomicmvvm/</projectUrl>
-    <summary>A supremely lightweight MVVM framework for WPF, Silverlight, Windows Phone &amp; Metro projects.</summary>
+    <summary>A supremely lightweight MVVM framework for WPF &amp; Metro projects.</summary>
     <releaseNotes>NOTE: This version has breaking changes from v4.
+Note: .NET version 4, Silverlight 4 &amp; Windows Phone are no longer supported.
 Added view state support for the Metro apps into the framework.
 Added non-generic versions of Start &amp; ChangeView methods.
 Added IntelliSense documentation.
@@ -17,21 +18,15 @@ Many internal cleanups.
     </releaseNotes>
     <copyright>Copyright Robert MacLean 2012</copyright>
     <tags>Windows8 Metro WinRT WindowsPhone71 WindowsPhone WP7 WP7.1 WindowsPhone7.1 MVVM WPF SILVERLIGHT METRO WINRT BINDING SL5 SL Convention Model-View-ViewModel Model View Presentation UI ViewModel mvvmlight data</tags>
-    <description>The goal of AtomicMVVM is to allow developers to work with MVVM in their XAML based solutions (XPF, Silverlight, Windows Phone, WinRT) with minimal effort while not getting in the way of the code. It requires .NET 4 or higher. The design goals of AtomicMVVM are (in order): simple over feature rich, unobtrusive over less code and convention over configuration.</description>
+    <description>The goal of AtomicMVVM is to allow developers to work with MVVM in their XAML based solutions (XPF, WinRT) with minimal effort while not getting in the way of the code. It requires .NET 4.5 or higher. The design goals of AtomicMVVM are (in order): simple over feature rich, unobtrusive over less code and convention over configuration.</description>
     <iconUrl>http://cdn.bitbucket.org/rmaclean/atomicmvvm/downloads/icon.png</iconUrl>
   </metadata>
   <files>
-    <file src="..\Source\AtomicMVVM\AtomicMVVM\bin\Release\AtomicMVVM.dll" target="lib\net40" />
-    <file src="..\Source\AtomicMVVM\AtomicMVVM (4.5)\bin\Release\AtomicMVVM.dll" target="lib\net45" />
-    <file src="..\Source\AtomicMVVM\AtomicMVVM (Silverlight 5)\Bin\Release\AtomicMVVM.dll" target="lib\sl5" />
+    <file src="..\Source\AtomicMVVM\AtomicMVVM\bin\Release\AtomicMVVM.dll" target="lib\net45" />
     <file src="..\Source\AtomicMVVM\AtomicMVVM (Metro)\bin\Release\AtomicMVVM.dll" target="lib\NetCore45" />
-    <file src="..\Source\AtomicMVVM\AtommicMVVM (WP7.1)\bin\Release\AtomicMVVM.dll" target="lib\sl4-wp" />
 
-    <file src="..\Source\AtomicMVVM\AtomicMVVM\bin\Release\AtomicMVVM.pdb" target="lib\net40" />
-    <file src="..\Source\AtomicMVVM\AtomicMVVM (4.5)\bin\Release\AtomicMVVM.pdb" target="lib\net45" />
-    <file src="..\Source\AtomicMVVM\AtomicMVVM (Silverlight 5)\Bin\Release\AtomicMVVM.pdb" target="lib\sl5" />
+    <file src="..\Source\AtomicMVVM\AtomicMVVM\bin\Release\AtomicMVVM.pdb" target="lib\net45" />
     <file src="..\Source\AtomicMVVM\AtomicMVVM (Metro)\bin\Release\AtomicMVVM.pdb" target="lib\NetCore45" />
-    <file src="..\Source\AtomicMVVM\AtommicMVVM (WP7.1)\bin\Release\AtomicMVVM.pdb" target="lib\sl4-wp" />
 
     <file src="..\Source\AtomicMVVM\**\*.cs" target="src" />
 
