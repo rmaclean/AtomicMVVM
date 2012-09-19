@@ -1,4 +1,10 @@
-﻿using System.Windows.Controls;
+﻿//-----------------------------------------------------------------------
+// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+// License: MS-PL http://www.opensource.org/licenses/MS-PL
+// Notes:
+//-----------------------------------------------------------------------
+
+using System.Windows.Controls;
 
 namespace HelloWorldDemo.Views
 {

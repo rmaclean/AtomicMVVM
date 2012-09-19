@@ -1,4 +1,10 @@
-﻿using AtomicMVVM;
+﻿//-----------------------------------------------------------------------
+// Project: AtomicMVVM https://bitbucket.org/rmaclean/atomicmvvm
+// License: MS-PL http://www.opensource.org/licenses/MS-PL
+// Notes:
+//-----------------------------------------------------------------------
+
+using AtomicMVVM;
 
 namespace HelloWorldDemo.ViewModels
 {
@@ -12,7 +18,7 @@ namespace HelloWorldDemo.ViewModels
             set
             {
                 _UserName = value;
-                RaisePropertyChanged("Username");
+                RaisePropertyChanged();
             }
         }
 
@@ -24,7 +30,7 @@ namespace HelloWorldDemo.ViewModels
             set
             {
                 _Message = value;
-                RaisePropertyChanged("Message");
+                RaisePropertyChanged();
             }
         }
 
