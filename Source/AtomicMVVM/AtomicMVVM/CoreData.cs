@@ -56,9 +56,7 @@ namespace AtomicMVVM
 #if WINRT
                 if (methodDispatchMode == MethodDispatchMode.Async)
                 {
-#pragma warning disable 4014
-                    ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-#pragma warning restore 4014
+                    var ƒ = ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
                         PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
                     });
@@ -115,9 +113,8 @@ namespace AtomicMVVM
                 return;
             }
 
-#pragma warning disable 4014
 #if (WINRT)
-            ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            var ƒ = ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
 #endif
 #if (NET45)
@@ -128,7 +125,6 @@ namespace AtomicMVVM
 #if (WINRT || NET45)
                 });
 #endif
-#pragma warning restore 4014
         }
 
         /// <summary>

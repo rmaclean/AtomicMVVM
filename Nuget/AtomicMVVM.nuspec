@@ -13,8 +13,13 @@
 Note: .NET version 4, Silverlight 4 &amp; Windows Phone are no longer supported.
 Added view state support for the Metro apps into the framework.
 Added non-generic versions of Start &amp; ChangeView methods.
+Added an AfterStartEvent which allows applications to run when everything is ready - UI, BS etc...
+Switched the NotifyPropertChanged methods to use the new callerinfo stuff.
 Added IntelliSense documentation.
-Many internal cleanups.
+Added an attached property which can be used to bind controls on rather than the name.
+Added CoreDataLight which gives a lighter version for just INotifyPropertyChanged.
+Added the ability to state if a call is made async or sync for NotifyPropertyChanged using an attribute.
+Many internal cleanups and fixes.
     </releaseNotes>
     <copyright>Copyright Robert MacLean 2012</copyright>
     <tags>Windows8 Metro WinRT WindowsPhone71 WindowsPhone WP7 WP7.1 WindowsPhone7.1 MVVM WPF SILVERLIGHT METRO WINRT BINDING SL5 SL Convention Model-View-ViewModel Model View Presentation UI ViewModel mvvmlight data</tags>
