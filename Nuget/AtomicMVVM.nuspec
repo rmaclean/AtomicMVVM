@@ -19,6 +19,7 @@ Added IntelliSense documentation.
 Added an attached property which can be used to bind controls on rather than the name.
 Added CoreDataLight which gives a lighter version for just INotifyPropertyChanged.
 Added the ability to state if a call is made async or sync for NotifyPropertyChanged using an attribute.
+Added IWhenDataBound which allows views to know when the bootstrapper binds the VM to them.
 Many internal cleanups and fixes.
     </releaseNotes>
     <copyright>Copyright Robert MacLean 2012</copyright>

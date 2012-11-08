@@ -1,22 +1,22 @@
 <?xml version="1.0"?>
 <package >
-	<metadata>
-		<id>AtomicStorage</id>
-		<version>1.1.0</version>
-		<authors>Robert MacLean</authors>
-		<owners>Robert MacLean</owners>
-		<licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
-		<projectUrl>https://bitbucket.org/rmaclean/atomicmvvm/</projectUrl>
-		<requireLicenseAcceptance>true</requireLicenseAcceptance>
-		<summary>A supremely lightweight data caching for in Windows Phone &amp; Windows 8 (Metro) projects.</summary>
-		<releaseNotes>
+    <metadata>
+        <id>AtomicStorage</id>
+        <version>1.1.0</version>
+        <authors>Robert MacLean</authors>
+        <owners>Robert MacLean</owners>
+        <licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
+        <projectUrl>https://bitbucket.org/rmaclean/atomicmvvm/</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <summary>A supremely lightweight data caching for in Windows Phone &amp; Windows 8 (Metro) projects.</summary>
+        <releaseNotes>
 Updated to support Windows 8 Release Candidate.
     </releaseNotes>
-		<copyright>Copyright Robert MacLean 2012</copyright>
-		<tags>WindowsPhone71 WindowsPhone WP7 WP7.1 WindowsPhone7.1 MVVM BINDING SL Convention Model-View-ViewModel Model View Presentation UI ViewModel mvvmlight data caching suspend metro winrt windows8</tags>
-		<description>The goal of AtomicStorage is to allow developers to easily cache and restore data during the process lifecycle (suspend/resume) in Windows Phone and Windows 8 (Metro) applications. It is designed to work with good MVVM frameworks.</description>
-		<iconUrl>http://cdn.bitbucket.org/rmaclean/atomicmvvm/downloads/icon.png</iconUrl>
-	</metadata>
+        <copyright>Copyright Robert MacLean 2012</copyright>
+        <tags>WindowsPhone71 WindowsPhone WP7 WP7.1 WindowsPhone7.1 MVVM BINDING SL Convention Model-View-ViewModel Model View Presentation UI ViewModel mvvmlight data caching suspend metro winrt windows8</tags>
+        <description>The goal of AtomicStorage is to allow developers to easily cache and restore data during the process lifecycle (suspend/resume) in Windows Phone and Windows 8 (Metro) applications. It is designed to work with good MVVM frameworks.</description>
+        <iconUrl>http://cdn.bitbucket.org/rmaclean/atomicmvvm/downloads/icon.png</iconUrl>
+    </metadata>
 <files>
     <file src="..\Source\AtomicStorage\AtomicStorage (WP7.1)\Bin\Release\AtomicStorage.dll" target="lib\sl4-wp" />
     <file src="..\Source\AtomicStorage\AtomicStorage (Metro)\bin\Release\AtomicStorage.dll" target="lib\NetCore45" />  
@@ -28,6 +28,6 @@ Updated to support Windows 8 Release Candidate.
 
     <file src="CREDITS.TXT" target="" /> 
     <file src="LICENSE.TXT" target="" />
-	<file src="Install.ps1" target="tools" />
+    <file src="Install.ps1" target="tools" />
 </files>
 </package>
