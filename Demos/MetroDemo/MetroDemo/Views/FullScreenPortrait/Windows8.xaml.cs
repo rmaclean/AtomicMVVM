@@ -3,10 +3,14 @@
 // License: MS-PL http://www.opensource.org/licenses/MS-PL
 // Notes:
 //-----------------------------------------------------------------------
+
 namespace MetroDemo.Views.FullScreenPortrait
 {
-    public sealed partial class Windows8
+    using AtomicMVVM;
+
+    public sealed partial class Windows8: IWhenDataBound
     {
+        private ViewModels.Windows8 vm;
         public Windows8()
         {
             InitializeComponent();            
@@ -15,11 +19,15 @@ namespace MetroDemo.Views.FullScreenPortrait
         private void SearchBoxKeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
-            {
-                var vm = this.DataContext as ViewModels.Windows8;
+            {                
                 vm.Search = query.Text;
                 vm.Refresh();
             }
-        }      
+        }
+
+        public void DataContextBound<T>(T viewModel) where T : CoreData
+        {
+            this.vm = this.DataContext as ViewModels.Windows8;
+        }
     }
 }

@@ -110,12 +110,12 @@ namespace MetroDemo.ViewModels
 
         public void LaunchSelected()
         {
-            Launcher.LaunchUriAsync(new System.Uri(this.SelectedItem.Link));
+            var Ø = Launcher.LaunchUriAsync(new System.Uri(this.SelectedItem.Link));
         }
 
         public void About()
         {
-            Launcher.LaunchUriAsync(new System.Uri("https://bitbucket.org/rmaclean/atomicmvvm"));
+            var Ø = Launcher.LaunchUriAsync(new System.Uri("https://bitbucket.org/rmaclean/atomicmvvm"));
         }
 
         private async void GetImages()
@@ -134,7 +134,7 @@ namespace MetroDemo.ViewModels
             {
                 InProgress = false;
                 var dialog = new MessageDialog("We cannot connect to Flickr, check your Internet connection, firewall settings and try again.");
-                dialog.ShowAsync();
+                var Ø = dialog.ShowAsync();
                 return;
 
             }

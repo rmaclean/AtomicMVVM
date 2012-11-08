@@ -41,7 +41,7 @@ namespace MetroDemo
             {
                 foreach (DownloadOperation download in downloads)
                 {
-                    download.AttachAsync();
+                    var Ø = download.AttachAsync();
                 }
             }
         }
@@ -51,7 +51,7 @@ namespace MetroDemo
             BackgroundDownloader downloader = new BackgroundDownloader();
             DownloadOperation download = downloader.CreateDownload(uri, resultFile);
             download.CostPolicy = BackgroundTransferCostPolicy.Always;
-            download.StartAsync();
+            var Ø = download.StartAsync();
         }
     }
 }
