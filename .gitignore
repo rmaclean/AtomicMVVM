@@ -33,3 +33,7 @@ _ReSharper*/
 [Bb]uild[Ll]og.*
 *.[Pp]ublish.xml
 ~*.*
+/Source/AtomicMVVM/AtomicMVVM.Checks/obj/Debug/Views
+/Source/AtomicMVVM/AtomicMVVM.Checks/obj/Release/Views
+/Demos/AtomicPhoneMVVM Demo/AtomicPhoneMVVM Demo/obj/Debug
+/Demos/AtomicPhoneMVVM Demo/AtomicPhoneMVVM Demo/obj/Debug

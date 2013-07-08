@@ -35,7 +35,7 @@ namespace AtomicMVVM
             {
                 if (BootStrapper != null)
                 {
-                    BootStrapper.CurrentViewModel.InvokeAsync(() =>
+                    var _  = BootStrapper.CurrentViewModel.InvokeAsync(() =>
                     {
                         PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
                     });

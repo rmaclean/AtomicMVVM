@@ -30,10 +30,12 @@ namespace AtomicMVVM
     /// </summary>
     public class Bootstrapper
     {
+        private Stack<Tuple<Type, object>> BackStack = new Stack<Tuple<Type, object>>();
         private sealed class McGuffin { }
         private List<object> CurrentViewExtendedChildControls;
-
-#if (WINRT)
+#if WINRT
+        private SortedDictionary<string, SortedDictionary<int, Type>> knownLandscapeViews;
+        private SortedDictionary<string, SortedDictionary<int, Type>> knownPortraitViews;
         private readonly Type[] EmptyTypes = new Type[] { };
         private string ViewSuffix;
 #else
@@ -103,6 +105,67 @@ namespace AtomicMVVM
             Start(shell, content, new McGuffin());
         }
 
+#if WINRT
+        /// <summary>
+        /// Inspects the assembly for all views and preloads them into the collections for portraits &amp; landscape
+        /// </summary>
+        private void LoadAllViewInformation()
+        {
+            var landscapeViews = new SortedDictionary<string, SortedDictionary<int, Type>>();
+            var portraitViews = new SortedDictionary<string, SortedDictionary<int, Type>>();
+
+            var allViews = from type in this.CurrentShell.GetType().GetTypeInfo().Assembly.ExportedTypes
+                           where type.GetTypeInfo().IsSubclassOf(typeof(UserControl)) &&
+                           type.Namespace.IndexOf(".Views", StringComparison.OrdinalIgnoreCase) > 0
+                           select type;
+
+            var stringWidth = "";
+            var maxWidth = 0;
+            var portraitOnlyView = false;
+            var orientation = "";
+            var lastDotInNamespace = 0;
+            foreach (var view in allViews)
+            {
+                portraitOnlyView = false;
+
+                if (!landscapeViews.ContainsKey(view.Name))
+                {
+                    landscapeViews.Add(view.Name, new SortedDictionary<int, Type>());
+                    portraitViews.Add(view.Name, new SortedDictionary<int, Type>());
+                }
+
+                lastDotInNamespace = view.Namespace.LastIndexOf('.');
+                orientation = view.Namespace.Substring(0, lastDotInNamespace);
+                portraitOnlyView = orientation.EndsWith("Portrait", StringComparison.OrdinalIgnoreCase);
+
+                stringWidth = view.Namespace.Substring(lastDotInNamespace + 2);
+                maxWidth = Int32.MaxValue;
+
+                try
+                {
+                    maxWidth = Convert.ToInt32(stringWidth);
+                }
+                catch (FormatException)
+                {
+                    //do nothing
+                }
+
+                if (portraitOnlyView)
+                {
+                    portraitViews[view.Name].Add(maxWidth, view);
+                }
+                else
+                {
+                    landscapeViews[view.Name].Add(maxWidth, view);
+                    portraitViews[view.Name].Add(maxWidth, view);
+                }
+            }
+
+            this.knownLandscapeViews = landscapeViews;
+            this.knownPortraitViews = portraitViews;
+        }
+#endif
+
         /// <summary>
         /// Instructs the bootstrapper to start the process of loading the shell, loading the view model &amp; and loading the view and binding them together.
         /// </summary>
@@ -125,7 +188,7 @@ namespace AtomicMVVM
             this.CurrentShell = shell.GetConstructor(EmptyTypes).Invoke(null) as IShell;
 
 #if WINRT
-            this.ViewSuffix = Windows.UI.ViewManagement.ApplicationView.Value.ToString();
+            LoadAllViewInformation();
 #endif
             this.ChangeView(content, data);
 
@@ -165,8 +228,7 @@ namespace AtomicMVVM
 #if WINRT
         private void WindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
         {
-            this.ViewSuffix = Windows.UI.ViewManagement.ApplicationView.Value.ToString();
-            ChangeView();
+            ChangeView(true);
         }
 #endif
 
@@ -190,14 +252,20 @@ namespace AtomicMVVM
         /// <typeparam name="TData">The type of the data to pass to the view model.</typeparam>
         /// <param name="newContent">The type of the new view model to load.</param>
         /// <param name="data">The data to pass to the view model.</param>
-        public void ChangeView<TData>(Type newContent, TData data)
+        /// <param name="addToBackStack">Should the new page be added to the back stack.</param>
+        public void ChangeView<TData>(Type newContent, TData data, bool addToBackStack = true)
         {
             if (newContent == null)
             {
                 throw new ArgumentNullException("newContent");
             }
 
-            if (typeof(TData) == typeof(McGuffin))
+            if (addToBackStack)
+            {
+                BackStack.Push(Tuple.Create(newContent, (object)data));
+            }
+
+            if (data.GetType() == typeof(McGuffin))
             {
                 CurrentViewModel = newContent.GetConstructor(EmptyTypes).Invoke(null) as CoreData;
             }
@@ -214,7 +282,8 @@ namespace AtomicMVVM
         /// Changes the view model and the associated view.
         /// </summary>
         /// <param name="newContent">The type of the new view model to load.</param>
-        public void ChangeView(Type newContent)
+        /// <param name="addToBackStack">Should the new page be added to the back stack.</param>
+        public void ChangeView(Type newContent, bool addToBackStack = true)
         {
             ChangeView(newContent, new McGuffin());
         }
@@ -225,7 +294,8 @@ namespace AtomicMVVM
         /// <typeparam name="TNewContent">The type of the new view model to load.</typeparam>
         /// <typeparam name="TData">The type of the data to pass to the view model.</typeparam>
         /// <param name="data">The data to pass to the view model.</param>
-        public void ChangeView<TNewContent, TData>(TData data)
+        /// <param name="addToBackStack">Should the new page be added to the back stack.</param>
+        public void ChangeView<TNewContent, TData>(TData data, bool addToBackStack = true)
             where TNewContent : CoreData
         {
             ChangeView(typeof(TNewContent), data);
@@ -235,29 +305,29 @@ namespace AtomicMVVM
         /// Changes the view model and the associated view.
         /// </summary>
         /// <typeparam name="TNewContent">The type of the new view model to load.</typeparam>
-        public void ChangeView<TNewContent>()
+        /// <param name="addToBackStack">Should the new page be added to the back stack.</param>
+        public void ChangeView<TNewContent>(bool addToBackStack = true)
             where TNewContent : CoreData
         {
             ChangeView(typeof(TNewContent), new McGuffin());
         }
 
-        private Type GetView(bool withSuffix)
+        /// <summary>
+        /// Allows you to go back to the previous page
+        /// </summary>
+        public void GoBack()
+        {
+            BackStack.Pop(); // remove current page
+            var previousPage = BackStack.Pop();
+            ChangeView(previousPage.Item1, previousPage.Item2);
+        }
+
+#if !WINRT
+        private Type GetView()
         {
             var viewNamespace = ".Views.";
-#if WINRT
-            if (withSuffix && !string.IsNullOrWhiteSpace(this.ViewSuffix))
-            {
-                viewNamespace += this.ViewSuffix + ".";
-            }
-#endif
-
             var viewName = CurrentViewModel.GetType().AssemblyQualifiedName.Replace(".ViewModels.", viewNamespace);
-
-#if (WINRT)
-            var viewType = Type.GetType(viewName);
-#else
             var viewType = Type.GetType(viewName, true, true);
-#endif
             if (viewType == null && withSuffix)
             {
                 return GetView(false);
@@ -266,16 +336,58 @@ namespace AtomicMVVM
             return viewType;
         }
 
-        private void ChangeView()
-        {
+#endif
+
 #if WINRT
-            var viewType = GetView(true);
-            if (CurrentView != null && viewType == CurrentView.GetType())
+        private Type GetView()
+        {
+            var availableViews = this.knownLandscapeViews;
+            var requestedWidth = Window.Current.Bounds.Width;
+            switch (Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().Orientation)
             {
-                return;
+                case Windows.UI.ViewManagement.ApplicationViewOrientation.Landscape:
+                    {
+                        //no need to do anything
+                        break;
+                    }
+                case Windows.UI.ViewManagement.ApplicationViewOrientation.Portrait:
+                    {
+                        availableViews = this.knownPortraitViews;
+                        break;
+                    }
             }
-#else
-            var viewType = GetView(false);
+
+            var viewModelName = this.CurrentViewModel.GetType().Name;
+            foreach (var viewSet in availableViews)
+            {
+                if (viewSet.Key == viewModelName)
+                {
+                    var views = viewSet.Value;
+                    foreach (var view in views)
+                    {
+                        if (requestedWidth <= view.Key)
+                        {
+                            return view.Value;
+                        }
+                    }
+                }
+            }
+
+            throw new Exception("Requested view cannot be found");
+        }
+#endif
+        private void ChangeView(bool forceChange = false)
+        {
+            var viewType = default(Type);
+            viewType = GetView();
+#if WINRT
+            if (!forceChange)
+            {
+                if (CurrentView != null && viewType == CurrentView.GetType())
+                {
+                    return;
+                }
+            }
 #endif
             CurrentView = viewType.GetConstructor(EmptyTypes).Invoke(null) as UserControl;
 
@@ -293,10 +405,15 @@ namespace AtomicMVVM
 
             CurrentView.DataContext = CurrentViewModel;
 
+            var initializedComponent = CurrentView.GetType().GetRuntimeMethod("InitializeComponent", EmptyTypes);
+            initializedComponent.Invoke(this.CurrentView, null);
+
             this.CurrentViewExtendedChildControls = UIExtendedControls();
+
             BindMethods(this.CurrentView, validMethods);
 
             BindGlobalCommands();
+
             CurrentViewModel.RaiseBound();
 
             var whenDataBound = CurrentView as IWhenDataBound;

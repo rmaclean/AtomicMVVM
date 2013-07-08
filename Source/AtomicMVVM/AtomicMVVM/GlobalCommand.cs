@@ -12,7 +12,7 @@ namespace AtomicMVVM
     /// <summary>
     /// Defines a command that can be attached to a button, if no match is found in the model.
     /// </summary>
-    sealed class GlobalCommand : ICommand
+    public sealed class GlobalCommand : ICommand
     {
         /// <summary>
         /// Determines whether this instance can execute the specified parameter.

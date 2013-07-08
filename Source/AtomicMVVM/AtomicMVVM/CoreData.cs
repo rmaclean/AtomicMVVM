@@ -87,19 +87,9 @@ namespace AtomicMVVM
         /// </summary>
         /// <param name="action">The action.</param>
         /// <exception cref="System.ArgumentNullException">If the action provide is null.</exception>
-        public async void Invoke(Action action)
-        {
-            await Task.Run(() => InvokeAsync(action));
-        }
-
-        /// <summary>
-        /// Invokes the specified action.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <exception cref="System.ArgumentNullException">If the action provide is null.</exception>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "While it makes sense in SL & WPF, it doesn't work for Metro apps which need this to not be static.")]
 #pragma warning disable 1998
-        public async void InvokeAsync(Action action)
+        public async Task InvokeAsync(Action action)
 #pragma warning restore 1998
         {
             if (action == null)

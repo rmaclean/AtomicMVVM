@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="MetroDemo.Views.Windows8"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:c="using:MetroDemo.Converters"
+    mc:Ignorable="d"
+    d:DesignHeight="768" d:DesignWidth="1366">
+    <UserControl.Resources>
+        <c:BoolToVis x:Key="boolToVis"/>
+    </UserControl.Resources>
+
+    <Grid Style="{StaticResource LayoutRootStyle}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" x:Name="BackButton" Style="{StaticResource BackButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0"/>
+                <TextBlock  Grid.Column="1" Text="{StaticResource AppName}" Style="{StaticResource PageHeaderTextStyle}" />
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Search For" Style="{StaticResource PageSubheaderTextStyle}" Grid.Column="1" Margin="0" Padding="0,0,20,0" VerticalAlignment="Center" />
+                <TextBox x:ConnectionId='1'                            Grid.Column="2" Text="{Binding Search, Mode=TwoWay}" x:Name="query" FontSize="26.667"/>
+            </Grid>
+
+            <GridView SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding Images}" Grid.Row="2" Margin="0,20,0,0"
+                      Padding="120,0,0,0">
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid HorizontalAlignment="Left" Width="252" Height="252">
+                            <Border>
+                                <Image Source="{Binding Media}" Margin="0" Stretch="UniformToFill"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
+                                <StackPanel.Background>
+                                    <SolidColorBrush Color="Black" Opacity="0.2"/>
+                                </StackPanel.Background>
+                                <TextBlock Text="{Binding Title}" Margin="12,8,12,2" HorizontalAlignment="Left" Height="60" Style="{StaticResource ItemTextStyle}" Foreground="White" TextWrapping="NoWrap" VerticalAlignment="Bottom"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+            <ProgressRing Grid.Row="2" Visibility="{Binding InProgress, Converter={StaticResource boolToVis}}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="200" IsActive="True" Foreground="{StaticResource ApplicationPressedForegroundThemeBrush}" />
+        </Grid>
+
+        <AppBar VerticalAlignment="Bottom" Background="{StaticResource AppBarBackgroundThemeBrush}" BorderBrush="{StaticResource AppBarBorderThemeBrush}" IsOpen="True" IsSticky="True" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button x:Name="SaveSelected" Style="{StaticResource SaveAppBarButtonStyle}"/>
+                    <Button x:Name="LaunchSelected" Style="{StaticResource PlayAppBarButtonStyle}" AutomationProperties.Name="info"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button x:Name="ClearResults" Style="{StaticResource DiscardAppBarButtonStyle}"/>
+                    <Button x:Name="Refresh" Style="{StaticResource RefreshAppBarButtonStyle}" />
+                    <Button x:Name="About" AutomationProperties.Name="About" Style="{StaticResource AppBarButtonStyle}">
+                        <Image HorizontalAlignment="Center" Grid.Row="0" Width="24" Height="24" Source="../Images/atom.png" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </AppBar>
+    </Grid>
+</UserControl>
+

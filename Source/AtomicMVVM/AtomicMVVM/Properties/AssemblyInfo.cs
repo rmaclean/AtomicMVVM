@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("AtomicMVVM")]
 [assembly: AssemblyCompany("Robert MacLean")]
 [assembly: AssemblyProduct("AtomicMVVM")]
-[assembly: AssemblyCopyright("Copyright © Robert MacLean 2012")]
+[assembly: AssemblyCopyright("Copyright © Robert MacLean 2012-2013")]
 [assembly:System.CLSCompliant(false)]
 [assembly:System.Resources.NeutralResourcesLanguage("en")]
 [assembly: ComVisible(false)]
@@ -18,5 +18,5 @@ using System.Runtime.InteropServices;
 #if !(SILVERLIGHT || WINRT)
 [assembly: System.Security.SecurityRules(System.Security.SecurityRuleSet.Level2)]
 #endif
-[assembly: AssemblyVersion("5.0.0.0")]
-[assembly: AssemblyFileVersion("5.0.0.0")]
+[assembly: AssemblyVersion("6.0.0.0")]
+[assembly: AssemblyFileVersion("6.0.0.0")]
