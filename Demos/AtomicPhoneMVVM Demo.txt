@@ -1,2 +1,0 @@
-If you are looking for a great demo of the AtomicPhoneMVVM code see:
-https://bitbucket.org/rmaclean/postal-codes/overview
