@@ -104,11 +104,11 @@ namespace AtomicMVVM
             }
 
 #if (WINRT)
-            var ƒ = ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await ViewControl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
 #endif
 #if (NET45)
-            ViewControl.Dispatcher.InvokeAsync(() =>
+            await ViewControl.Dispatcher.InvokeAsync(() =>
                 {
 #endif
                     action();

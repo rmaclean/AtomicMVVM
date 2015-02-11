@@ -37,7 +37,6 @@ namespace AtomicMVVM
         private SortedDictionary<string, SortedDictionary<int, Type>> knownLandscapeViews;
         private SortedDictionary<string, SortedDictionary<int, Type>> knownPortraitViews;
         private readonly Type[] EmptyTypes = new Type[] { };
-        private string ViewSuffix;
 #else
         private readonly Type[] EmptyTypes = Type.EmptyTypes;
 #endif
@@ -328,9 +327,9 @@ namespace AtomicMVVM
             var viewNamespace = ".Views.";
             var viewName = CurrentViewModel.GetType().AssemblyQualifiedName.Replace(".ViewModels.", viewNamespace);
             var viewType = Type.GetType(viewName, true, true);
-            if (viewType == null && withSuffix)
+            if (viewType == null)
             {
-                return GetView(false);
+                return GetView();
             }
 
             return viewType;
