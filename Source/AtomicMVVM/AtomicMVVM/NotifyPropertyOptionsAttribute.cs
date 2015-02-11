@@ -16,6 +16,7 @@ namespace AtomicMVVM
         /// Event is raised async.
         /// </summary>
         Async,
+
         /// <summary>
         /// Event is raised sync
         /// </summary>
@@ -25,7 +26,7 @@ namespace AtomicMVVM
     /// <summary>
     /// Used to attribute properties which implement INotifyPropertyChange so that you can control the way that is invoked.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]    
+    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
     public sealed class NotifyPropertyOptionsAttribute : Attribute
     {
         /// <summary>

@@ -10,14 +10,18 @@ namespace AtomicMVVM
     using System.ComponentModel;
     using System.Reflection;
     using System.Linq;
+
 #if WINRT
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Core;
 #else
+
     using System.Windows.Controls;
+
 #endif
+
     using System.Threading.Tasks;
-    using System.Collections.Generic;    
+    using System.Collections.Generic;
     using System.Runtime.CompilerServices;
 
     /// <summary>
@@ -68,15 +72,15 @@ namespace AtomicMVVM
 #endif
 #if NET45
                 if (methodDispatchMode == MethodDispatchMode.Async)
-                { 
-                ViewControl.Dispatcher.InvokeAsync(() =>
-                    {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                });
+                {
+                    ViewControl.Dispatcher.InvokeAsync(() =>
+                        {
+                            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                        });
                 }
                 else
                 {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
                 }
 #endif
             }

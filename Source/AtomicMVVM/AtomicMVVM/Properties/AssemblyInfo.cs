@@ -11,8 +11,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("Robert MacLean")]
 [assembly: AssemblyProduct("AtomicMVVM")]
 [assembly: AssemblyCopyright("Copyright © Robert MacLean 2012-2013")]
-[assembly:System.CLSCompliant(false)]
-[assembly:System.Resources.NeutralResourcesLanguage("en")]
+[assembly: System.CLSCompliant(false)]
+[assembly: System.Resources.NeutralResourcesLanguage("en")]
 [assembly: ComVisible(false)]
 [assembly: Guid("dd623e44-e327-437d-8462-00676ccd42f0")]
 #if !(SILVERLIGHT || WINRT)

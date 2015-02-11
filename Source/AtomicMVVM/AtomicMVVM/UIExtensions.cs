@@ -4,13 +4,16 @@
 // Notes:
 //-----------------------------------------------------------------------
 
-
 namespace AtomicMVVM
 {
 #if WINRT
+
     using Windows.UI.Xaml;
+
 #else
+
     using System.Windows;
+
 #endif
 
     /// <summary>

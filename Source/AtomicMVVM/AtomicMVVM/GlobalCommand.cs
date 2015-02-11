@@ -27,10 +27,12 @@ namespace AtomicMVVM
         }
 
 #pragma warning disable 67
+
         /// <summary>
         /// Occurs when [can execute changed].
         /// </summary>
         public event EventHandler CanExecuteChanged;
+
 #pragma warning restore 67
 
         private readonly Action action;
@@ -53,5 +55,5 @@ namespace AtomicMVVM
         {
             action();
         }
-    }   
+    }
 }

@@ -4,7 +4,6 @@
 /// Notes:
 ///-----------------------------------------------------------------------
 
-
 namespace AtomicMVVM.ViewModels
 {
     public class CoreDataSample2 : CoreData

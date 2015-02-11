@@ -7,10 +7,15 @@
 namespace AtomicMVVM
 {
     using System;
+
 #if WINRT
+
     using Windows.UI.Xaml.Controls;
-#else    
+
+#else
+
     using System.Windows.Controls;
+
 #endif
 
     /// <summary>

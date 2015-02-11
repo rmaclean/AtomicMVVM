@@ -1,11 +1,10 @@
-﻿
-namespace AtomicMVVM
+﻿namespace AtomicMVVM
 {
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
 
     /// <summary>
-    /// This is the lighter version of <see cref="CoreData"/>. 
+    /// This is the lighter version of <see cref="CoreData"/>.
     /// It just handles INotifyPropertyChanged events.
     /// </summary>
     public class CoreDataLight : INotifyPropertyChanged
@@ -15,7 +14,10 @@ namespace AtomicMVVM
         /// <summary>
         /// Simple constructor for CoreDataLight - this has no bootstrapper assigned and thus will not cannot invoke on the view model.
         /// </summary>
-        public CoreDataLight() : this(null){}
+        public CoreDataLight()
+            : this(null)
+        {
+        }
 
         /// <summary>
         /// Creates an instance of CoreDataLight - recommended to use this one as it allows the call to be called on the view model.
@@ -35,7 +37,7 @@ namespace AtomicMVVM
             {
                 if (BootStrapper != null)
                 {
-                    var _  = BootStrapper.CurrentViewModel.InvokeAsync(() =>
+                    var _ = BootStrapper.CurrentViewModel.InvokeAsync(() =>
                     {
                         PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
                     });
@@ -50,6 +52,6 @@ namespace AtomicMVVM
         /// <summary>
         /// This event is raised when the <see cref="RaisePropertyChanged"/> method is called.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;        
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

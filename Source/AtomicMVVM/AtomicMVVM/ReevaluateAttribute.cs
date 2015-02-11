@@ -8,6 +8,7 @@ namespace AtomicMVVM
 {
     using System;
     using System.Collections.Generic;
+
     /// <summary>
     /// Indicates that the attribute method is affected by the listed properties.
     /// </summary>

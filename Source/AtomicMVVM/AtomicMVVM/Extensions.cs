@@ -9,7 +9,7 @@ namespace AtomicMVVM
     using System;
     using System.Collections.Generic;
 
-    using ActionCommand = System.Tuple<string,System.Action>;
+    using ActionCommand = System.Tuple<string, System.Action>;
 
     /// <summary>
     /// Extension methods for AtomicMVVM
@@ -41,7 +41,7 @@ namespace AtomicMVVM
             }
 
             var actionCommand = new ActionCommand(commandId, action);
-            globalCommands.Add(actionCommand);  
+            globalCommands.Add(actionCommand);
         }
     }
 }

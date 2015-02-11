@@ -14,5 +14,5 @@ namespace AtomicMVVM
         /// This method is raised on the view once the view model is set to the data context.
         /// </summary>
         void DataContextBound<T>(T viewModel) where T : CoreData;
-    }  
+    }
 }

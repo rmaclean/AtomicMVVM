@@ -12,11 +12,14 @@ namespace AtomicMVVM
     using System.Globalization;
     using System.Reflection;
     using ActionCommand = System.Tuple<string, System.Action>;
+
 #if WINRT
+
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml;
     using Windows.UI.Core;
     using Windows.UI.Xaml.Controls.Primitives;
+
 #else
     using System.Windows.Controls;
     using System.Windows;
@@ -31,7 +34,9 @@ namespace AtomicMVVM
     public class Bootstrapper
     {
         private Stack<Tuple<Type, object>> BackStack = new Stack<Tuple<Type, object>>();
+
         private sealed class McGuffin { }
+
         private List<object> CurrentViewExtendedChildControls;
 #if WINRT
         private SortedDictionary<string, SortedDictionary<int, Type>> knownLandscapeViews;
@@ -40,6 +45,7 @@ namespace AtomicMVVM
 #else
         private readonly Type[] EmptyTypes = Type.EmptyTypes;
 #endif
+
         /// <summary>
         /// The current shell that is being used to render the screen.
         /// </summary>
@@ -52,7 +58,7 @@ namespace AtomicMVVM
         /// The current view model that is being used to render the screen.
         /// </summary>
         /// <remarks>
-        /// This can be change by calling the ChangeView method. 
+        /// This can be change by calling the ChangeView method.
         /// </remarks>
         /// <seealso cref="ChangeView(System.Type)"/>
         public CoreData CurrentViewModel { get; private set; }
@@ -61,7 +67,7 @@ namespace AtomicMVVM
         /// The current view that is being used to render the screen.
         /// </summary>
         /// <remarks>
-        /// This can be change by calling the ChangeView method. 
+        /// This can be change by calling the ChangeView method.
         /// </remarks>
         /// <seealso cref="ChangeView(System.Type)"/>
         public UserControl CurrentView { get; private set; }
@@ -75,6 +81,7 @@ namespace AtomicMVVM
         /// Is raised after the start has completed (i.e. when we have the first screen up).
         /// </summary>
         public event Action AfterStartCompletes;
+
         private List<MethodInfo> validMethods;
 
         /// <summary>
@@ -105,6 +112,7 @@ namespace AtomicMVVM
         }
 
 #if WINRT
+
         /// <summary>
         /// Inspects the assembly for all views and preloads them into the collections for portraits &amp; landscape
         /// </summary>
@@ -163,6 +171,7 @@ namespace AtomicMVVM
             this.knownLandscapeViews = landscapeViews;
             this.knownPortraitViews = portraitViews;
         }
+
 #endif
 
         /// <summary>
@@ -225,10 +234,12 @@ namespace AtomicMVVM
         }
 
 #if WINRT
+
         private void WindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
         {
             ChangeView(true);
         }
+
 #endif
 
         /// <summary>
@@ -237,7 +248,7 @@ namespace AtomicMVVM
         /// <typeparam name="TShell">The type of the shell to load.</typeparam>
         /// <typeparam name="TContent">The type of the initial view model to load.</typeparam>
         /// <typeparam name="TData">The type of the data to pass to the initial view model.</typeparam>
-        /// <param name="data">The data to pass to the initial view model.</param>        
+        /// <param name="data">The data to pass to the initial view model.</param>
         public void Start<TShell, TContent, TData>(TData data)
             where TContent : CoreData
             where TShell : IShell
@@ -338,6 +349,7 @@ namespace AtomicMVVM
 #endif
 
 #if WINRT
+
         private Type GetView()
         {
             var availableViews = this.knownLandscapeViews;
@@ -374,7 +386,9 @@ namespace AtomicMVVM
 
             throw new Exception("Requested view cannot be found");
         }
+
 #endif
+
         private void ChangeView(bool forceChange = false)
         {
             var viewType = default(Type);
@@ -485,7 +499,6 @@ namespace AtomicMVVM
 #else
                     GetChildControls(item, result);
 #endif
-
                 }
             }
 
@@ -556,7 +569,6 @@ namespace AtomicMVVM
 
         private void BindControl(MethodInfo method, object control)
         {
-
 #if WINRT
             if (control != null && typeof(ButtonBase).GetTypeInfo().IsAssignableFrom(control.GetType().GetTypeInfo()))
 #else
@@ -617,6 +629,7 @@ namespace AtomicMVVM
         }
 
 #if WINRT
+
         internal void BindGlobalCommands(Control view = null, List<ActionCommand> commands = null)
 #else
         internal void BindGlobalCommands(ContentControl view = null, List<ActionCommand> commands = null)

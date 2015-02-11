@@ -10,13 +10,14 @@ namespace AtomicMVVM
     using System.Reflection;
     using System.Windows.Input;
 
-    class AttachedCommand : ICommand
+    internal class AttachedCommand : ICommand
     {
 #if (WINRT)
         private readonly Type[] EmptyTypes = new Type[] { };
 #else
         private readonly Type[] EmptyTypes = Type.EmptyTypes;
 #endif
+
         public bool CanExecute(object parameter)
         {
             if (!canExecuteExists)
@@ -50,6 +51,7 @@ namespace AtomicMVVM
         }
 
         public event EventHandler CanExecuteChanged;
+
         private readonly string methodName;
         private MethodInfo executeMethod;
         private MethodInfo canExecuteMethod;

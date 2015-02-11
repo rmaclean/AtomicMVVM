@@ -6,8 +6,8 @@
 
 namespace AtomicMVVM
 {
-    using System;
     using AtomicMVVM.ViewModels;
+    using System;
     using Xunit;
 
     public class BootstrapperChecks
@@ -161,6 +161,6 @@ namespace AtomicMVVM
             var ex = Assert.Throws<ArgumentNullException>(() => bootStrapper.GlobalCommands.Add("horse", null));
             Assert.Equal("action", ex.ParamName);
             Assert.Equal("Value cannot be null.\r\nParameter name: action", ex.Message);
-        }       
+        }
     }
 }
